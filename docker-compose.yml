@@ -1,0 +1,55 @@
+#version: '3.8'
+
+services:
+  api:
+    image: railsimage # Se puede agregar :latest si utilizamos más versiones
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000" # Mapeo de puertos del contenedor a la maquina host
+    volumes:
+      - .:/demoapi # Volumen para persistir los cambios en el código
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/RailsDB 
+      # Esta url es de la forma: 
+      #postgresql://<usuario>:<contraseña>@<nombre de servicio de la base de datos>:<puerto de la base de datos>/<nombre de la base de datos>
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    environment: # variables de entorno para la base de datos
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=RailsDB # Nombre de la base de datos, creo que debe coincidir con el nombre de la base de datos en el archivo de configuración de la API
+    volumes:
+      - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "un.mail@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  app-network:
+    driver: bridge
