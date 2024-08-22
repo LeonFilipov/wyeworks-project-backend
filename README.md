@@ -10,6 +10,8 @@
 En este punto deberías de tener lo siguiente disponible:
 - API: _0.0.0.0:3000_
 - PGAdmin: _localhost:5050_
+   * mail: un.mail@example.com
+   * contraseña: admin
 - Postgres con:
    * Usuario: _postgres_
    * Contraseña: _password_
