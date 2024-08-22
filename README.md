@@ -6,6 +6,7 @@
 2. Clonar el repositorio.
 3. Ejecutar `docker-compose up --build -d` desde el directorio que contiene el clone de git.
 > El -d es opcional, es para poder seguir utilizando la consola luego de levantar los contenedores.
+
 En este punto deberías de tener lo siguiente disponible:
 - API: _0.0.0.0:3000_
 - PGAdmin: _localhost:5050_
@@ -26,3 +27,5 @@ En este punto deberías de tener lo siguiente disponible:
 | Remueve la/las imagen/es declaradas.|`docker rmi [nombre o id de imagen]`|
 | Levantar los contenedores **sin crear la imagen otra vez**|`docker-compose up`|
 | Para los contenedores.|`docker-compose down`|
+| Elimina todas las imágenes huerfanas|`docker image prune -f`|
+> Las imágenes huérfanas se te van a crear generalmente si levantas la misma imágen más de una vez, supongo que hay más formas de que esto pase, pero la que me pasó fué esta.
