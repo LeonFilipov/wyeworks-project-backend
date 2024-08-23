@@ -16,7 +16,8 @@ services:
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/RailsDB  
       # postgresql://[usuario]:[contraseña]@[nombre de servicio de la base de datos]:[puerto]/[nombre de la base de datos]
     networks:
-      - app-network
+      app-network:
+          ipv4_address: 172.20.0.2
 
   postgres:
     image: postgres:latest
@@ -29,7 +30,8 @@ services:
     ports:
       - "5433:5432" # Mapeo de puertos del contenedor a la maquina host
     networks:
-      - app-network
+      app-network:
+          ipv4_address: 172.20.0.3
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -43,7 +45,8 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     networks:
-      - app-network
+      app-network:
+          ipv4_address: 172.20.0.4
 
 volumes: # Volumenes para persistir la información de la base de datos y pgadmin
   postgres-data:
@@ -52,3 +55,6 @@ volumes: # Volumenes para persistir la información de la base de datos y pgadmi
 networks:
   app-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
