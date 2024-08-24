@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-    before_action :set_article, only: [:show, :update, :destroy]
+    before_action :set_article, only: [:show, :update, :destroy, :publish]
 
   # GET /articles
   def index
@@ -21,6 +21,14 @@ class ArticlesController < ApplicationController
     else
       render json: @article.errors, status: :unprocessable_entity
     end
+  end
+
+  # POST /articles/:id/publish
+  def publish
+    # Example logic to mark the article as published
+    @article.update(published: true)
+    puts(@article)
+    render json: { message: 'Article published successfully', article: @article }
   end
 
   # PATCH/PUT /articles/:id

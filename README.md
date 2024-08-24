@@ -8,16 +8,17 @@
 > El -d es opcional, es para poder seguir utilizando la consola luego de levantar los contenedores.
 
 En este punto deberías de tener lo siguiente disponible:
-- API: _0.0.0.0:3000_
+- API: _localhost:3000_
 - PGAdmin: _localhost:5050_
    * mail: un.mail@example.com
    * contraseña: admin
-- Postgres con:
-   * Usuario: _postgres_
-   * Contraseña: _password_
-   * Puerto 5432 dentro del contenedor.
-   * Puerto 5433 fuera de este.
-> El puerto fuera del contenedor puede ser 5432 al igual que dentro, pero como el creador de esto tiene ocupado el puerto y es vago no lo liberó.
+   - Se debe crear una conexion dandole nombre _DB-API_
+   - En la pestaña conexión:
+      * Dirección IP: 172.20.0.3
+      * Usuario: _postgres_
+      * Contraseña: _password_
+      * Puerto 5432 dentro del contenedor.
+      * Puerto 5433 fuera de este.
 
 ## Algunos comandos útiles para trabajar con Docker.
 | Funcionalidad | Comando |
