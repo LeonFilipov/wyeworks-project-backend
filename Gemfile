@@ -15,6 +15,10 @@ gem "puma", "~> 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
+# Connect frontend
+gem 'rack-cors', '~> 0.4.0'
+gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

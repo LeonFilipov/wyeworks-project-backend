@@ -13,6 +13,30 @@
 #
 # Configure Using Gemfile
 # gem "pg"
+
+# development:
+#   <<: *default
+#   host: <%= ENV["APP_API_DATABASE_HOST"] %>
+#   database: <%= ENV["APP_API_DATABASE_NAME"] %>
+#   username: <%= ENV["APP_API_DATABASE_USERNAME"] %>
+#   password: <%= ENV["APP_API_DATABASE_PASSWORD"] %>
+
+# test:
+#   <<: *default
+#   host: <%= ENV["TEST_APP_API_DATABASE_HOST"] %>
+#   database: <%= ENV["TEST_APP_API_DATABASE_NAME"] %>
+#   username: <%= ENV["TEST_APP_API_DATABASE_USERNAME"] %>
+#   password: <%= ENV["TEST_APP_API_DATABASE_PASSWORD"] %>
+
+# production:
+#   <<: *default
+#   url: <%= ENV["APP_BLOG_DATABASE_URL"] %>
+#   database: <%= ENV["APP_BLOG_DATABASE_NAME"] %>
+#   username: <%= ENV["APP_BLOG_DATABASE_USERNAME"] %>
+#   password: <%= ENV["APP_BLOG_DATABASE_PASSWORD"] %>
+
+
+
 #
 default: &default
   adapter: postgresql
