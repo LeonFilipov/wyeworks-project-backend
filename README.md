@@ -6,6 +6,9 @@
 2. Clonar el repositorio.
 3. Ejecutar `docker-compose up --build -d` desde el directorio que contiene el clone de git.
 > El -d es opcional, es para poder seguir utilizando la consola luego de levantar los contenedores.
+4. Si es la primera vez inicializas todo deberías ingresar a la línea de comandos del contenedor en el que se encuentra la API ejecutando el siguiente comando:
+`docker exec -it tutorias-api /bin/sh`
+5. Ejecuta `rails db:migrate` para crear el esquema de la base de datos.
 
 En este punto deberías de tener lo siguiente disponible:
 - API: _localhost:3000_
@@ -18,7 +21,7 @@ En este punto deberías de tener lo siguiente disponible:
       * Usuario: _postgres_
       * Contraseña: _password_
       * Puerto 5432 dentro del contenedor.
-      * Puerto 5433 fuera de este.
+      * Puerto 5433 fuera de este (en tu máquina host).
 
 ## Algunos comandos útiles para trabajar con Docker.
 | Funcionalidad | Comando |
