@@ -7,8 +7,8 @@
 3. Ejecutar `docker-compose up --build -d` desde el directorio que contiene el clone de git.
 > El -d es opcional, es para poder seguir utilizando la consola luego de levantar los contenedores.
 4. Si es la primera vez inicializas todo deberías ingresar a la línea de comandos del contenedor en el que se encuentra la API ejecutando el siguiente comando:
-`docker exec -it tutorias-api /bin/sh`
-5. Ejecuta `rails db:migrate` para crear el esquema de la base de datos.
+`docker exec -it rails-api /bin/sh`
+5. Ejecuta `rails db:migrate` para crear el esquema de la base de datos (dentro del docker).
 
 En este punto deberías de tener lo siguiente disponible:
 - API: _localhost:3000_
