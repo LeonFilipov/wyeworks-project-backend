@@ -1,6 +1,10 @@
-# README
-
-## Inicializar el entorno de desarrollo:
+# Wyeworks project backend
+This is the backend side of the project developed for WyeWorks. It's designed to connect students who need help with specific subjects to other students who can provide tutoring in those subjects.
+## Tech stack
+  * Ruby 3.3.4
+  * Rails 7.2
+  * Docker
+## Installation
 
 1. Tener docker instalado en tu maquina.
 2. Clonar el repositorio.
@@ -11,19 +15,19 @@
 5. Ejecuta `rails db:migrate` para crear el esquema de la base de datos (dentro del docker).
 
 En este punto deberías de tener lo siguiente disponible:
-- API: _localhost:3000_
-- PGAdmin: _localhost:5050_
+1. API: localhost:3000
+2. PGAdmin: localhost:5050
    * mail: un.mail@example.com
    * contraseña: admin
-   - Se debe crear una conexion dandole nombre _DB-API_
+   - Se debe crear una conexion dandole nombre DB-API
    - En la pestaña conexión:
-      * Dirección IP: 172.20.0.3
-      * Usuario: _postgres_
-      * Contraseña: _postgres_
+      * Dirección IP: 172.20.0.3 _(dirección de postgresql)_
+      * Usuario: postgres
+      * Contraseña: postgres
       * Puerto 5432 dentro del contenedor.
       * Puerto 5433 fuera de este (en tu máquina host).
 
-## Algunos comandos útiles para trabajar con Docker.
+## Docker commands
 | Funcionalidad | Comando |
 |---------------|---------|
 | Información de los contenedores, imagenes, etc. |`docker inspect [nombre o id]`|
