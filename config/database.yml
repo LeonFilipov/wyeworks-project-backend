@@ -14,6 +14,11 @@
 # Configure Using Gemfile
 # gem "pg"
 
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
 # development:
 #   <<: *default
 #   host: <%= ENV["APP_API_DATABASE_HOST"] %>
@@ -30,10 +35,10 @@
 
 # production:
 #   <<: *default
-#   url: <%= ENV["APP_BLOG_DATABASE_URL"] %>
-#   database: <%= ENV["APP_BLOG_DATABASE_NAME"] %>
-#   username: <%= ENV["APP_BLOG_DATABASE_USERNAME"] %>
-#   password: <%= ENV["APP_BLOG_DATABASE_PASSWORD"] %>
+#   host: <%= ENV["PROD_APP_API_DATABASE_HOST"] %>
+#   database: <%= ENV["PROD_APP_API_DATABASE_NAME"] %>
+#   username: <%= ENV["PROD_APP_API_DATABASE_USERNAME"] %>
+#   password: <%= ENV["PROD_APP_API_DATABASE_PASSWORD"] %>
 
 
 
@@ -44,6 +49,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
 
 development:
   <<: *default
