@@ -19,7 +19,7 @@ En este punto deberías de tener lo siguiente disponible:
    - En la pestaña conexión:
       * Dirección IP: 172.20.0.3
       * Usuario: _postgres_
-      * Contraseña: _password_
+      * Contraseña: _postgres_
       * Puerto 5432 dentro del contenedor.
       * Puerto 5433 fuera de este (en tu máquina host).
 
