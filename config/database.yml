@@ -4,8 +4,6 @@
 #   gem install pg
 # On macOS with Homebrew:
 #   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On macOS with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
 # On Windows:
 #   gem install pg
 #       Choose the win32 build.
@@ -13,35 +11,6 @@
 #
 # Configure Using Gemfile
 # gem "pg"
-
-# default: &default
-#   adapter: postgresql
-#   encoding: unicode
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
-# development:
-#   <<: *default
-#   host: <%= ENV["APP_API_DATABASE_HOST"] %>
-#   database: <%= ENV["APP_API_DATABASE_NAME"] %>
-#   username: <%= ENV["APP_API_DATABASE_USERNAME"] %>
-#   password: <%= ENV["APP_API_DATABASE_PASSWORD"] %>
-
-# test:
-#   <<: *default
-#   host: <%= ENV["TEST_APP_API_DATABASE_HOST"] %>
-#   database: <%= ENV["TEST_APP_API_DATABASE_NAME"] %>
-#   username: <%= ENV["TEST_APP_API_DATABASE_USERNAME"] %>
-#   password: <%= ENV["TEST_APP_API_DATABASE_PASSWORD"] %>
-
-# production:
-#   <<: *default
-#   host: <%= ENV["PROD_APP_API_DATABASE_HOST"] %>
-#   database: <%= ENV["PROD_APP_API_DATABASE_NAME"] %>
-#   username: <%= ENV["PROD_APP_API_DATABASE_USERNAME"] %>
-#   password: <%= ENV["PROD_APP_API_DATABASE_PASSWORD"] %>
-
-
-
 #
 default: &default
   adapter: postgresql
@@ -49,19 +18,24 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  <% if ENV["DB_HOST"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: postgres
+  password: postgres
+  <% end %>
 
 
 development:
   <<: *default
-  database: RailsApi_development
+  database: wyerworks_project_backend_development
 
-  # The specified database role being used to connect to postgres.
-  # To create additional roles in postgres see `$ createuser --help`.
-  # When left blank, postgres will use the default role. This is
+  # The specified database role being used to connect to PostgreSQL.
+  # To create additional roles in PostgreSQL see `$ createuser --help`.
+  # When left blank, PostgreSQL will use the default role. This is
   # the same name as the operating system user running Rails.
-  #username: RailsApi
+  #username: wyerworks_project_backend
 
-  # The password associated with the postgres role (username).
+  # The password associated with the PostgreSQL role (username).
   #password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -87,7 +61,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: RailsApi_test
+  database: wyerworks_project_backend_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -111,6 +85,6 @@ test:
 #
 production:
   <<: *default
-  database: RailsApi_production
-  username: RailsApi
-  password: <%= ENV["RAILSAPI_DATABASE_PASSWORD"] %>
+  database: wyerworks_project_backend_production
+  username: wyerworks_project_backend
+  password: <%= ENV["WYERWORKS_PROJECT_BACKEND_DATABASE_PASSWORD"] %>

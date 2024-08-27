@@ -6,13 +6,7 @@ This is the backend side of the project developed for WyeWorks. It's designed to
   * Docker
 ## Installation
 
-1. Tener docker instalado en tu maquina.
-2. Clonar el repositorio.
-3. Ejecutar `docker-compose up --build -d` desde el directorio que contiene el clone de git.
-> El -d es opcional, es para poder seguir utilizando la consola luego de levantar los contenedores.
-4. Si es la primera vez inicializas todo deberías ingresar a la línea de comandos del contenedor en el que se encuentra la API ejecutando el siguiente comando:
-`docker exec -it rails-api /bin/sh`
-5. Ejecuta `rails db:migrate` para crear el esquema de la base de datos (dentro del docker).
+Things you may want to cover:
 
 En este punto deberías de tener lo siguiente disponible:
 1. API: localhost:3000

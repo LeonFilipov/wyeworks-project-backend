@@ -1,4 +1,4 @@
-FROM ruby:3.0.2-alpine
+FROM ruby:3.3.4-alpine
 
 # Instala las dependencias necesarias para la aplicación
 RUN apk update && apk add --no-cache \
@@ -14,7 +14,7 @@ WORKDIR /api
 COPY . /api 
 # Esto sirve para indicar las dependencias de la aplicación. 
 # Si gamefile y gamefile.lock no cambian, no se volverá a instalar las dependencias.
-COPY Gemfile Gemfile.lock ./ 
+COPY Gemfile ./ 
 # Instala las dependencias de la aplicación
 RUN bundle install
 # Inicia el servidor de rails
