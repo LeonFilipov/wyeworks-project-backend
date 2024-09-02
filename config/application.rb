@@ -71,6 +71,7 @@ module WyerworksProjectBackend
     end
 
     config.api_only = true
+    config.action_controller.allow_forgery_protection = false
 
   end
 end
