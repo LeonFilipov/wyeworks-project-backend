@@ -1,0 +1,11 @@
+<!-- app/views/tutors/show.html.erb -->
+<h1><%= @tutor.name %></h1>
+
+<p>
+  <strong>Specialization:</strong>
+  <%= @tutor.specialization %>
+</p>
+
+<%= link_to 'Back', tutors_path %>
+<%= link_to 'Edit', edit_tutor_path(@tutor) %> |
+<%= link_to 'Destroy', tutor_path(@tutor), method: :delete, data: { confirm: 'Are you sure?' } %>
