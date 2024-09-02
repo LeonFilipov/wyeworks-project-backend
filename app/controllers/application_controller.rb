@@ -1,3 +1,3 @@
 class ApplicationController < ActionController::API
-    #make me contributor
+    #protect_from_forgery with: :null_session
 end

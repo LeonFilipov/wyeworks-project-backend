@@ -40,7 +40,7 @@ gem 'rack-attack'
 # gem 'rack-mini-profiler', '~> 2.0'
 
 # Secured password handling
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 group :development, :test do
   # Debugging tools

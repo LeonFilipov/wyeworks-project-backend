@@ -89,4 +89,6 @@ Rails.application.configure do
     end
   end
 
+  #config.action_controller.allow_forgery_protection = false # Desactivar protección CSRF en desarrollo
+
 end
