@@ -1,0 +1,27 @@
+<!-- app/views/tutors/index.html.erb -->
+<h1>Tutors List</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Specialization</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tutors.each do |tutor| %>
+      <tr>
+        <td><%= tutor.name %></td>
+        <td><%= tutor.specialization %></td>
+        <td>
+          <%= link_to 'Show', tutor_path(tutor) %> |
+          <%= link_to 'Edit', edit_tutor_path(tutor) %> |
+          <%= link_to 'Destroy', tutor_path(tutor), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Tutor', new_tutor_path %>
