@@ -22,10 +22,7 @@ module WyerworksProjectBackend
     # Active Record configurations
     config.active_record.schema_format = :ruby
     config.active_record.belongs_to_required_by_default = true
-    config.active_record.database_selector = { delay: 2.seconds }
-    #config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
-    #ESTA LINEA COMENTADA DA PROBLEMAS CON LOS ROLES DEL USUARIO DE POSTGRESQL
-    #Error: No connection pool for 'ActiveRecord::Base' found for the 'reading' role.
+    config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
     config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
     # Cache settings
