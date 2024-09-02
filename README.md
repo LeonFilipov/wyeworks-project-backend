@@ -42,6 +42,9 @@ Algunas recomendaciones al desarrollar con Docker:
 - En el caso de querer actualizar las dependencias del proyecto (por ejemplo, querer utilizar una nueva [gema](https://medium.com/@morgannegagne/what-is-a-ruby-gem-1eec2684e68)) se debe volver a construir la imagen y probar que esto no traiga problemas al funcionamiento general del contenedor y la API en sí.
 - En el caso de errores es recomendable utilizar el comando `docker-compose logs`.
 
+## En caso de error al levantar el servidor con Docker
+Algunos casos ocurre que devuelva error código 1, borre el archivo "server.pid" que se encuentra en tmp/pids.
+
 ## Docker commands
 | Funcionalidad | Comando |
 |---------------|---------|

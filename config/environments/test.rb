@@ -28,6 +28,7 @@ Rails.application.configure do
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
 
+
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
@@ -64,4 +65,11 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+
+  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime('%z').gsub('0', '').to_i]
+
+  config.force_ssl = true
+  config.action_dispatch.cookies_same_site_protection = :strict
+
 end
