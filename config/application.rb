@@ -67,5 +67,12 @@ module WyerworksProjectBackend
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
 
+    # Establecer Rails.env según la variable de entorno 'AMBIENTE'
+    # Validar que el valor del entorno es uno de los permitidos
+    allowed_envs = %w[development test production]
+    env = ENV['AMBIENTE'] if allowed_envs.include?(ENV['AMBIENTE'])
+    env ||= 'development'  # Por defecto 'development' 
+    Rails.env = ActiveSupport::StringInquirer.new(env)
+
   end
 end

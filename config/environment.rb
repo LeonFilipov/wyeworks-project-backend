@@ -10,6 +10,10 @@ Rails.application.config.before_initialize do
   # Ejemplo de uso:
   # some_config = ENV['SOME_GLOBAL_CONFIG'] 
 
+  ENV['AMBIENTE'] ||= 'development'
+  # ENV['AMBIENTE'] ||= 'test'
+  # ENV['AMBIENTE'] ||= 'production'
+
   # Configuración de variables de entorno para la base de datos
   ENV['DB_DESA_HOST'] ||= 'localhost'
   ENV['DB_DESA_PORT'] ||= '5432'
