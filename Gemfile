@@ -13,7 +13,7 @@ gem 'puma', '~> 6.4.2'
 gem 'rack-cors', '~> 2.0', '>= 2.0.2'
 
 # To manage environment variables
-gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
+gem 'dotenv-rails', '~> 3.1'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
