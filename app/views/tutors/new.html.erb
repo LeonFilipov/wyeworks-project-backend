@@ -1,0 +1,32 @@
+<!-- app/views/tutors/new.html.erb -->
+<h1>New Tutor</h1>
+
+<%= form_with model: @tutor, local: true do |form| %>
+  <% if @tutor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tutor.errors.count, "error") %> prohibited this tutor from being saved:</h2>
+
+      <ul>
+        <% @tutor.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :specialization %>
+    <%= form.text_field :specialization %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Create Tutor' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', tutors_path %>

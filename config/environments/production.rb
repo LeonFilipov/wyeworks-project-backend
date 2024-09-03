@@ -92,4 +92,11 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+
+  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime('%z').gsub('0', '').to_i]
+
+  config.force_ssl = true
+  config.action_dispatch.cookies_same_site_protection = :strict
+
 end
