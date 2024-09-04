@@ -66,12 +66,10 @@ module WyerworksProjectBackend
 
     # Middleware and security settings
     config.middleware.use Rack::Attack
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "*"
-        resource "*", headers: :any, methods: [ :get, :post, :options ]
-      end
-    end
+    
+    # 
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
