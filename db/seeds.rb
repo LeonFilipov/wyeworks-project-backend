@@ -13,7 +13,7 @@
 
 # CARGA INICIAL DE DATOS -> DESDE initializers se configura
 
-# SE USA COMANDO -> "rails db:seed"      
+# SE USA COMANDO -> "rails db:seed"
 
 # Ejemplo
 # User.create!([
@@ -22,14 +22,14 @@
 #   { name: 'Carlos Diaz', email: 'carlos.diaz@example.com', password: 'password789' }
 # ])
 
-# 
+#
 # Category.create!([
 #   { name: 'Tecnología' },
 #   { name: 'Salud' },
 #   { name: 'Educación' }
 # ])
 
-# 
+#
 # Product.create!([
 #   { name: 'Laptop', price: 1000, category_id: Category.find_by(name: 'Tecnología').id },
 #   { name: 'Medicamento', price: 50, category_id: Category.find_by(name: 'Salud').id },

@@ -79,7 +79,7 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Don't log any deprecations.
+  # Don"t log any deprecations.
   config.active_support.report_deprecations = false
 
   # Do not dump schema after migrations.
@@ -94,9 +94,8 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
 
-  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime('%z').gsub('0', '').to_i]
+  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime("%z").gsub("0", "").to_i]
 
   config.force_ssl = true
   config.action_dispatch.cookies_same_site_protection = :strict
-
 end
