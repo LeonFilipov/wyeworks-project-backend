@@ -3,18 +3,21 @@ require_relative "boot"
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
+# you"ve limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load dotenv
+if Rails.env.development? || Rails.env.test?
+  require "dotenv/load"
+end
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
 module WyerworksProjectBackend
   class Application < Rails::Application
-
     config.load_defaults 7.2
-    
+
     # Set Timezone
-    config.time_zone = 'America/Montevideo'
+    config.time_zone = "America/Montevideo"
 
     # Autoload and eager load settings for lib directory
     config.autoload_lib(ignore: %w[assets tasks])
@@ -39,11 +42,11 @@ module WyerworksProjectBackend
     config.action_controller.default_protect_from_forgery = true
 
     # Filter sensitive parameters from logs
-    config.filter_parameters += [:password, :credit_card_number]
+    config.filter_parameters += [ :password, :credit_card_number ]
 
     # Logging and monitoring
     config.log_level = :info
-    config.log_tags = [:request_id]
+    config.log_tags = [ :request_id ]
     config.active_support.deprecation = :notify
 
     # Configure Active Job
@@ -57,7 +60,7 @@ module WyerworksProjectBackend
     # YJIT configuration for performance (Ruby 3.1+)
     config.yjit = true
 
-    config.encoding = 'utf-8'          # Encoding configuration
+    config.encoding = "utf-8"          # Encoding configuration
     # config.eager_load = true         # Cargar todo y no hacerlo mediante joins, ver que conviene
     config.show_exceptions = true      # Show exceptions configuration
 
@@ -65,13 +68,12 @@ module WyerworksProjectBackend
     config.middleware.use Rack::Attack
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :options]
+        origins "*"
+        resource "*", headers: :any, methods: [ :get, :post, :options ]
       end
     end
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
-
   end
 end
