@@ -8,9 +8,9 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "*" # Debe cambiar para setear los dominios permitidos
- 
+
     resource "*", # Debe cambiar para setear los recursos permitidos, por ejemplo "/api/*"
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      methods: [ :get, :post, :put, :patch, :delete, :options, :head ]
   end
 end
