@@ -6,6 +6,10 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load dotenv
+if Rails.env.development? || Rails.env.test?
+  require 'dotenv/load'
+end
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
 module WyerworksProjectBackend

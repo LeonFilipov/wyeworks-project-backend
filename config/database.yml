@@ -21,13 +21,13 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
   host: <%= ENV["DB_DESA_HOST"] %>
   port: <%= ENV["DB_DESA_PORT"] %>
   username: <%= ENV["DB_DESA_USERNAME"] %>
   password: <%= ENV["DB_DESA_PASSWORD"] %>
-
-development:
-  <<: *default
   database: <%= ENV["DB_DESA_NAME_DEVELOPMENT"] %>
 
 test:

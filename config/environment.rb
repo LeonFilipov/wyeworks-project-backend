@@ -23,11 +23,12 @@ Rails.application.config.before_initialize do
   ENV['DB_TEST_PASSWORD'] ||= 'password'
   ENV['DB_TEST_NAME'] ||= 'RailsDB_TEST'
   
-  ENV['DB_PROD_HOST'] ||= 'localhost'
-  ENV['DB_PROD_PORT'] ||= '5432'
-  ENV['DB_PROD_USERNAME'] ||= 'postgres'
-  ENV['DB_PROD_PASSWORD'] ||= 'password'
-  ENV['DB_PROD_NAME'] ||= 'RailsDB_PROD'
+  # Estas variables deben de estar definidas en otro lado.
+  # ENV['DB_PROD_HOST'] ||= 'localhost'
+  # ENV['DB_PROD_PORT'] ||= '5432'
+  # ENV['DB_PROD_USERNAME'] ||= 'postgres'
+  # ENV['DB_PROD_PASSWORD'] ||= 'password'
+  # ENV['DB_PROD_NAME'] ||= 'RailsDB_PROD'
 
   # Custom logging configuration
   Rails.logger = Logger.new(STDOUT)
