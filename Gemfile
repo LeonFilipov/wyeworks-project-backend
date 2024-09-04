@@ -22,6 +22,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 #
 gem "sidekiq", "~> 7.1", ">= 7.1.2"
+# Devise gem for authentication
+gem 'devise', '~> 4.9'
+# Omniauth for Google OAuth2
+gem 'omniauth-google-oauth2', '~> 1.1'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
