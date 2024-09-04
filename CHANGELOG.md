@@ -7,7 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Removed
-- https://ianaraznyc.atlassian.net/jira/software/projects/PIS2024/boards/1?selectedIssue=PIS2024-111 Clean the Github branches
-- Removed unused controllers and routes.
-- Removed cors configuration from application.rb
-- Removed production env form enviroment.rb
+- [[PIS2024-11]](https://ianaraznyc.atlassian.net/jira/software/projects/PIS2024/boards/1?selectedIssue=PIS2024-111) 
+- Repo chores after initial setup and testing
