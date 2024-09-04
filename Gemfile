@@ -13,7 +13,7 @@ gem "puma", "~> 6.4.2"
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
 
 # To manage environment variables
-gem "dotenv-rails", "~> 2.1", ">= 2.1.1"
+gem "dotenv-rails", "~> 3.1.2"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -54,7 +54,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Test suite gem
-  gem "rspec-rails", "~> 5.0.0"
+  gem "rspec-rails", "~> 7.0"
 
   # Factories for testing
   gem "factory_bot_rails"
