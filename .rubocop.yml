@@ -1,8 +1,28 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_from: .rubocop_todo.yml
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# Omakase Ruby styling for Rails
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+# Reglas personalizadas
+AllCops:
+  NewCops: enable  # Habilitar nuevas reglas de RuboCop por defecto
+  TargetRubyVersion: 3.0  # Establecer la versión de Ruby objetivo
+  Exclude:
+    - 'db/schema.rb'  # Excluye el esquema de la base de datos
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+
+Layout/LineLength:
+  Max: 120  # Establece el límite de longitud de línea a 120 caracteres
+
+Metrics/MethodLength:
+  Max: 10  # Límite máximo de 10 líneas por método
+
+Style/FrozenStringLiteralComment:
+  Enabled: false  # Deshabilitar la advertencia sobre la falta de comentarios de cadena congelada
+
+# Agregar o sobrescribir reglas específicas
+# Ejemplo: No forzar espacio dentro de corchetes de arrays
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false

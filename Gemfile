@@ -55,6 +55,13 @@ group :development, :test do
   # Test suite gem
   gem 'rspec-rails', '~> 5.0.0'
 
+  # Verificacion codigo estatico
+  gem 'rubocop', '~> 1.9', require: false
+  # Inspeccionar :
+  # bundle exec rubocop
+  # Corregir automaticamente:
+  # bundle exec rubocop -A
+
   # Factories for testing
   gem 'factory_bot_rails'
 
