@@ -5,15 +5,15 @@ services:
     build:
       context: .
       dockerfile: ./dev.dockerfile
-    container_name: rails-api
+    container_name: tutorias-api
     ports:
       - "3000:3000" # Mapeo de puertos del contenedor a la maquina host
     volumes:
       - .:/api # Volumen para persistir los cambios en el código
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/RailsDB  
+    # environment:
+    #   - DATABASE_URL=postgresql://postgres:password@postgres:5432/RailsDB  
       # postgresql://[usuario]:[contraseña]@[nombre de servicio de la base de datos]:[puerto]/[nombre de la base de datos]
 
   postgres:
@@ -21,7 +21,7 @@ services:
     environment: # variables de entorno para la base de datos
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=RailsDB
+      # - POSTGRES_DB=RailsDB
     volumes:
       - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
     ports:

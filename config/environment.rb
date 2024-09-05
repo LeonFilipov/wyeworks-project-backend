@@ -11,24 +11,24 @@ Rails.application.config.before_initialize do
   # some_config = ENV["SOME_GLOBAL_CONFIG"]
 
   # Configuración de variables de entorno para la base de datos
-  ENV["DB_DESA_HOST"] ||= "localhost"
+  ENV["DB_DESA_HOST"] ||= "postgres" # docker mapea directamente al host de la base de datos
   ENV["DB_DESA_PORT"] ||= "5432"
   ENV["DB_DESA_USERNAME"] ||= "postgres"
   ENV["DB_DESA_PASSWORD"] ||= "password"
-  ENV["DB_DESA_NAME_DEVELOPMENT"] ||= "RailsDB"
+  ENV["DB_DESA_NAME_DEVELOPMENT"] ||= "tutorias_development"
 
-  ENV["DB_TEST_HOST"] ||= "localhost"
+  ENV["DB_TEST_HOST"] ||= "postgres"
   ENV["DB_TEST_PORT"] ||= "5432"
   ENV["DB_TEST_USERNAME"] ||= "postgres"
   ENV["DB_TEST_PASSWORD"] ||= "password"
-  ENV["DB_TEST_NAME"] ||= "RailsDB_TEST"
+  ENV["DB_TEST_NAME"] ||= "tutorias_test"
 
   # Estas variables deben de estar definidas en otro lado.
   # ENV["DB_PROD_HOST"] ||= "localhost"
   # ENV["DB_PROD_PORT"] ||= "5432"
   # ENV["DB_PROD_USERNAME"] ||= "postgres"
   # ENV["DB_PROD_PASSWORD"] ||= "password"
-  # ENV["DB_PROD_NAME"] ||= "RailsDB_PROD"
+  # ENV["DB_PROD_NAME"] ||= "tutorias_production"
 
   # Custom logging configuration
   Rails.logger = Logger.new(STDOUT)
