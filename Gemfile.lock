@@ -151,7 +151,7 @@ GEM
     parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
-    pg (1.5.7)
+    pg (1.5.8)
     psych (5.1.2)
       stringio
     puma (6.4.2)
@@ -294,7 +294,7 @@ DEPENDENCIES
   debug
   dotenv-rails (~> 3.1.2)
   factory_bot_rails
-  pg (~> 1.1)
+  pg (~> 1.5)
   puma (~> 6.4.2)
   rack-attack
   rack-cors (~> 2.0, >= 2.0.2)
