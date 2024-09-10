@@ -28,6 +28,9 @@ gem "devise"
 
 gem "pundit"
 
+# Consistencia testing
+gem 'faker', '~> 1.6', '>= 1.6.6'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

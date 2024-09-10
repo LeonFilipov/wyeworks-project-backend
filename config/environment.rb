@@ -15,23 +15,7 @@ Rails.application.config.before_initialize do
   # ENV['AMBIENTE'] ||= 'production'
 
   # Configuración de variables de entorno para la base de datos
-  ENV['DB_DESA_HOST'] ||= 'localhost'
-  ENV['DB_DESA_PORT'] ||= '5432'
-  ENV['DB_DESA_USERNAME'] ||= 'postgres'
-  ENV['DB_DESA_PASSWORD'] ||= 'password'
-  ENV['DB_DESA_NAME_DEVELOPMENT'] ||= 'RailsDB'
 
-  ENV['DB_TEST_HOST'] ||= 'localhost'
-  ENV['DB_TEST_PORT'] ||= '5432'
-  ENV['DB_TEST_USERNAME'] ||= 'postgres'
-  ENV['DB_TEST_PASSWORD'] ||= 'password'
-  ENV['DB_TEST_NAME'] ||= 'RailsDB_TEST'
-  
-  ENV['DB_PROD_HOST'] ||= 'localhost'
-  ENV['DB_PROD_PORT'] ||= '5432'
-  ENV['DB_PROD_USERNAME'] ||= 'postgres'
-  ENV['DB_PROD_PASSWORD'] ||= 'password'
-  ENV['DB_PROD_NAME'] ||= 'RailsDB_PROD'
 
   # Custom logging configuration
   Rails.logger = Logger.new(STDOUT)
