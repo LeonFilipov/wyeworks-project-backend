@@ -1,4 +1,4 @@
-# 
+#
 class JsonWebTokenService
     def self.encode(payload, exp = 2.hours.from_now)
         payload[:exp] = exp.to_i
