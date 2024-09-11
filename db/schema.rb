@@ -15,10 +15,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_231808) do
   enable_extension "plpgsql"
 
   create_table "users", force: :cascade do |t|
+    t.string "name"
     t.string "email"
     t.string "uid"
-    t.string "provider"
-    t.string "name"
+    t.string "description"
+    t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

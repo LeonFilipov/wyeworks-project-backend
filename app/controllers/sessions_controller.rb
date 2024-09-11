@@ -1,11 +1,13 @@
 class SessionsController < ApplicationController
-    def create
-        user = User.google_auth(request.env['omniauth.auth']);
+    def oauth2_callback
+        response = GoogleAuthService.get_access_token(params[:code])
+        user_info = GoogleAuthService.get_user_info(response["access_token"])
+        user = User.google_auth(user_info)
+
         if user.save
-            session[:user_id] = user.id
-            render json: { user: user}
+            render json: { user: user }, status: 200
         else
-            render json: { status: 500, errors: user.errors.full_messages }
+            render json: { error: "Error creating user" }, status: 500
         end
     end
 end
