@@ -64,6 +64,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.0.0'
 
   # Verificacion codigo estatico
+  gem 'rubocop-rails-omakase'
   gem 'rubocop', '~> 1.9', require: false
   # Inspeccionar :
   # bundle exec rubocop
