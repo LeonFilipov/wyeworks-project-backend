@@ -27,6 +27,7 @@ gem "sidekiq", "~> 7.1", ">= 7.1.2"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 gem "httparty"
+gem "jwt"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

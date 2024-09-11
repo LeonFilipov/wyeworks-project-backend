@@ -9,23 +9,23 @@ class GoogleAuthService
       redirect_uri: ENV["GOOGLE_REDIRECT_URI"],
       grant_type: "authorization_code"
     }.to_json, headers: {
-      "Content-Type" => "application/json"  
+      "Content-Type" => "application/json"
     })
 
     if response.success?
-      return response
+      response
     else
-      return "Error getting access token #{response.parsed_response}"
+      "Error getting access token #{response.parsed_response}"
     end
   end
 
   def self.get_user_info(access_token)
-    response = HTTParty.get("https://www.googleapis.com/oauth2/v3/userinfo", 
-      query: { "access_token" => access_token }    
+    response = HTTParty.get("https://www.googleapis.com/oauth2/v3/userinfo",
+      query: { "access_token" => access_token }
     )
 
     if response.success?
-      return response.parsed_response
+      response.parsed_response
     else
       raise "Error getting user info: #{response.parsed_response}"
     end

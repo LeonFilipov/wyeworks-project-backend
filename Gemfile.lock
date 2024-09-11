@@ -116,6 +116,8 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.7.2)
+    jwt (2.8.2)
+      base64
     language_server-protocol (3.17.0.3)
     logger (1.6.0)
     loofah (2.22.0)
@@ -302,6 +304,7 @@ DEPENDENCIES
   dotenv-rails (~> 3.1.2)
   factory_bot_rails
   httparty
+  jwt
   pg (~> 1.1)
   puma (~> 6.4.2)
   rack-attack
