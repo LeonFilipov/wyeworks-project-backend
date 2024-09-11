@@ -3,21 +3,27 @@ require_relative "boot"
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
+# you"ve limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+# Load dotenv
+if Rails.env.development? || Rails.env.test?
+  require "dotenv/load"
+end
 
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
 module WyerworksProjectBackend
   class Application < Rails::Application
-
+    
     config.load_defaults 7.2
     
     # Set Timezone
     config.time_zone = 'America/Montevideo'
 
-    # Autoload and eager load settings for lib directory
-    config.autoload_lib(ignore: %w[assets tasks])
+    # Set Timezone
+    config.time_zone = "America/Montevideo"
+
 
     # Active Record configurations
     config.active_record.schema_format = :ruby
@@ -44,6 +50,7 @@ module WyerworksProjectBackend
     # Logging and monitoring
     config.log_level = :info
     config.log_tags = [:request_id]
+
     config.active_support.deprecation = :notify
 
     # Configure Active Job
@@ -57,12 +64,14 @@ module WyerworksProjectBackend
     # YJIT configuration for performance (Ruby 3.1+)
     config.yjit = true
 
-    config.encoding = 'utf-8'          # Encoding configuration
+    config.encoding = "utf-8"          # Encoding configuration
+    
     # config.eager_load = true         # Cargar todo y no hacerlo mediante joins, ver que conviene
     config.show_exceptions = true      # Show exceptions configuration
 
     # Middleware and security settings
     config.middleware.use Rack::Attack
+
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false

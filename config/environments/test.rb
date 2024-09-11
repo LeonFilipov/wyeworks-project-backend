@@ -45,7 +45,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
 
   # Unlike controllers, the mailer instance doesn't have any context about the
-  # incoming request so you'll need to provide the :host parameter yourself.
+  # incoming request so you"ll need to provide the :host parameter yourself.
   config.action_mailer.default_url_options = { host: "www.example.com" }
 
   # Print deprecation notices to the stderr.
@@ -63,11 +63,11 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 
-  # Raise error when a before_action's only/except options reference missing actions.
+  # Raise error when a before_action"s only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
 
-  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime('%z').gsub('0', '').to_i]
+  config.time_zone = ActiveSupport::TimeZone[Time.now.strftime("%z").gsub("0", "").to_i]
 
   config.force_ssl = true
   config.action_dispatch.cookies_same_site_protection = :strict

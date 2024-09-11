@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   # root "posts#index"
   resources :tutors
   resources :users, only: [:index, :show, :new, :create, :edit, :update, :destroy]  
+
 end
