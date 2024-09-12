@@ -103,6 +103,8 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
+    faker (1.9.6)
+      i18n (>= 0.7)
     globalid (1.2.1)
       activesupport (>= 6.1)
     httparty (0.22.0)
@@ -165,6 +167,8 @@ GEM
       stringio
     puma (6.4.2)
       nio4r (~> 2.0)
+    pundit (2.4.0)
+      activesupport (>= 3.0.0)
     racc (1.8.1)
     rack (3.1.7)
     rack-attack (6.7.0)
@@ -303,10 +307,12 @@ DEPENDENCIES
   debug
   dotenv-rails (~> 3.1.2)
   factory_bot_rails
+  faker (~> 1.6, >= 1.6.6)
   httparty
   jwt
   pg (~> 1.1)
   puma (~> 6.4.2)
+  pundit
   rack-attack
   rack-cors (~> 2.0, >= 2.0.2)
   rails (~> 7.2.0)

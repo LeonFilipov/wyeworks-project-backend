@@ -22,6 +22,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 #
 gem "sidekiq", "~> 7.1", ">= 7.1.2"
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+# gem "jbuilder"
 # Gem for http requests
 gem "httparty"
 # Gem for JWT service
@@ -43,6 +45,13 @@ gem "rack-attack"
 
 # Secured password handling
 gem "bcrypt", "~> 3.1.7"
+
+# gem "devise"
+
+gem "pundit"
+
+# Consistencia testing
+gem 'faker', '~> 1.6', '>= 1.6.6'
 
 group :development, :test do
   # Debugging tools
