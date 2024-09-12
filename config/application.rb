@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 # Load dotenv
 if Rails.env.development? || Rails.env.test?
-  require "dotenv/load"
+  Dotenv::Railtie.load
 end
 
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
@@ -72,6 +72,9 @@ module WyerworksProjectBackend
     # Middleware and security settings
     config.middleware.use Rack::Attack
 
+    #
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
