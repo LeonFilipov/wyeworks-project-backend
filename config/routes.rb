@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
   get "authorization" => "sessions#authorization_needed"
-  resources :universities do
-    resources :subjects do
+  resources :universities, only: [:index, :show] do
+    resources :subjects, only: [:index, :show] do
       resources :topics do
         resources :tags
       end
