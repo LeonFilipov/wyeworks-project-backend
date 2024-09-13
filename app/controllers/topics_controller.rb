@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   before_action :set_subject
-  before_action :set_topic, only: [:show, :update, :destroy]
+  before_action :set_topic, only: [ :show, :update, :destroy ]
 
   # GET /universities/:university_id/subjects/:subject_id/topics
   def index

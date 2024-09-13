@@ -1,6 +1,6 @@
 class SubjectsController < ApplicationController
   before_action :set_university
-  before_action :set_subject, only: [:show, :update, :destroy]
+  before_action :set_subject, only: [ :show, :update, :destroy ]
 
   # GET /universities/:university_id/subjects
   def index
@@ -16,7 +16,7 @@ class SubjectsController < ApplicationController
   # POST /universities/:university_id/subjects
   def create
     @subject = @university.subjects.build(subject_params)
-    
+
     if @subject.save
       render json: @subject, status: :created
     else
