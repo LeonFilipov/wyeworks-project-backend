@@ -29,7 +29,5 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-docker-compose.yml
-
 # Ignore master key for decrypting credentials and more.
 /config/master.key
