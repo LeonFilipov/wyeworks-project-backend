@@ -13,7 +13,7 @@ gem "puma", "~> 6.4.2"
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
 
 # To manage environment variables
-gem 'dotenv-rails'
+gem "dotenv-rails"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -51,7 +51,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "pundit"
 
 # Consistencia testing
-gem 'faker', '~> 1.6', '>= 1.6.6'
+gem "faker", "~> 1.6", ">= 1.6.6"
 
 group :development, :test do
   # Debugging tools
