@@ -1,4 +1,4 @@
-class UniversityController < ApplicationController
+class UniversitiesController < ApplicationController
     before_action :set_university, only: [:show, :edit, :update, :destroy]
   
     # GET /universities

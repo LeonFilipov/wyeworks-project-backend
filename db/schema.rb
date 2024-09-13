@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_11_012455) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_12_002809) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,12 +18,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_012455) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "university_id", null: false
+    t.index ["university_id"], name: "index_subjects_on_university_id"
   end
 
   create_table "tags", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "topic_id", null: false
+    t.index ["topic_id"], name: "index_tags_on_topic_id"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -31,13 +35,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_012455) do
     t.text "asset"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "tutors", force: :cascade do |t|
-    t.string "name"
-    t.string "subject"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "subject_id", null: false
+    t.index ["subject_id"], name: "index_topics_on_subject_id"
   end
 
   create_table "universities", force: :cascade do |t|
@@ -56,4 +55,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_11_012455) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "subjects", "universities"
+  add_foreign_key "tags", "topics"
+  add_foreign_key "topics", "subjects"
 end
