@@ -22,14 +22,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_12_002809) do
     t.index ["university_id"], name: "index_subjects_on_university_id"
   end
 
-  create_table "tags", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "topic_id", null: false
-    t.index ["topic_id"], name: "index_tags_on_topic_id"
-  end
-
   create_table "topics", force: :cascade do |t|
     t.string "name"
     t.text "asset"
@@ -57,6 +49,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_12_002809) do
   end
 
   add_foreign_key "subjects", "universities"
-  add_foreign_key "tags", "topics"
   add_foreign_key "topics", "subjects"
 end

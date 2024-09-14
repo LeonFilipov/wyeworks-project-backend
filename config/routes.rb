@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   get "authorization" => "sessions#authorization_needed"
   resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
-      resources :topics do
-        resources :tags
-      end
+      resources :topics
     end
   end
 
