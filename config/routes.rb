@@ -3,14 +3,14 @@ Rails.application.routes.draw do
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
   get "authorization" => "sessions#authorization_needed"
 
-  resources :users, only: [:index, :show, :update ]
+  resources :users, only: [ :index, :show, :update ]
 
   resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
       resources :topics
     end
   end
-  
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
