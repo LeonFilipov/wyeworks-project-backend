@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 # Load dotenv
 if Rails.env.development? || Rails.env.test?
-  Dotenv::Railtie.load
+  Dotenv::Rails.load
 end
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
