@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_04_231808) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_12_002809) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "subjects", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "university_id", null: false
+    t.index ["university_id"], name: "index_subjects_on_university_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "name"
+    t.text "asset"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "subject_id", null: false
+    t.index ["subject_id"], name: "index_topics_on_subject_id"
+  end
+
+  create_table "universities", force: :cascade do |t|
+    t.string "name"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -23,4 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_231808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+  
+  add_foreign_key "subjects", "universities"
+  add_foreign_key "topics", "subjects"
 end

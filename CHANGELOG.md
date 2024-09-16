@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JWT Service for sessions
 - New migration: CreateUsers with name, email, uid, description, and image_url
 
+- [[Backend-40]](https://www.notion.so/Desarrollo-gestion-de-Temas-b47179ce78f14a32ab1f2116cc2e47bc?pvs=4) Topic management with University and Subject associations
++ University table with name and location
++ Subject table with name and university_id
++ Topic table with name, asset, and subject_id
++ Tag table with name and topic_id
+
 ### Removed
 - [[PIS2024-11]](https://ianaraznyc.atlassian.net/jira/software/projects/PIS2024/boards/1?selectedIssue=PIS2024-111) 
 - Repo chores after initial setup and testing
