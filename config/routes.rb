@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
   get "authorization" => "sessions#authorization_needed"
 
+  resources :users, only: [:index, :show, :update ]
+
   resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
       resources :topics
