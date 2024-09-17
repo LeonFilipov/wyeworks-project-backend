@@ -3,6 +3,8 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.0"
 
+gem "nokogiri", ">= 1.8.5"
+
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 

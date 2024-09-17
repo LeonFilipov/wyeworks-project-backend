@@ -310,6 +310,7 @@ DEPENDENCIES
   faker (~> 1.6, >= 1.6.6)
   httparty
   jwt
+  nokogiri (>= 1.8.5)
   pg (~> 1.1)
   puma (~> 6.4.2)
   pundit
