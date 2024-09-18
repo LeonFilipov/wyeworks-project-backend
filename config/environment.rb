@@ -10,19 +10,6 @@ Rails.application.config.before_initialize do
   # Ejemplo de uso:
   # some_config = ENV["SOME_GLOBAL_CONFIG"]
 
-  # Configuración de variables de entorno para la base de datos
-  ENV["DB_DESA_HOST"] ||= "localhost"
-  ENV["DB_DESA_PORT"] ||= "5432"
-  ENV["DB_DESA_USERNAME"] ||= "postgres"
-  ENV["DB_DESA_PASSWORD"] ||= "password"
-  ENV["DB_DESA_NAME_DEVELOPMENT"] ||= "tutorias_development"
-
-  ENV["DB_TEST_HOST"] ||= "localhost"
-  ENV["DB_TEST_PORT"] ||= "5432"
-  ENV["DB_TEST_USERNAME"] ||= "postgres"
-  ENV["DB_TEST_PASSWORD"] ||= "password"
-  ENV["DB_TEST_NAME"] ||= "tutorias_test"
-
 
   # Estas variables deben de estar definidas en otro lado.
   # ENV["DB_PROD_HOST"] ||= "localhost"
