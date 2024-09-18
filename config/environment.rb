@@ -11,17 +11,11 @@ Rails.application.config.before_initialize do
   # some_config = ENV["SOME_GLOBAL_CONFIG"]
 
   # Configuración de variables de entorno para la base de datos
-  ENV["DB_DESA_HOST"] ||= "localhost"
-  ENV["DB_DESA_PORT"] ||= "5432"
-  ENV["DB_DESA_USERNAME"] ||= "postgres"
-  ENV["DB_DESA_PASSWORD"] ||= "password"
-  ENV["DB_DESA_NAME_DEVELOPMENT"] ||= "RailsDB"
-
-  ENV["DB_TEST_HOST"] ||= "localhost"
-  ENV["DB_TEST_PORT"] ||= "5432"
-  ENV["DB_TEST_USERNAME"] ||= "postgres"
-  ENV["DB_TEST_PASSWORD"] ||= "password"
-  ENV["DB_TEST_NAME"] ||= "RailsDB_TEST"
+  ENV["DB_HOST"] 
+  ENV["DB_PORT"] 
+  ENV["DB_USERNAME"] 
+  ENV["DB_PASSWORD"] 
+  ENV["DB_NAME_DEVELOPMENT"] 
 
 
   # Estas variables deben de estar definidas en otro lado.
