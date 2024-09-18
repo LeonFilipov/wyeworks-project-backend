@@ -38,6 +38,8 @@ gem "jwt"
 # Protection against abusive requests
 gem "rack-attack"
 
+gem 'rswag'
+
 # Profiling tools
 # gem "rack-mini-profiler", "~> 2.0"
 
