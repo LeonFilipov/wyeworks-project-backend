@@ -11,11 +11,11 @@ Rails.application.config.before_initialize do
   # some_config = ENV["SOME_GLOBAL_CONFIG"]
 
   # Configuración de variables de entorno para la base de datos
-  ENV["DB_HOST"]
-  ENV["DB_PORT"]
-  ENV["DB_USERNAME"]
-  ENV["DB_PASSWORD"]
-  ENV["DB_NAME_DEVELOPMENT"]
+  ENV["DB_HOST"] 
+  ENV["DB_PORT"] 
+  ENV["DB_USERNAME"] 
+  ENV["DB_PASSWORD"] 
+  ENV["DB_NAME_DEVELOPMENT"] 
 
 
   # Estas variables deben de estar definidas en otro lado.
