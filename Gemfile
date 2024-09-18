@@ -30,6 +30,8 @@ gem "sidekiq", "~> 7.1", ">= 7.1.2"
 gem "httparty"
 # Gem for JWT service
 gem "jwt"
+# For use of UUIDs in the database
+gem "pgcrypto"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
