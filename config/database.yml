@@ -15,27 +15,34 @@
 
 
 
-
-
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV["DB_HOST"] %>
-  port: <%= ENV["DB_PORT"] %>
-  username: <%= ENV["DB_USERNAME"] %>
-  password: <%= ENV["DB_PASSWORD"] %>
-  database: <%= ENV["DB_NAME"] %>
-  timeout: 5000
 
 development:
   <<: *default
+  host: <%= ENV["DB_DESA_HOST"] %>
+  port: <%= ENV["DB_DESA_PORT"] %>
+  username: <%= ENV["DB_DESA_USERNAME"] %>
+  password: <%= ENV["DB_DESA_PASSWORD"] %>
+  database: <%= ENV["DB_DESA_NAME_DEVELOPMENT"] %>
 
 test:
   <<: *default
+  host: <%= ENV["DB_TEST_HOST"] %>
+  port: <%= ENV["DB_TEST_PORT"] %>
+  username: <%= ENV["DB_TEST_USERNAME"] %>
+  password: <%= ENV["DB_TEST_PASSWORD"] %>
+  database: <%= ENV["DB_TEST_NAME"] %>
 
 production:
   <<: *default
+  host: <%= ENV["DB_PROD_HOST"] %>
+  port: <%= ENV["DB_PROD_PORT"] %>
+  username: <%= ENV["DB_PROD_USERNAME"] %>
+  password: <%= ENV["DB_PROD_PASSWORD"] %>
+  database: <%= ENV["DB_PROD_NAME"] %>
 
 
 
