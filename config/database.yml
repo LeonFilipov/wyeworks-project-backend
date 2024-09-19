@@ -25,7 +25,7 @@ default: &default
   port: <%= ENV["DB_PORT"] || 5432 %>
   username: <%= ENV["DB_USERNAME"] || "postgres" %>
   password: <%= ENV["DB_PASSWORD"] || "password" %>
-  database: <%= ENV["DB_NAME"] || "tutorias_development" %>
+  database: <%= ENV["DB_NAME"] || "tutorias_test" %>
   timeout: 5000
 
 development:
