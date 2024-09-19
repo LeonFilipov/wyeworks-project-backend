@@ -7,7 +7,7 @@ gem "rails", "~> 7.2.0"
 gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.4.2"
+gem "puma", "~> 6.4.3"
 
 # For Cross-Origin Resource Sharing (CORS) support
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
