@@ -32,6 +32,9 @@ gem "httparty"
 gem "jwt"
 # For use of UUIDs in the database
 gem "pgcrypto"
+#
+gem "rswag-api"
+gem "rswag-ui"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
