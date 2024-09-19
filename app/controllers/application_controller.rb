@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
         header = request.headers["Authorization"].split(" ").last
         begin
           decoded = JsonWebTokenService.decode(header)
-          @current_user = User.find(decoded[:user_id])
+          @current_user = User.where(id: decoded[:user_id])
         rescue JWT::DecodeError
           render json: { error: "Invalid token" }, status: 401
         end
