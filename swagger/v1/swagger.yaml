@@ -1,0 +1,184 @@
+openapi: '3.0.0'
+info:
+  title: Study Circle API
+  version: 1.0.0
+  description: This is the backend for Study Circle project
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  # - url: http://52.14.63.57:3000
+  #   description: Production server
+paths:
+  /users:
+    get:
+      summary: Get all user
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+  /users/{id}:    # Aquí se añade el endpoint show
+    get:
+      summary: Get a specific user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: UUID
+          description: The ID of the user
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+  /profile:
+    get:
+      summary: Get the user profile
+      responses:
+        '200':
+          description: The user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+    put:
+      summary: Update the user information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                description:
+                  type: string
+                  example: "A brief description of the user."
+      responses:
+        '200':
+          description: The updated user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "param is missing or the value is empty"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+  /auth/google_oauth2/callback:
+    get:
+      summary: Callback for Google OAuth2
+      responses:
+        '200':
+          description: Register/login the user and generate the JWT token 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: JWT
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # Indicates that this is a JWT token
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        description:
+          type: string
+        image_url:
+          type: string
+          format: uri
+  responses:
+    UnauthorizedError:
+      description: Unauthorized error by invalid token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Invalid token
+    AuthHeaderMissingError:
+      description: Bad request error by missing Authorization header
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Authorization header is missing

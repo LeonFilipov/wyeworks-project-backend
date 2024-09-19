@@ -233,6 +233,12 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
+    rswag-api (2.14.0)
+      activesupport (>= 5.2, < 8.0)
+      railties (>= 5.2, < 8.0)
+    rswag-ui (2.14.0)
+      actionpack (>= 5.2, < 8.0)
+      railties (>= 5.2, < 8.0)
     rubocop (1.65.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -313,6 +319,8 @@ DEPENDENCIES
   rails (~> 7.2.0)
   rspec-rails (~> 7.0)
   rubocop
+  rswag-api
+  rswag-ui
   rubocop-rails-omakase
   sidekiq (~> 7.1, >= 7.1.2)
   spring
