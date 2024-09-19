@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+    has_many :student_topics
+    has_many :topics, through: :student_topics
+    
     validates :email, presence: true, uniqueness: true
     validates :uid, presence: true, uniqueness: true
 

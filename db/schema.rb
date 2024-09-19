@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_16_182839) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_18_204708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "student_topics", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "topic_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_student_topics_on_topic_id"
+    t.index ["user_id"], name: "index_student_topics_on_user_id"
+  end
 
   create_table "subjects", force: :cascade do |t|
     t.string "name"
@@ -47,8 +56,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_182839) do
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "attended_lessons", default: 0
+    t.integer "attended_tutors", default: 0
+    t.integer "attended_topics", default: 0
   end
 
+  add_foreign_key "student_topics", "topics"
+  add_foreign_key "student_topics", "users"
   add_foreign_key "subjects", "universities"
   add_foreign_key "topics", "subjects"
 end
