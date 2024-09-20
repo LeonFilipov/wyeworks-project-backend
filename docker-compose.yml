@@ -1,4 +1,4 @@
-#version: '3.8'
+
 
 services:
   api:
@@ -16,6 +16,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}
       # postgresql://[usuario]:[contraseña]@[nombre de servicio de la base de datos]:[puerto]/[nombre de la base de datos]
+    networks:
+      - app-network
 
   postgres:
     image: postgres:latest
@@ -27,19 +29,30 @@ services:
       - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
     ports:
       - "${DB_PORT}:5432"
+    networks:
+      - app-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: "un.mail@example.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
     ports:
       - "5050:80"
     depends_on:
       - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - app-network
 
 volumes: # Volumenes para persistir la información de la base de datos y pgadmin
   postgres-data:
   pgadmin-data:
+
+networks:
+  app-network:
+    driver: bridge
