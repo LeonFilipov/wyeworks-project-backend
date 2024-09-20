@@ -69,6 +69,6 @@ Rails.application.configure do
 
   config.time_zone = ActiveSupport::TimeZone[Time.now.strftime("%z").gsub("0", "").to_i]
 
-  config.force_ssl = true
+  config.force_ssl = false
   config.action_dispatch.cookies_same_site_protection = :strict
 end

@@ -13,6 +13,10 @@ class UsersController < ApplicationController
         end
     end
 
+    def profile
+        render json: @current_user.as_json(only: [ :id, :name, :email, :description, :image_url ]), status: 200
+    end
+
     def update
         begin
             @current_user.update(user_params)

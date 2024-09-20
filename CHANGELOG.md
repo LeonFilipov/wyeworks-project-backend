@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-36]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=2b0cb01cb3994c38bd126dcb3162a272&pm=s)
+- New endpoint /api-docs to access the Swagger documentation
+- Accept bearer token in the Authorization header to authenticate the user
+- Removed unused spec tests
+
+- New endpoint profile to get the user's information
 
 - [[Backend-85]](https://www.notion.so/Sumarse-Crear-a-una-solicitud-de-tutor-a-sobre-un-tema-Estudiante-b8c99b9dc6414efd94a62313cfeeeaa3)
 - Student management:
