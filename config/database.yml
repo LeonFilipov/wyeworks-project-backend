@@ -13,38 +13,27 @@
 # gem "pg"
 #
 
-
-
-
-
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST", "postgres") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV.fetch("DB_USERNAME", "postgres") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "password") %>
+  timeout: 5000
 
 development:
   <<: *default
-  host: <%= ENV["DB_DESA_HOST"] %>
-  port: <%= ENV["DB_DESA_PORT"] %>
-  username: <%= ENV["DB_DESA_USERNAME"] %>
-  password: <%= ENV["DB_DESA_PASSWORD"] %>
-  database: <%= ENV["DB_DESA_NAME_DEVELOPMENT"] %>
+  database: "tutorias_development"
 
 test:
   <<: *default
-  host: <%= ENV["DB_TEST_HOST"] %>
-  port: <%= ENV["DB_TEST_PORT"] %>
-  username: <%= ENV["DB_TEST_USERNAME"] %>
-  password: <%= ENV["DB_TEST_PASSWORD"] %>
-  database: <%= ENV["DB_TEST_NAME"] %>
+  database: "tutorias_test"
 
 production:
   <<: *default
-  host: <%= ENV["DB_PROD_HOST"] %>
-  port: <%= ENV["DB_PROD_PORT"] %>
-  username: <%= ENV["DB_PROD_USERNAME"] %>
-  password: <%= ENV["DB_PROD_PASSWORD"] %>
-  database: <%= ENV["DB_PROD_NAME"] %>
+  database: <%= ENV.fetch("DB_NAME", "tutorias_production") %>
 
 
 
