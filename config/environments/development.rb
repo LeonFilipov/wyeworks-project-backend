@@ -81,13 +81,5 @@ Rails.application.configure do
 
   config.time_zone = ActiveSupport::TimeZone[Time.now.strftime("%z").gsub("0", "").to_i]
 
-  # Permitir acceso CORS desde cualquier origen en desarrollo
-  config.middleware.insert_before 0, Rack::Cors do
-    allow do
-      origins "*"
-      resource "*", headers: :any, methods: [ :get, :post, :options, :put, :delete ]
-    end
-  end
-
   # config.action_controller.allow_forgery_protection = false # Desactivar protección CSRF en desarrollo
 end
