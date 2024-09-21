@@ -1,7 +1,6 @@
-#version: '3.8'
-
 services:
   api:
+    platform: linux/x86_64
     build:
       context: .
       dockerfile: ./dev.dockerfile
@@ -12,20 +11,18 @@ services:
       - .:/api # Volumen para persistir los cambios en el código
     depends_on:
       - postgres
-    # environment:
-    #   - DATABASE_URL=postgresql://postgres:password@postgres:5432/RailsDB  
-      # postgresql://[usuario]:[contraseña]@[nombre de servicio de la base de datos]:[puerto]/[nombre de la base de datos]
+    environment:
+      - SECRET_KEY_BASE=${JWT_SECRET}
 
   postgres:
     image: postgres:latest
     environment: # variables de entorno para la base de datos
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=postgres
-      # - POSTGRES_DB=RailsDB
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
     volumes:
       - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
     ports:
-      - "5433:5432" # Mapeo de puertos del contenedor a la maquina host
+      - "5433:5432"
 
   pgadmin:
     image: dpage/pgadmin4:latest
