@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "availability_tutors/index"
+  get "availability_tutors/show"
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
