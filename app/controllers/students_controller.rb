@@ -1,5 +1,5 @@
 class StudentsController < UsersController
-    before_action :set_subject, only: [ :request_topic ]
+    #before_action :set_subject, only: [ :request_topic ]
     before_action :set_topic, only: [ :request_topic ]
 
     def request_topic
@@ -11,47 +11,24 @@ class StudentsController < UsersController
         end
     end
 
-    def show_my_requested_topics
-        query = StudentTopic.joins(:user).joins(:topic).joins(topic: :subject)
-                            .select("subjects.id as subject_id, subjects.name as subject_name, student_topics.topic_id, topics.name as topic_name")
-                            .where(user_id: @current_user.id)
-        result = query.map do |record|
-            {
-                subject_id: record.subject_id,
-                subject_name: record.subject_name,
-                topic_id: record.topic_id,
-                topic_name: record.topic_name
-            }
-            end
-        render json: result, status: :ok
+    def my_requested_topics
+        result = StudentsService.get_my_requested_topics(@current_user)
+
+        if result[:error]
+            render json: result, status: :not_found
+        else
+            render json: result, status: :ok
+        end
     end
 
-    def show_requested_topics
-        query = StudentTopic.joins(:user).joins(:topic).joins(topic: :subject)
-                            .select("student_topics.topic_id, topics.name as topic_name, subjects.id as subject_id, subjects.name as subject_name, users.id as user_id")
+    def all_requested_topics
+        result = StudentsService.get_requested_topics
 
-        topics = {}
-        query.each do |record|
-            topic_id = record.topic_id
-            topic_name = record.topic_name
-            subject_id = record.subject_id
-            subject_name = record.subject_name
-
-            topics[topic_id] ||= { topic_name: topic_name, subject_id: subject_id, subject_name: subject_name, user_count: 0 }
-            topics[topic_id][:user_count] += 1
+        if result[:error]
+            render json: result, status: :not_found
+        else
+            render json: result, status: :ok
         end
-
-        result = topics.map do |topic_id, data|
-            {
-                subject_id: data[:subject_id],
-                subject_name: data[:subject_name],
-                topic_id: topic_id,
-                topic_name: data[:topic_name],
-                user_count: data[:user_count]
-            }
-        end
-
-        render json: result, status: :ok
     end
 
     private
