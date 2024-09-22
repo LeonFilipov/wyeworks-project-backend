@@ -13,6 +13,8 @@ services:
       - postgres
     environment:
       - SECRET_KEY_BASE=${JWT_SECRET}
+    env_file:
+      - .env
 
   postgres:
     image: postgres:latest
