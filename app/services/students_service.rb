@@ -1,10 +1,14 @@
 class StudentsService
-    def self.get_my_requested_topics(current_user)
+    def initialize(current_user)
+      @current_user=current_user
+    end
+  
+    def get_my_requested_topics()
         query = StudentTopic.joins(:user)
                           .joins(:topic)
-                          .joins(topic: :subject)
+                          .joins(:subject)
                           .select("subjects.id as subject_id, subjects.name as subject_name, student_topics.topic_id, topics.name as topic_name")
-                          .where(user_id: current_user.id)
+                          .where(user_id: @current_user.select[:id])
       
     result = query.map do |record|
         {

@@ -1,5 +1,5 @@
 class StudentsController < UsersController
-    #before_action :set_subject, only: [ :request_topic ]
+    
     before_action :set_topic, only: [ :request_topic ]
 
     def request_topic
@@ -12,7 +12,8 @@ class StudentsController < UsersController
     end
 
     def my_requested_topics
-        result = StudentsService.get_my_requested_topics(@current_user)
+        service = StudentsService.new(@current_user)
+        result = service.get_my_requested_topics()
 
         if result[:error]
             render json: result, status: :not_found
@@ -33,22 +34,18 @@ class StudentsController < UsersController
 
     private
 
-        # Set the subject based on the university and subject ID
-        def set_subject
-            @subject = Subject.find(params[:subject_id])
-        rescue ActiveRecord::RecordNotFound
-            render json: { error: "Subject not found" }, status: :not_found
-        end
+        
+       
 
         # Set the topic within the context of the subject
         def set_topic
-            @topic = @subject.topics.find(params[:topic_id])
+            @topic = Topic.find(params[:topic_id])
         rescue ActiveRecord::RecordNotFound
             render json: { error: "Topic not found" }, status: :not_found
         end
 
         # Permit only allowed parameters
         def solicitar_params
-            params.require(:solicitar).permit(:subject_id, :topic_id)
+            params.require(:solicitar).permit(:topic_id)
         end
 end
