@@ -14,9 +14,13 @@ Rails.application.routes.draw do
 
   resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
-      resources :topics
+      resources :topics do
+        resources :tutor_availability, only: [ :index, :create ], controller: 'availability_tutors'
+      end
     end
   end
+
+  resources :tutor_availability, only: [ :index, :show, :create ], controller: 'availability_tutors'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

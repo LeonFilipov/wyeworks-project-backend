@@ -1,5 +1,5 @@
 class Topic < ApplicationRecord
     belongs_to :subject
-    has_many :given_topics
-    has_many :tutors, through: :given_topics
+    has_many :availability_tutors
+    has_many :users, through: :availability_tutors
 end

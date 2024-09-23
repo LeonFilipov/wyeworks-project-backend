@@ -1,20 +1,54 @@
 class AvailabilityTutorsController < ApplicationController
+  # GET /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
+  # GET /tutor_availability
   def index
-    @availability_tutors = AvailabilityTutor.all
-    render json: @availability_tutors, status: :ok
+    if params[:topic_id]
+      @availabilities = AvailabilityTutor.where(topic_id: params[:topic_id])
+    else
+      @availabilities = AvailabilityTutor.all
+    end
+
+    render json: @availabilities.as_json(only: [:id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form])
   end
 
+  # GET /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability/:id
+  # GET /tutor_availability/:id
   def show
-    @availability_tutor = AvailabilityTutor.find(params[:id])
-    if @availability_tutor.present?
-      render json: @availability_tutor, status: :ok
+    @availability = AvailabilityTutor.find(params[:id])
+
+    render json: @availability.as_json(only: [:id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form])
+  end
+
+  # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
+  # POST /tutor_availability
+  def create
+    if params[:topic_id]
+      @topic = Topic.find(params[:topic_id])
     else
-      render json: { message: "Availability tutor not found" }, status: :not_found
+      @topic = Topic.new(topic_params)
+      unless @topic.save
+        render json: { errors: @topic.errors.full_messages }, status: :unprocessable_entity
+        return
+      end
+    end
+
+    @availability = @topic.availability_tutors.new(availability_tutor_params)
+    @availability.user = @current_user
+
+    if @availability.save
+      render json: { message: 'Availability created successfully', availability: @availability }, status: :created
+    else
+      render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   private
-    def user_params
-      params.require(:user).permit(:description, :tentative_date_from, :tentative_date_to)
-    end
+
+  def topic_params
+    params.require(:topic).permit(:name, :asset, :subject_id)
+  end
+
+  def availability_tutor_params
+    params.require(:availability_tutor).permit(:description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form)
+  end
 end
