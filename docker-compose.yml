@@ -1,58 +1,42 @@
-
-
 services:
   api:
     platform: linux/x86_64
     build:
       context: .
       dockerfile: ./dev.dockerfile
-    container_name: tutorias-api
+    container_name: studycircle-api
     ports:
       - "3000:3000" # Mapeo de puertos del contenedor a la maquina host
     volumes:
-      - .:/api # Volumen para persistir los cambios en el código
+      - .:/api # Volumen para persistir los cambios en el código}
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/studycircle
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@postgres:${DB_PORT}/${DB_NAME}
-      # postgresql://[usuario]:[contraseña]@[nombre de servicio de la base de datos]:[puerto]/[nombre de la base de datos]
-    networks:
-      - app-network
 
   postgres:
     image: postgres:latest
     environment: # variables de entorno para la base de datos
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=studycircle
     volumes:
       - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
     ports:
-      - "${DB_PORT}:5432"
-    networks:
-      - app-network
+      - "5433:5432"
 
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: "un.mail@example.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
-      PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
     ports:
       - "5050:80"
     depends_on:
       - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-    networks:
-      - app-network
 
 volumes: # Volumenes para persistir la información de la base de datos y pgadmin
   postgres-data:
   pgadmin-data:
-
-networks:
-  app-network:
-    driver: bridge
