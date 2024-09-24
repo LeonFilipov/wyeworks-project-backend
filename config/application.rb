@@ -14,7 +14,7 @@ module WyerworksProjectBackend
   class Application < Rails::Application
     config.load_defaults 7.2
 
-    ENV['RAILS_ENV'] ||= ENV['AMBIENTE'] || 'development'
+    ENV["RAILS_ENV"] ||= ENV["AMBIENTE"] || "development"
 
     # Set Timezone
     config.time_zone = "America/Montevideo"
