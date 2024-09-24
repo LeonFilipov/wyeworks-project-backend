@@ -7,9 +7,7 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 # Load dotenv
-if Rails.env.development? || Rails.env.test?
-  Dotenv::Rails.load
-end
+Dotenv::Rails.load
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
 module WyerworksProjectBackend

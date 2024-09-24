@@ -318,9 +318,9 @@ DEPENDENCIES
   rack-cors (~> 2.0, >= 2.0.2)
   rails (~> 7.2.0)
   rspec-rails (~> 7.0)
-  rubocop
   rswag-api
   rswag-ui
+  rubocop
   rubocop-rails-omakase
   sidekiq (~> 7.1, >= 7.1.2)
   spring
