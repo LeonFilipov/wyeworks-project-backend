@@ -14,11 +14,11 @@ Rails.application.routes.draw do
 
   resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
-      resources :topics do
-        resources :tutor_availability, only: [ :index, :create ], controller: 'availability_tutors'
-      end
+      resources :topics
     end
   end
+
+  post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
 
   resources :tutor_availability, only: [ :index, :show, :create ], controller: 'availability_tutors'
 
