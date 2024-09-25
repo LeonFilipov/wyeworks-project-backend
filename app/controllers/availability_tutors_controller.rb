@@ -8,7 +8,7 @@ class AvailabilityTutorsController < ApplicationController
       @availabilities = AvailabilityTutor.all
     end
 
-    render json: @availabilities.as_json(only: [:id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form])
+    render json: @availabilities.as_json(only: [ :id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form ])
   end
 
   # GET /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability/:id
@@ -16,7 +16,7 @@ class AvailabilityTutorsController < ApplicationController
   def show
     @availability = AvailabilityTutor.find(params[:id])
 
-    render json: @availability.as_json(only: [:id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form])
+    render json: @availability.as_json(only: [ :id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form ])
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
@@ -36,7 +36,7 @@ class AvailabilityTutorsController < ApplicationController
     @availability.user = @current_user
 
     if @availability.save
-      render json: { message: 'Availability created successfully', availability: @availability }, status: :created
+      render json: { message: "Availability created successfully", availability: @availability }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
     end
