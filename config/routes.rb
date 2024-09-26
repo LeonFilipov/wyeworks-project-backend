@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   put "profile" => "users#update"
   patch "profile" => "users#update"
 
-  resources :universities, only: [ :index, :show] do
+  resources :universities, only: [ :index, :show ] do
     resources :subjects, only: [ :index, :show ] do
       resources :topics
     end
@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   post "students/topics/:topic_id/request_topic" => "students#request_topic"
 
   get "students/my_requested_topics" => "students#my_requested_topics"
-  get "students/requested_topics" => "students#all_requested_topics"
+  get "students/requested_topics" => "students#requested_topics"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -135,12 +135,32 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-  /students/universities/{university_id}/subjects/{subject_id}/topics/{topic_id}/request_topic:
+  /students/topics/{topic_id}/request_topic:
     post:
       summary: A Student request a Topic
+      description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset and subject_id)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "topic name"
+                    asset:
+                      type: string
+                      example: "asset"
+                    subject_id:
+                      type: integer
+                      example: 10
       responses:
         '200':
-          description: The topic is now associated with the user, as if the user has requested it
+          description: Ok
           content:
             application/json:
               schema:
@@ -176,16 +196,18 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
+                    subject_id:
+                      type: integer
+                      example: 12
+                    subject_name:
                       type: string
-                      format: uuid
-                    name:
+                      example: "GAL 2"
+                    topic_id:
+                      type: integer
+                      example: 7
+                    topic_name:
                       type: string
-                    description:
-                      type: string
-                    image_url:
-                      type: string
-                      format: uri
+                      example: "Valores Propios"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
@@ -203,16 +225,21 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
+                    subject_id:
+                      type: integer
+                      example: 12
+                    subject_name:
                       type: string
-                      format: uuid
-                    name:
+                      example: "GAL 2"
+                    topic_id:
+                      type: integer
+                      example: 7
+                    topic_name:
                       type: string
-                    description:
-                      type: string
-                    image_url:
-                      type: string
-                      format: uri
+                      example: "Valores Propios"
+                    user_count:
+                      type: integer
+                      example: 3
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
