@@ -4,21 +4,22 @@ services:
     build:
       context: .
       dockerfile: ./dev.dockerfile
-    container_name: tutorias-api
+    container_name: studycircle-api
     ports:
       - "3000:3000" # Mapeo de puertos del contenedor a la maquina host
     volumes:
-      - .:/api # Volumen para persistir los cambios en el código
+      - .:/api # Volumen para persistir los cambios en el código}
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/studycircle
     depends_on:
       - postgres
-    environment:
-      - SECRET_KEY_BASE=${JWT_SECRET}
 
   postgres:
     image: postgres:latest
     environment: # variables de entorno para la base de datos
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=studycircle
     volumes:
       - postgres-data:/var/lib/postgresql/data # Acá se persiste la información de la DB
     ports:
