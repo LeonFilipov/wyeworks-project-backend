@@ -159,18 +159,13 @@ paths:
                   properties:
                     description:
                       type: string
-                    tentative_date_from:
+                    date_from:
                       type: string
                       format: date-time
-                    tentative_date_to:
-                      type: string
-                      format: date-time
-                    effective_date:
+                    date_to:
                       type: string
                       format: date-time
                     link:
-                      type: string
-                    form:
                       type: string
       responses:
         '201':
@@ -190,18 +185,13 @@ paths:
                         type: integer
                       description:
                         type: string
-                      tentative_date_from:
+                      date_from:
                         type: string
                         format: date-time
-                      tentative_date_to:
-                        type: string
-                        format: date-time
-                      effective_date:
+                      date_to:
                         type: string
                         format: date-time
                       link:
-                        type: string
-                      form:
                         type: string
         '400':
           description: Bad request
@@ -238,18 +228,13 @@ paths:
                   properties:
                     description:
                       type: string
-                    tentative_date_from:
+                    date_from:
                       type: string
                       format: date-time
-                    tentative_date_to:
-                      type: string
-                      format: date-time
-                    effective_date:
+                    date_to:
                       type: string
                       format: date-time
                     link:
-                      type: string
-                    form:
                       type: string
       responses:
         '201':
@@ -269,18 +254,13 @@ paths:
                         type: integer
                       description:
                         type: string
-                      tentative_date_from:
+                      date_from:
                         type: string
                         format: date-time
-                      tentative_date_to:
-                        type: string
-                        format: date-time
-                      effective_date:
+                      date_to:
                         type: string
                         format: date-time
                       link:
-                        type: string
-                      form:
                         type: string
         '400':
           description: Bad request
@@ -309,18 +289,13 @@ paths:
                       type: integer
                     description:
                       type: string
-                    tentative_date_from:
+                    date_from:
                       type: string
                       format: date-time
-                    tentative_date_to:
-                      type: string
-                      format: date-time
-                    effective_date:
+                    date_to:
                       type: string
                       format: date-time
                     link:
-                      type: string
-                    form:
                       type: string
 
   /tutor_availability/{id}:
@@ -345,18 +320,13 @@ paths:
                     type: integer
                   description:
                     type: string
-                  tentative_date_from:
+                  date_from:
                     type: string
                     format: date-time
-                  tentative_date_to:
-                    type: string
-                    format: date-time
-                  effective_date:
+                  date_to:
                     type: string
                     format: date-time
                   link:
-                    type: string
-                  form:
                     type: string
         '404':
           description: Availability not found

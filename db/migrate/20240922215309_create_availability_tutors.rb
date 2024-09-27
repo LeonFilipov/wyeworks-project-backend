@@ -4,11 +4,9 @@ class CreateAvailabilityTutors < ActiveRecord::Migration[7.2]
       t.references :user, null: false, foreign_key: true
       t.references :topic, null: false, foreign_key: true
       t.string :description
-      t.datetime :tentative_date_from
-      t.datetime :tentative_date_to
-      t.datetime :effective_date
+      t.datetime :date_from
+      t.datetime :date_to
       t.string :link
-      t.string :form
 
       t.timestamps
     end

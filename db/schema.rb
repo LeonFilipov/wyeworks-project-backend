@@ -19,11 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
     t.uuid "user_id", null: false
     t.bigint "topic_id", null: false
     t.string "description"
-    t.datetime "tentative_date_from"
-    t.datetime "tentative_date_to"
-    t.datetime "effective_date"
+    t.datetime "date_from"
+    t.datetime "date_to"
     t.string "link"
-    t.string "form"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["topic_id"], name: "index_availability_tutors_on_topic_id"

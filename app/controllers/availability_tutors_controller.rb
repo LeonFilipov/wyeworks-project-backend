@@ -8,7 +8,7 @@ class AvailabilityTutorsController < ApplicationController
       @availabilities = AvailabilityTutor.all
     end
 
-    render json: @availabilities.as_json(only: [ :id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form ])
+    render json: @availabilities.as_json(only: [ :id, :description, :date_from, :date_to, :link ])
   end
 
   # GET /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability/:id
@@ -16,7 +16,7 @@ class AvailabilityTutorsController < ApplicationController
   def show
     @availability = AvailabilityTutor.find(params[:id])
 
-    render json: @availability.as_json(only: [ :id, :description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form ])
+    render json: @availability.as_json(only: [ :id, :description, :date_from, :date_to, :link ])
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
@@ -49,6 +49,6 @@ class AvailabilityTutorsController < ApplicationController
   end
 
   def availability_tutor_params
-    params.require(:availability_tutor).permit(:description, :tentative_date_from, :tentative_date_to, :effective_date, :link, :form)
+    params.require(:availability_tutor).permit(:description, :date_from, :date_to, :link)
   end
 end
