@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "availability_tutors/index"
+  get "availability_tutors/show"
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -15,6 +17,10 @@ Rails.application.routes.draw do
       resources :topics
     end
   end
+
+  post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
+
+  resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
