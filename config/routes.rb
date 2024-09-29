@@ -12,8 +12,8 @@ Rails.application.routes.draw do
   put "profile" => "users#update"
   patch "profile" => "users#update"
 
-  resources :universities, only: [ :index, :show ] do
-    resources :subjects, only: [ :index, :show ] do
+  resources :universities, only: [ :index, :show, :create ] do
+    resources :subjects, only: [ :index, :show, :create ] do
       resources :topics
     end
   end
