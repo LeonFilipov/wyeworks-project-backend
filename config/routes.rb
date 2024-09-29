@@ -18,13 +18,16 @@ Rails.application.routes.draw do
     end
   end
 
+
   post "students/topics/:topic_id/request_topic" => "students#request_topic"
 
   get "students/my_requested_topics" => "students#my_requested_topics"
   get "students/requested_topics" => "students#requested_topics"
   post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
 
-  resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors"
+  resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors" do
+    resources :interesteds, only: [ :index, :show, :create, :destroy]
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
