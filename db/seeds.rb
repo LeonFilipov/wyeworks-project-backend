@@ -453,4 +453,3 @@ Subject.create([
   { name: 'Hidrología e Hidráulica Aplicadas', university: fing },
   { name: 'Hidrología Avanzada II', university: fing }
 ])
-
