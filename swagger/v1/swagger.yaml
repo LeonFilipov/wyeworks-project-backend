@@ -2,16 +2,14 @@ openapi: '3.0.0'
 info:
   title: Study Circle API
   version: 1.0.0
-  description: This is the backend for Study Circle project
+  description: This is the backend for the Study Circle project
 servers:
   - url: http://localhost:3000
     description: Development server
-  # - url: http://52.14.63.57:3000
-  #   description: Production server
 paths:
   /users:
     get:
-      summary: Get all user
+      summary: Get all users
       responses:
         '200':
           description: A list of users
@@ -25,7 +23,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-  /users/{id}:    # Aquí se añade el endpoint show
+
+  /users/{id}:
     get:
       summary: Get a specific user by ID
       parameters:
@@ -33,7 +32,7 @@ paths:
           name: id
           required: true
           schema:
-            type: UUID
+            type: string
           description: The ID of the user
       responses:
         '200':
@@ -56,6 +55,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+
   /profile:
     get:
       summary: Get the user profile
@@ -110,6 +110,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+
   /auth/google_oauth2/callback:
     get:
       summary: Callback for Google OAuth2
@@ -124,7 +125,7 @@ paths:
                   token:
                     type: string
                     format: JWT
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
         '500':
           description: Internal server error
           content:
@@ -135,10 +136,396 @@ paths:
                   error:
                     type: string
                     example: Internal server error
+
+  /topics/{topic_id}/tutor_availability:
+    post:
+      summary: Create availability for a specific topic
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the topic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                availability_tutor:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    date_from:
+                      type: string
+                      format: date-time
+                    date_to:
+                      type: string
+                      format: date-time
+                    link:
+                      type: string
+      responses:
+        '201':
+          description: Availability created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Availability created successfully
+                  availability:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      description:
+                        type: string
+                      date_from:
+                        type: string
+                        format: date-time
+                      date_to:
+                        type: string
+                        format: date-time
+                      link:
+                        type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: param is missing or the value is empty availability_tutor
+
+  /tutor_availability:
+    post:
+      summary: Create a new topic and availability at the same time
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    asset:
+                      type: string
+                    subject_id:
+                      type: integer
+                availability_tutor:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    date_from:
+                      type: string
+                      format: date-time
+                    date_to:
+                      type: string
+                      format: date-time
+                    link:
+                      type: string
+      responses:
+        '201':
+          description: Topic and availability created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Topic and availability created successfully
+                  availability:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      description:
+                        type: string
+                      date_from:
+                        type: string
+                        format: date-time
+                      date_to:
+                        type: string
+                        format: date-time
+                      link:
+                        type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: param is missing or the value is empty
+
+    get:
+      summary: Get all availabilities
+      responses:
+        '200':
+          description: A list of all availabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    description:
+                      type: string
+                    date_from:
+                      type: string
+                      format: date-time
+                    date_to:
+                      type: string
+                      format: date-time
+                    link:
+                      type: string
+
+  /tutor_availability/{id}:
+    get:
+      summary: Get availability by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the availability
+      responses:
+        '200':
+          description: Availability details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  description:
+                    type: string
+                  date_from:
+                    type: string
+                    format: date-time
+                  date_to:
+                    type: string
+                    format: date-time
+                  link:
+                    type: string
+        '404':
+          description: Availability not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Availability not found
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
+
+  /universities/{university_id}/subjects/{subject_id}/topics:
+    post:
+      summary: Create a new topic for a specific subject
+      parameters:
+        - in: path
+          name: university_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the university
+        - in: path
+          name: subject_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the subject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "80868"
+                asset:
+                  type: string
+                  example: "Buenardo"
+      responses:
+        '201':
+          description: Topic created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  asset:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  subject_id:
+                    type: integer
+
+    get:
+      summary: Get all topics for a specific subject
+      parameters:
+        - in: path
+          name: university_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the university
+        - in: path
+          name: subject_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the subject
+      responses:
+        '200':
+          description: A list of topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    asset:
+                      type: string
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                    subject_id:
+                      type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
+
+  /universities/{university_id}/subjects/{subject_id}/topics/{id}:
+    get:
+      summary: Get a specific topic by ID
+      parameters:
+        - in: path
+          name: university_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the university
+        - in: path
+          name: subject_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the subject
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the topic
+      responses:
+        '200':
+          description: A topic object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  asset:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  subject_id:
+                    type: integer
+        '404':
+          description: Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Topic not found
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
+
   /students/topics/{topic_id}/request_topic:
     post:
       summary: A Student request a Topic
-      description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset and subject_id)
+      description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset, and subject_id)
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: false
         content:
@@ -183,9 +570,10 @@ paths:
                   error:
                     type: string
                     example: "Failed to add student to topic"
+
   /students/my_requested_topics:
     get:
-      summary: Get all the my topics
+      summary: Get all the topics requested by the user
       responses:
         '200':
           description: A list of topics requested by the user
@@ -212,6 +600,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+
   /students/requested_topics:
     get:
       summary: Get all the requested topics
@@ -244,6 +633,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+
 security:
   - bearerAuth: []
 

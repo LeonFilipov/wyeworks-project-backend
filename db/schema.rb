@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_18_204708) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -24,12 +24,33 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_18_204708) do
     t.index ["user_id"], name: "index_student_topics_on_user_id"
   end
 
+  create_table "availability_tutors", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "topic_id", null: false
+    t.string "description"
+    t.datetime "date_from"
+    t.datetime "date_to"
+    t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_availability_tutors_on_topic_id"
+    t.index ["user_id"], name: "index_availability_tutors_on_user_id"
+  end
+
   create_table "subjects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "university_id", null: false
     t.index ["university_id"], name: "index_subjects_on_university_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "topic_id", null: false
+    t.index ["topic_id"], name: "index_tags_on_topic_id"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -54,15 +75,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_18_204708) do
     t.string "uid"
     t.string "description"
     t.string "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
     t.integer "attended_lessons", default: 0
     t.integer "attended_tutors", default: 0
     t.integer "attended_topics", default: 0
+    t.integer "ranking"
+    t.integer "amount_given_lessons"
+    t.integer "amount_given_topics"
+    t.integer "amount_attended_students"
   end
 
   add_foreign_key "student_topics", "topics"
   add_foreign_key "student_topics", "users"
+  add_foreign_key "availability_tutors", "topics"
+  add_foreign_key "availability_tutors", "users"
   add_foreign_key "subjects", "universities"
+  add_foreign_key "tags", "topics"
   add_foreign_key "topics", "subjects"
 end
