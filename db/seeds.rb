@@ -10,7 +10,7 @@
 
 fing = University.find_or_create_by!(name: 'Facultad de Ingeniería', location: 'Montevideo')
 
-Subject.create([
+subjects = [
   { name: 'Programación 1', university: fing },
   { name: 'Programación 2', university: fing },
   { name: 'Programación 3', university: fing },
@@ -452,4 +452,8 @@ Subject.create([
   { name: 'Máquinas para fluidos 2', university: fing },
   { name: 'Hidrología e Hidráulica Aplicadas', university: fing },
   { name: 'Hidrología Avanzada II', university: fing }
-])
+]
+
+subjects.each do |subject|
+  Subject.find_or_create_by!({ name: subject[:name], university: subject[:university] })
+end
