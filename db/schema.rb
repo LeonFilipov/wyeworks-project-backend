@@ -85,17 +85,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
     t.index ["subject_id"], name: "index_topics_on_subject_id"
   end
 
-  create_table "tutors", force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.integer "ranking"
-    t.integer "amount_given_lessons"
-    t.integer "amount_given_topics"
-    t.integer "amount_attended_students"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_tutors_on_user_id"
-  end
-
   create_table "universities", force: :cascade do |t|
     t.string "name"
     t.string "location"
@@ -130,5 +119,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
   add_foreign_key "subjects", "universities"
   add_foreign_key "tentatives", "availability_tutors"
   add_foreign_key "topics", "subjects"
-  add_foreign_key "tutors", "users"
 end
