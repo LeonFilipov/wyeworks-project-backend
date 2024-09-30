@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+-[[Backend-132]](https://www.notion.so/Crear-la-meet-con-posibles-interesados-a-confirmar-58cd2e4ff7b34a218f6d9de4a8fa8835?pvs=4) - Daily tentatives for tutor availabilities, student showing interest for an availability and meet creation on first student being interested.
++ Added table 'tentatives' with references to 'availability_tutor' and fields for scheduling details.
++ Added table 'interesteds' with references to 'user' and 'availability_tutor'.
++ Added table 'meets' with scheduling, description, and mode fields, referencing 'availability_tutor'.
+
 -[[Backend-88]](https://www.notion.so/Tutor-se-ofrece-a-dar-tutoria-sobre-un-tema-solicitado-4b1792c3912845118fbfbfd7c37534bf?pvs=4) - Create an availability for existing topic, create both a topic and an availability
 
 - [[Backend-116]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=4ad2fae2b891400bbea5f6f896e24afd&pm=s)
