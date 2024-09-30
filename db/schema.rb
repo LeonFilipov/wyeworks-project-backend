@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -37,12 +37,52 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
     t.index ["user_id"], name: "index_availability_tutors_on_user_id"
   end
 
+  create_table "interesteds", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "availability_tutor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["availability_tutor_id"], name: "index_interesteds_on_availability_tutor_id"
+    t.index ["user_id"], name: "index_interesteds_on_user_id"
+  end
+
+  create_table "meets", force: :cascade do |t|
+    t.datetime "date_time"
+    t.string "description"
+    t.string "link"
+    t.string "mode"
+    t.string "status"
+    t.bigint "availability_tutor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["availability_tutor_id"], name: "index_meets_on_availability_tutor_id"
+  end
+
+  create_table "student_topics", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "topic_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_student_topics_on_topic_id"
+    t.index ["user_id"], name: "index_student_topics_on_user_id"
+  end
+
   create_table "subjects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "university_id", null: false
     t.index ["university_id"], name: "index_subjects_on_university_id"
+  end
+
+  create_table "tentatives", force: :cascade do |t|
+    t.string "day"
+    t.datetime "schedule_from"
+    t.datetime "schedule_to"
+    t.bigint "availability_tutor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["availability_tutor_id"], name: "index_tentatives_on_availability_tutor_id"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -52,17 +92,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
     t.datetime "updated_at", null: false
     t.bigint "subject_id", null: false
     t.index ["subject_id"], name: "index_topics_on_subject_id"
-  end
-
-  create_table "tutors", force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.integer "ranking"
-    t.integer "amount_given_lessons"
-    t.integer "amount_given_topics"
-    t.integer "amount_attended_students"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_tutors_on_user_id"
   end
 
   create_table "universities", force: :cascade do |t|
@@ -93,7 +122,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_23_004340) do
   add_foreign_key "student_topics", "users"
   add_foreign_key "availability_tutors", "topics"
   add_foreign_key "availability_tutors", "users"
+  add_foreign_key "interesteds", "availability_tutors"
+  add_foreign_key "interesteds", "users"
+  add_foreign_key "meets", "availability_tutors"
   add_foreign_key "subjects", "universities"
+  add_foreign_key "tentatives", "availability_tutors"
   add_foreign_key "topics", "subjects"
-  add_foreign_key "tutors", "users"
 end

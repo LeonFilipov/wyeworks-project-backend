@@ -7,6 +7,8 @@ class User < ApplicationRecord
     validates :ranking, :amount_given_lessons, :amount_given_topics, :amount_attended_students, numericality: { only_integer: true }, allow_nil: true
     has_many :availability_tutors
     has_many :topics, through: :availability_tutors
+    has_many :interesteds
+    has_many :interested_availability_tutors, through: :interesteds, source: :availability_tutor
 
     def self.google_auth(user_info)
         where(email: user_info["email"]).first_or_initialize do |user|
