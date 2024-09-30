@@ -23,6 +23,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
 
   /users/{id}:
     get:
@@ -55,6 +57,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
 
   /profile:
     get:
@@ -70,6 +75,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
     put:
       summary: Update the user information
       requestBody:
@@ -110,6 +118,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
 
   /auth/google_oauth2/callback:
     get:
@@ -136,143 +147,74 @@ paths:
                   error:
                     type: string
                     example: Internal server error
+      tags:
+      - Authentication
+
 
   /topics/{topic_id}/tutor_availability:
     post:
-      summary: Create availability for a specific topic
+      summary: Create an availability tutor for an existing topic
+      description: |
+        This endpoint allows the creation of an availability tutor for an existing topic by providing the `topic_id`. You do not need to provide the `topic` structure in the request.
       parameters:
-        - in: path
-          name: topic_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the topic
-      requestBody:
+      - in: path
+        name: topic_id
         required: true
+        schema:
+          type: integer
+      requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                availability_tutor:
-                  type: object
-                  properties:
-                    description:
-                      type: string
-                    date_from:
-                      type: string
-                      format: date-time
-                    date_to:
-                      type: string
-                      format: date-time
-                    link:
-                      type: string
+              $ref: '#/components/schemas/CreateAvailabilityTutorInputWithoutTopic'
+        required: true
       responses:
         '201':
-          description: Availability created successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Availability created successfully
-                  availability:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      description:
-                        type: string
-                      date_from:
-                        type: string
-                        format: date-time
-                      date_to:
-                        type: string
-                        format: date-time
-                      link:
-                        type: string
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: param is missing or the value is empty availability_tutor
+                $ref: '#/components/schemas/AvailabilityTutor'
+          description: Availability tutor created for the existing topic.
+        '422':
+          description: Validation errors
+      tags:
+      - Tutor availability
 
   /tutor_availability:
     post:
-      summary: Create a new topic and availability at the same time
+      summary: Create a new availability tutor (with optional topic creation)
+      description: |
+        This endpoint allows the creation of an availability tutor. If the `topic` field is provided, a new topic will be created alongside the availability tutor.
+        If no `topic` is provided, use the `/topics/{topic_id}/tutor_availability` endpoint to create an availability for an existing topic.
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                topic:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    asset:
-                      type: string
-                    subject_id:
-                      type: integer
-                availability_tutor:
-                  type: object
-                  properties:
-                    description:
-                      type: string
-                    date_from:
-                      type: string
-                      format: date-time
-                    date_to:
-                      type: string
-                      format: date-time
-                    link:
-                      type: string
+              $ref: '#/components/schemas/CreateAvailabilityTutorInputWithTopic'
+        required: true
       responses:
         '201':
-          description: Topic and availability created successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
-                    type: string
-                    example: Topic and availability created successfully
-                  availability:
+                  availability_tutor:
+                    $ref: '#/components/schemas/AvailabilityTutor'
+                  topic:
                     type: object
                     properties:
                       id:
                         type: integer
-                      description:
+                      name:
                         type: string
-                      date_from:
+                      asset:
                         type: string
-                        format: date-time
-                      date_to:
-                        type: string
-                        format: date-time
-                      link:
-                        type: string
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: param is missing or the value is empty
-
+          description: Availability tutor created, possibly with a new topic.
+        '422':
+          description: Validation errors
+      tags:
+      - Tutor availability
     get:
       summary: Get all availabilities
       responses:
@@ -297,6 +239,8 @@ paths:
                       format: date-time
                     link:
                       type: string
+      tags:
+      - Tutor availability
 
   /tutor_availability/{id}:
     get:
@@ -348,10 +292,88 @@ paths:
                   error:
                     type: string
                     example: Bad request
+      tags:
+      - Tutor availability
+                    
+  /tutor_availability/{availability_tutor_id}/meets:
+    get:
+      parameters:
+      - in: path
+        name: availability_tutor_id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Meet'
+                type: array
+          description: A list of meetings
+        '404':
+          description: Availability tutor not found
+      summary: List all meetings for a specific availability tutor
+      tags:
+      - Meets
+  /meets/{id}:
+    get:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meet'
+          description: Meeting details
+        '404':
+          description: Meeting not found
+      summary: Get details of a specific meeting
+      tags:
+      - Meets
+  /tutor_availability/{id}/interesteds:
+    post:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meet'
+          description: >
+            Interest added successfully. A new meeting is created only if one does not already exist for this availability tutor.
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+          description: >
+            Interest added, but a meeting already exists for this availability tutor.
+        '422':
+          description: Interest already exists or validation errors
+      summary: Add interest to an availability tutor
+      tags:
+      - Interesteds
 
   /universities/{university_id}/subjects/{subject_id}/topics:
     post:
       summary: Create a new topic for a specific subject
+      tags:
+      - Universities
       parameters:
         - in: path
           name: university_id
@@ -403,6 +425,8 @@ paths:
 
     get:
       summary: Get all topics for a specific subject
+      tags:
+      - Universities
       parameters:
         - in: path
           name: university_id
@@ -454,6 +478,8 @@ paths:
   /universities/{university_id}/subjects/{subject_id}/topics/{id}:
     get:
       summary: Get a specific topic by ID
+      tags:
+      - Universities
       parameters:
         - in: path
           name: university_id
@@ -519,6 +545,8 @@ paths:
   /students/topics/{topic_id}/request_topic:
     post:
       summary: A Student request a Topic
+      tags:
+      - Students
       description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset, and subject_id)
       parameters:
         - in: path
@@ -574,6 +602,8 @@ paths:
   /students/my_requested_topics:
     get:
       summary: Get all the topics requested by the user
+      tags:
+      - Students
       responses:
         '200':
           description: A list of topics requested by the user
@@ -604,6 +634,8 @@ paths:
   /students/requested_topics:
     get:
       summary: Get all the requested topics
+      tags:
+      - Students
       responses:
         '200':
           description: A list of topics requested by all users
@@ -643,6 +675,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT  # Indicates that this is a JWT token
+
   schemas:
     User:
       type: object
@@ -660,6 +693,127 @@ components:
         image_url:
           type: string
           format: uri
+
+    AvailabilityTutor:
+      type: object
+      properties:
+        id:
+          type: integer
+        date_from:
+          type: string
+          format: date-time
+        date_to:
+          type: string
+          format: date-time
+        description:
+          type: string
+        link:
+          type: string
+        tentatives:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              schedule_from:
+                type: string
+                format: date-time
+              schedule_to:
+                type: string
+                format: date-time
+
+    CreateAvailabilityTutorInputWithTopic:
+      type: object
+      required:
+        - description
+        - date_from
+        - date_to
+        - link
+      properties:
+        topic:
+          type: object
+          properties:
+            name:
+              type: string
+            asset:
+              type: string
+        date_from:
+          type: string
+          format: date-time
+        date_to:
+          type: string
+          format: date-time
+        description:
+          type: string
+        link:
+          type: string
+        tentatives:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              schedule_from:
+                type: string
+                format: date-time
+              schedule_to:
+                type: string
+                format: date-time
+
+    CreateAvailabilityTutorInputWithoutTopic:
+      type: object
+      required:
+        - description
+        - date_from
+        - date_to
+        - link
+      properties:
+        date_from:
+          type: string
+          format: date-time
+        date_to:
+          type: string
+          format: date-time
+        description:
+          type: string
+        link:
+          type: string
+        tentatives:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+              schedule_from:
+                type: string
+                format: date-time
+              schedule_to:
+                type: string
+                format: date-time
+
+    Meet:
+      type: object
+      properties:
+        id:
+          type: integer
+        date_time:
+          type: string
+          format: date-time
+        description:
+          type: string
+        link:
+          type: string
+        mode:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - confirmed
+
   responses:
     UnauthorizedError:
       description: Unauthorized error by invalid token
@@ -671,6 +825,7 @@ components:
               error:
                 type: string
                 example: Invalid token
+
     AuthHeaderMissingError:
       description: Bad request error by missing Authorization header
       content:
