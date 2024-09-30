@@ -25,8 +25,17 @@ Rails.application.routes.draw do
   get "students/requested_topics" => "students#requested_topics"
   post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
 
-  resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors" do
-    resources :interesteds, only: [ :index, :show, :create, :destroy]
+  # resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors" do
+  #   resources :interesteds, only: [ :index, :show, :create, :destroy]
+  # end
+  
+  # Routes for availability_tutors, including adding interest
+  resources :tutor_availability, only: [:index, :show, :create], controller: "availability_tutors" do
+    member do
+      post 'interesteds', to: 'availability_tutors#add_interest'
+    end
+    resources :meets, only: [:index, :show] # Nested meet routes under availability_tutors
+    resources :interesteds, only: [:index, :show] # Nested interested routes under availability_tutors
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

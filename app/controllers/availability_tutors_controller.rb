@@ -66,6 +66,45 @@ class AvailabilityTutorsController < ApplicationController
     end
   end
 
+# POST /tutor_availability/:id/interesteds
+def add_interest
+  @availability = AvailabilityTutor.find(params[:id])
+
+  # Check if the current user has already expressed interest in this availability
+  existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
+
+  if existing_interest
+    render json: { message: "You have already expressed interest in this availability." }, status: :unprocessable_entity
+    return
+  end
+
+  # Add the current user to the 'Interested' table for this availability
+  interested_record = Interested.new(user: @current_user, availability_tutor: @availability)
+
+  if interested_record.save
+    # If this is the first interested user, create a new Meet
+    if @availability.meets.empty?
+      @meet = @availability.meets.new(
+        description: "Meeting for #{@availability.description}",
+        link: "https://meeting-link.com", # Placeholder link
+        mode: "virtual", # Adjust based on your use case
+        status: "pending" # Initial status
+      )
+
+      if @meet.save
+        render json: { message: "Interest added and meet created", meet: @meet }, status: :created
+      else
+        render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { message: "Interest added, meet already exists" }, status: :ok
+    end
+  else
+    render json: { errors: interested_record.errors.full_messages }, status: :unprocessable_entity
+  end
+end
+
+
   private
 
   def topic_params

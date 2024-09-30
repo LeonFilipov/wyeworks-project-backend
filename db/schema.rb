@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_29_215807) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -35,6 +35,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_215807) do
     t.datetime "updated_at", null: false
     t.index ["availability_tutor_id"], name: "index_interesteds_on_availability_tutor_id"
     t.index ["user_id"], name: "index_interesteds_on_user_id"
+  end
+
+  create_table "meets", force: :cascade do |t|
+    t.datetime "date_time"
+    t.string "description"
+    t.string "link"
+    t.string "mode"
+    t.string "status"
+    t.bigint "availability_tutor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["availability_tutor_id"], name: "index_meets_on_availability_tutor_id"
   end
 
   create_table "student_topics", force: :cascade do |t|
@@ -112,6 +124,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_215807) do
   add_foreign_key "availability_tutors", "users"
   add_foreign_key "interesteds", "availability_tutors"
   add_foreign_key "interesteds", "users"
+  add_foreign_key "meets", "availability_tutors"
   add_foreign_key "student_topics", "topics"
   add_foreign_key "student_topics", "users"
   add_foreign_key "subjects", "universities"
