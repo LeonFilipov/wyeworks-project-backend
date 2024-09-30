@@ -18,7 +18,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   post "students/topics/:topic_id/request_topic" => "students#request_topic"
 
   get "students/my_requested_topics" => "students#my_requested_topics"

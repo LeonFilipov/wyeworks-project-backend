@@ -15,6 +15,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "student_topics", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "topic_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_student_topics_on_topic_id"
+    t.index ["user_id"], name: "index_student_topics_on_user_id"
+  end
+
   create_table "availability_tutors", force: :cascade do |t|
     t.uuid "user_id", null: false
     t.bigint "topic_id", null: false
@@ -109,8 +118,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
     t.string "uid"
     t.string "description"
     t.string "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
     t.integer "attended_lessons", default: 0
     t.integer "attended_tutors", default: 0
     t.integer "attended_topics", default: 0
@@ -120,6 +129,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
     t.integer "amount_attended_students"
   end
 
+  add_foreign_key "student_topics", "topics"
+  add_foreign_key "student_topics", "users"
   add_foreign_key "availability_tutors", "topics"
   add_foreign_key "availability_tutors", "users"
   add_foreign_key "interesteds", "availability_tutors"
