@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[Backend-126]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=e03be58673d54ad8a9c8f75922af8604&pm=s)
+- Added preload subjects and universities in the database
+- Fixed the type of the user ID in create_availability migration 
+- Added database seed to render-build.sh
+
 -[[Backend-88]](https://www.notion.so/Tutor-se-ofrece-a-dar-tutoria-sobre-un-tema-solicitado-4b1792c3912845118fbfbfd7c37534bf?pvs=4) - Create an availability for existing topic, create both a topic and an availability
 
 - [[Backend-116]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=4ad2fae2b891400bbea5f6f896e24afd&pm=s)
