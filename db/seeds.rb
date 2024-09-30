@@ -35,3 +35,21 @@
 #   { name: 'Medicamento', price: 50, category_id: Category.find_by(name: 'Salud').id },
 #   { name: 'Libro', price: 30, category_id: Category.find_by(name: 'Educación').id }
 # ])
+
+University.create!([
+   { name: "FING", location: "Siempre cerca, nunca tan cerca" }
+])
+
+Subject.create!([
+   { name: "Calculo 1", university_id: University.find_by(name: 'FING').id },
+   { name: "GAL 1", university_id: University.find_by(name: 'FING').id },
+   { name: "GAL 2", university_id: University.find_by(name: 'FING').id },
+   { name: "PyE", university_id: University.find_by(name: 'FING').id }
+])
+
+Topic.create!([
+   { name: "Derivadas", asset: "sample_text", subject_id: Subject.find_by(name: 'Calculo 1').id },
+   { name: "Escalerizacion Gaussiana", asset: "sample_text", subject_id: Subject.find_by(name: 'GAL 1').id },
+   { name: "Valores Propios", asset: "sample_text", subject_id: Subject.find_by(name: 'GAL 2').id },
+   { name: "La ley de los grandes numeros", asset: "sample_text", subject_id: Subject.find_by(name: 'PyE').id }
+])

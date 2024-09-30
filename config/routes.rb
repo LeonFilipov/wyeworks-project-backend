@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     end
   end
 
+  post "students/topics/:topic_id/request_topic" => "students#request_topic"
+
+  get "students/my_requested_topics" => "students#my_requested_topics"
+  get "students/requested_topics" => "students#requested_topics"
   post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
 
   resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors"

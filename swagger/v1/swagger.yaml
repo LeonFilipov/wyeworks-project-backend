@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   title: Study Circle API
   version: 1.0.0
-  description: This is the backend for Study Circle project
+  description: This is the backend for the Study Circle project
 servers:
   - url: http://localhost:3000
     description: Development server
@@ -125,7 +125,7 @@ paths:
                   token:
                     type: string
                     format: JWT
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
         '500':
           description: Internal server error
           content:
@@ -348,7 +348,7 @@ paths:
                   error:
                     type: string
                     example: Bad request
-  paths:
+
   /universities/{university_id}/subjects/{subject_id}/topics:
     post:
       summary: Create a new topic for a specific subject
@@ -400,16 +400,6 @@ paths:
                     format: date-time
                   subject_id:
                     type: integer
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
 
     get:
       summary: Get all topics for a specific subject
@@ -525,6 +515,124 @@ paths:
                   error:
                     type: string
                     example: Bad request
+
+  /students/topics/{topic_id}/request_topic:
+    post:
+      summary: A Student request a Topic
+      description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset, and subject_id)
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "topic name"
+                    asset:
+                      type: string
+                      example: "asset"
+                    subject_id:
+                      type: integer
+                      example: 10
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Student successfully added to topic"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to add student to topic"
+
+  /students/my_requested_topics:
+    get:
+      summary: Get all the topics requested by the user
+      responses:
+        '200':
+          description: A list of topics requested by the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subject_id:
+                      type: integer
+                      example: 12
+                    subject_name:
+                      type: string
+                      example: "GAL 2"
+                    topic_id:
+                      type: integer
+                      example: 7
+                    topic_name:
+                      type: string
+                      example: "Valores Propios"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+
+  /students/requested_topics:
+    get:
+      summary: Get all the requested topics
+      responses:
+        '200':
+          description: A list of topics requested by all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subject_id:
+                      type: integer
+                      example: 12
+                    subject_name:
+                      type: string
+                      example: "GAL 2"
+                    topic_id:
+                      type: integer
+                      example: 7
+                    topic_name:
+                      type: string
+                      example: "Valores Propios"
+                    user_count:
+                      type: integer
+                      example: 3
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
 
 security:
   - bearerAuth: []
