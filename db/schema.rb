@@ -125,8 +125,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_30_011217) do
   add_foreign_key "interesteds", "availability_tutors"
   add_foreign_key "interesteds", "users"
   add_foreign_key "meets", "availability_tutors"
-  add_foreign_key "student_topics", "topics"
-  add_foreign_key "student_topics", "users"
   add_foreign_key "subjects", "universities"
   add_foreign_key "tentatives", "availability_tutors"
   add_foreign_key "topics", "subjects"
