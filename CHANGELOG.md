@@ -26,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New endpoint profile to get the user's information
 
+- [[Backend-85]](https://www.notion.so/Sumarse-Crear-a-una-solicitud-de-tutor-a-sobre-un-tema-Estudiante-b8c99b9dc6414efd94a62313cfeeeaa3?pvs=4)
+- Student management:
+- Request of topic from student
+- Show requested topics
+- Show my requested topics
+- Build Services to manage endpoints logic
+
 - [[Backend-109]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b88a9bbe9595475b815dc5b89c47affb&pm=s)
 User management:
 - Get all users

@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+    has_many :student_topics
+    has_many :topics, through: :student_topics
+
     validates :email, presence: true, uniqueness: true
     validates :uid, presence: true, uniqueness: true
     validates :ranking, :amount_given_lessons, :amount_given_topics, :amount_attended_students, numericality: { only_integer: true }, allow_nil: true
