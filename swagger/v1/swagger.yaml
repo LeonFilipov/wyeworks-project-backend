@@ -59,6 +59,129 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
       - Users
+  /users/{user_id}/proposed_topics:
+    get:
+      summary: Get proposed topics for a user
+      tags:
+        - Users
+      description: Retrieve a list of topics proposed by a specific user.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of proposed topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    idsubject:
+                      type: integer
+                      description: ID of the subject
+                    namesubject:
+                      type: string
+                      description: Name of the subject
+                    idtopic:
+                      type: integer
+                      description: ID of the topic
+                    nametopic:
+                      type: string
+                      description: Name of the topic
+                    nombretutor:
+                      type: string
+                      description: Name of the tutor
+                    cantidadInteresados:
+                      type: integer
+                      description: Number of interested students
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /users/{user_id}/proposed_topics/{topic_id}:
+    get:
+      summary: Get detailed information of a proposed topic
+      tags:
+        - Users
+      description: Retrieve detailed information about a specific topic proposed by a user.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detailed information about a proposed topic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  idtopic:
+                    type: integer
+                    description: ID of the topic
+                  nametopic:
+                    type: string
+                    description: Name of the topic
+                  descripcionTopic:
+                    type: string
+                    description: Description of the topic
+                  date_toDisponibilidad:
+                    type: string
+                    format: date
+                    description: End date of availability
+                  date_fromDisponibilidad:
+                    type: string
+                    format: date
+                    description: Start date of availability
+                  descripciondisponibilidad:
+                    type: string
+                    description: Description of the availability
+                  link:
+                    type: string
+                    description: Link associated with the availability
+                  tentatives:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                          format: date
+                          description: Day of the tentative schedule
+                        schedule_from:
+                          type: string
+                          description: Start time of the tentative schedule
+                        schedule_to:
+                          type: string
+                          description: End time of the tentative schedule
+        '404':
+          description: User or Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
 
 
   /profile:
