@@ -105,7 +105,7 @@ class TopicsController < ApplicationController
     {
       idtopic: topic.id,
       nametopic: topic.name,
-      descripcionTopic: topic.asset,
+      descripcionTopic: topic.description,
       date_toDisponibilidad: latest_availability&.date_to,
       date_fromDisponibilidad: latest_availability&.date_from,
       descripciondisponibilidad: latest_availability&.description,
