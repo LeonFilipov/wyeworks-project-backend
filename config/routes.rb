@@ -12,19 +12,19 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  resources :users, only: [:index, :show, :create] do
+  resources :users, only: [ :index, :show, :create ] do
     member do
-      get 'proposed_topics', to: 'topics#proposed_topics'
-      get 'proposed_topics/:topic_id', to: 'topics#proposed_topic'
+      get "proposed_topics", to: "topics#proposed_topics"
+      get "proposed_topics/:topic_id", to: "topics#proposed_topic"
     end
   end
 
   scope :profile do
-    get '/', to: 'users#profile', as: :profile
-    put '/', to: 'users#update'
-    patch '/', to: 'users#update'
+    get "/", to: "users#profile", as: :profile
+    put "/", to: "users#update"
+    patch "/", to: "users#update"
   end
-  
+
   resources :universities, only: [ :index, :show, :create ] do
     resources :subjects, only: [ :index, :show, :create ] do
       resources :topics

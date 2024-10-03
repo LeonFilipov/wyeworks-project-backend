@@ -10,8 +10,8 @@ class AvailabilityTutorsController < ApplicationController
 
     render json: @availabilities.as_json(
       only: [ :id, :description, :date_from, :date_to, :link ],
-      include: { 
-        topic: { only: [:id, :name, :subject_id] },
+      include: {
+        topic: { only: [ :id, :name, :subject_id ] },
         tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
       }
     )
@@ -24,7 +24,7 @@ class AvailabilityTutorsController < ApplicationController
 
     render json: @availability.as_json(
       only: [ :id, :description, :date_from, :date_to, :link ],
-      include: { topic: { only: [:id, :name, :subject_id] } }
+      include: { topic: { only: [ :id, :name, :subject_id ] } }
     )
   end
 
@@ -60,10 +60,10 @@ class AvailabilityTutorsController < ApplicationController
       end
 
       if tentatives_data.map(&:save).all?
-        render json: { 
-          message: "Availability and tentatives created successfully", 
-          availability: @availability.as_json(include: { topic: { only: [:id, :name, :subject_id] } }),
-          tentatives: @availability.tentatives 
+        render json: {
+          message: "Availability and tentatives created successfully",
+          availability: @availability.as_json(include: { topic: { only: [ :id, :name, :subject_id ] } }),
+          tentatives: @availability.tentatives
         }, status: :created
       else
         render json: { errors: @availability.errors.full_messages + @availability.tentatives.errors.full_messages }, status: :unprocessable_entity

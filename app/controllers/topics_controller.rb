@@ -1,16 +1,16 @@
 class TopicsController < ApplicationController
-  before_action :set_subject, only: [:index, :create, :show, :update, :destroy]
-  before_action :set_topic, only: [:show, :update, :destroy]
+  before_action :set_subject, only: [ :index, :create, :show, :update, :destroy ]
+  before_action :set_topic, only: [ :show, :update, :destroy ]
 
   # GET /universities/:university_id/subjects/:subject_id/topics
   def index
     @topics = @subject.topics
-    render json: @topics.as_json(only: [:id, :name, :description], methods: [:subject_id]), status: :ok
+    render json: @topics.as_json(only: [ :id, :name, :description ], methods: [ :subject_id ]), status: :ok
   end
 
   # GET /universities/:university_id/subjects/:subject_id/topics/:id
   def show
-    render json: @topic.as_json(only: [:id, :name, :description], methods: [:subject_id]), status: :ok
+    render json: @topic.as_json(only: [ :id, :name, :description ], methods: [ :subject_id ]), status: :ok
   end
 
   # GET /users/:user_id/proposed_topics
@@ -27,7 +27,7 @@ class TopicsController < ApplicationController
   def proposed_topic
     # Encuentra el usuario primero (opcional, dependiendo de cómo quieras estructurarlo)
     @user = User.find(params[:id])
-    
+
     # Encuentra el topic por el ID proporcionado
     @topic = @user.topics.find_by(id: params[:topic_id]) # Cambia params[:id] a params[:topic_id]
 
@@ -119,5 +119,4 @@ class TopicsController < ApplicationController
       end
     }
   end
-
 end
