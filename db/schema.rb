@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_02_030141) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_145607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -75,14 +75,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_030141) do
     t.datetime "updated_at", null: false
     t.index ["availability_tutor_id"], name: "index_tentatives_on_availability_tutor_id"
   end
-  
+
   create_table "topics", force: :cascade do |t|
     t.string "name"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "subject_id", null: false
-    t.string "description"
     t.index ["subject_id"], name: "index_topics_on_subject_id"
+  end
+
+  create_table "tutors", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.integer "ranking"
+    t.integer "amount_given_lessons"
+    t.integer "amount_given_topics"
+    t.integer "amount_attended_students"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tutors_on_user_id"
   end
 
   create_table "universities", force: :cascade do |t|
@@ -100,13 +111,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_030141) do
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "attended_lessons", default: 0
-    t.integer "attended_tutors", default: 0
-    t.integer "attended_topics", default: 0
     t.integer "ranking"
     t.integer "amount_given_lessons"
     t.integer "amount_given_topics"
     t.integer "amount_attended_students"
+    t.integer "attended_lessons", default: 0
+    t.integer "attended_tutors", default: 0
+    t.integer "attended_topics", default: 0
   end
 
   add_foreign_key "availability_tutors", "topics"
@@ -119,4 +130,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_030141) do
   add_foreign_key "subjects", "universities"
   add_foreign_key "tentatives", "availability_tutors"
   add_foreign_key "topics", "subjects"
+  add_foreign_key "tutors", "users"
 end
