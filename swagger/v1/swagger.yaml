@@ -183,7 +183,6 @@ paths:
                     type: string
 
 
-
   /profile:
     get:
       summary: Get the user profile

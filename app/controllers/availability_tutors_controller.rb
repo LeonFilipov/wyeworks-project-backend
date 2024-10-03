@@ -44,12 +44,14 @@ class AvailabilityTutorsController < ApplicationController
     @availability = @topic.availability_tutors.new(availability_tutor_params.except(:tentatives))
     @availability.user = @current_user
 
+    # Check if tentatives are provided
     if availability_tutor_params[:tentatives].blank?
       render json: { errors: "At least one tentative schedule is required." }, status: :unprocessable_entity
       return
     end
 
     if @availability.save
+      # Process tentatives
       tentatives_data = availability_tutor_params[:tentatives].map do |tentative|
         @availability.tentatives.new(tentative.permit(:day, :schedule_from, :schedule_to))
       end
@@ -107,6 +109,7 @@ class AvailabilityTutorsController < ApplicationController
       render json: { errors: interested_record.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
 
   private
 

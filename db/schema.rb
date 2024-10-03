@@ -75,7 +75,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_030141) do
     t.datetime "updated_at", null: false
     t.index ["availability_tutor_id"], name: "index_tentatives_on_availability_tutor_id"
   end
-
+  
   create_table "topics", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false

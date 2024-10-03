@@ -7,11 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
-
 - [[Backend-135]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=09367787109f4ccaa806b92274cb8424&pm=s) - Listar disponibilidades de un tutor para un tema/ Mostrar detalles de disponibilidad de tutor para un cierto tema.
 + Added endpoint `/users/:user_id/proposed_topics` to list tutor availabilities for a specific topic.
 + Added endpoint `/users/:user_id/proposed_topics/:topic_id` to show detailed availability of a tutor for a specific topic.
-
 
 -[[Backend-132]](https://www.notion.so/Crear-la-meet-con-posibles-interesados-a-confirmar-58cd2e4ff7b34a218f6d9de4a8fa8835?pvs=4) - Daily tentatives for tutor availabilities, student showing interest for an availability and meet creation on first student being interested.
 + Added table 'tentatives' with references to 'availability_tutor' and fields for scheduling details.
