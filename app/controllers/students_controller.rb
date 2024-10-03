@@ -49,6 +49,6 @@ class StudentsController < UsersController
         end
 
         def topic_params
-            params.require(:topic).permit(:name, :asset, :subject_id)
+            params.require(:topic).permit(:name, :description, :subject_id)
         end
 end

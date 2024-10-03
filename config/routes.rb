@@ -7,10 +7,23 @@ Rails.application.routes.draw do
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
   get "authorization" => "sessions#authorization_needed"
 
-  resources :users, only: [ :index, :show ]
-  get "profile" => "users#profile"
-  put "profile" => "users#update"
-  patch "profile" => "users#update"
+  # resources :users, only: [ :index, :show ]
+  # get "profile" => "users#profile"
+  # put "profile" => "users#update"
+  # patch "profile" => "users#update"
+
+  resources :users, only: [ :index, :show, :create ] do
+    member do
+      get "proposed_topics", to: "topics#proposed_topics"
+      get "proposed_topics/:topic_id", to: "topics#proposed_topic"
+    end
+  end
+
+  scope :profile do
+    get "/", to: "users#profile", as: :profile
+    put "/", to: "users#update"
+    patch "/", to: "users#update"
+  end
 
   resources :universities, only: [ :index, :show, :create ] do
     resources :subjects, only: [ :index, :show, :create ] do

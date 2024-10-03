@@ -10,7 +10,10 @@ class AvailabilityTutorsController < ApplicationController
 
     render json: @availabilities.as_json(
       only: [ :id, :description, :date_from, :date_to, :link ],
-      include: { tentatives: { only: [ :day, :schedule_from, :schedule_to ] } }
+      include: {
+        topic: { only: [ :id, :name, :subject_id ] },
+        tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
+      }
     )
   end
 
@@ -19,7 +22,10 @@ class AvailabilityTutorsController < ApplicationController
   def show
     @availability = AvailabilityTutor.find(params[:id])
 
-    render json: @availability.as_json(only: [ :id, :description, :date_from, :date_to, :link ])
+    render json: @availability.as_json(
+      only: [ :id, :description, :date_from, :date_to, :link ],
+      include: { topic: { only: [ :id, :name, :subject_id ] } }
+    )
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
@@ -35,7 +41,6 @@ class AvailabilityTutorsController < ApplicationController
       end
     end
 
-    # Initialize the AvailabilityTutor without tentatives first
     @availability = @topic.availability_tutors.new(availability_tutor_params.except(:tentatives))
     @availability.user = @current_user
 
@@ -57,7 +62,11 @@ class AvailabilityTutorsController < ApplicationController
       end
 
       if tentatives_data.map(&:save).all?
-        render json: { message: "Availability and tentatives created successfully", availability: @availability, tentatives: @availability.tentatives }, status: :created
+        render json: {
+          message: "Availability and tentatives created successfully",
+          availability: @availability.as_json(include: { topic: { only: [ :id, :name, :subject_id ] } }),
+          tentatives: @availability.tentatives
+        }, status: :created
       else
         render json: { errors: @availability.errors.full_messages + @availability.tentatives.errors.full_messages }, status: :unprocessable_entity
       end
@@ -66,49 +75,46 @@ class AvailabilityTutorsController < ApplicationController
     end
   end
 
-# POST /tutor_availability/:id/interesteds
-def add_interest
-  @availability = AvailabilityTutor.find(params[:id])
+  # POST /tutor_availability/:id/interesteds
+  def add_interest
+    @availability = AvailabilityTutor.find(params[:id])
 
-  # Check if the current user has already expressed interest in this availability
-  existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
+    existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
 
-  if existing_interest
-    render json: { message: "You have already expressed interest in this availability." }, status: :unprocessable_entity
-    return
-  end
+    if existing_interest
+      render json: { message: "You have already expressed interest in this availability." }, status: :unprocessable_entity
+      return
+    end
 
-  # Add the current user to the 'Interested' table for this availability
-  interested_record = Interested.new(user: @current_user, availability_tutor: @availability)
+    interested_record = Interested.new(user: @current_user, availability_tutor: @availability)
 
-  if interested_record.save
-    # If this is the first interested user, create a new Meet
-    if @availability.meets.empty?
-      @meet = @availability.meets.new(
-        description: "Meeting for #{@availability.description}",
-        link: "https://meeting-link.com", # Placeholder link
-        mode: "virtual", # Adjust based on your use case
-        status: "pending" # Initial status
-      )
+    if interested_record.save
+      if @availability.meets.empty?
+        @meet = @availability.meets.new(
+          description: "Meeting for #{@availability.description}",
+          link: "https://meeting-link.com",
+          mode: "virtual",
+          status: "pending"
+        )
 
-      if @meet.save
-        render json: { message: "Interest added and meet created", meet: @meet }, status: :created
+        if @meet.save
+          render json: { message: "Interest added and meet created", meet: @meet }, status: :created
+        else
+          render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages }, status: :unprocessable_entity
+        end
       else
-        render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: "Interest added, meet already exists" }, status: :ok
       end
     else
-      render json: { message: "Interest added, meet already exists" }, status: :ok
+      render json: { errors: interested_record.errors.full_messages }, status: :unprocessable_entity
     end
-  else
-    render json: { errors: interested_record.errors.full_messages }, status: :unprocessable_entity
   end
-end
 
 
   private
 
   def topic_params
-    params.require(:topic).permit(:name, :asset, :subject_id)
+    params.require(:topic).permit(:name, :description, :subject_id)
   end
 
   def availability_tutor_params
