@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   # get "profile" => "users#profile"
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
-  
+
   resources :users, only: [ :index, :show, :create ] do
     member do
       get "proposed_topics", to: "topics#proposed_topics"
