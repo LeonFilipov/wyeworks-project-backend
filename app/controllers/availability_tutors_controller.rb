@@ -12,7 +12,7 @@ class AvailabilityTutorsController < ApplicationController
       only: [ :id, :description, :link, :availability ],
       include: {
         topic: { only: [ :id, :name, :subject_id ] }
-        #tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
+        # tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
       }
     )
   end

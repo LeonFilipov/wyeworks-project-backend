@@ -107,7 +107,7 @@ class TopicsController < ApplicationController
       nametopic: topic.name,
       descripcionTopic: topic.description,
       descripciondisponibilidad: latest_availability&.description,
-      link: latest_availability&.link,
+      link: latest_availability&.link
     }
   end
 end
