@@ -42,7 +42,7 @@ class AvailabilityTutorsController < ApplicationController
     end
 
     @availability = @topic.availability_tutors.new(availability_tutor_params)
-    @availability.user = @current_user
+    @availability.user = @current_user.first
 
 
     if @availability.save
