@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-139]](https://www.notion.so/Talle-S-Transformar-la-disponibilidad-a-un-string-y-eliminar-fechas-tentativas-11624a6692a480d081f1c8a5af8d7e9e?pvs=4) - Transformar la disponibilidad a un string y eliminar fechas tentativas.
++ Removed Tentatives entity, date_to and date_from fields from availability_tutors.
++ Added avalability field to availability_tutors.
++ Corrected interdependencies related to removed fields and tables.
+
 - [[Backend-135]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=09367787109f4ccaa806b92274cb8424&pm=s) - Listar disponibilidades de un tutor para un tema/ Mostrar detalles de disponibilidad de tutor para un cierto tema.
 + Added endpoint `/users/:user_id/proposed_topics` to list tutor availabilities for a specific topic.
 + Added endpoint `/users/:user_id/proposed_topics/:topic_id` to show detailed availability of a tutor for a specific topic.

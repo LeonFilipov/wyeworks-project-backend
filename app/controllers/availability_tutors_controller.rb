@@ -9,10 +9,10 @@ class AvailabilityTutorsController < ApplicationController
     end
 
     render json: @availabilities.as_json(
-      only: [ :id, :description, :date_from, :date_to, :link ],
+      only: [ :id, :description, :link, :availability ],
       include: {
-        topic: { only: [ :id, :name, :subject_id ] },
-        tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
+        topic: { only: [ :id, :name, :subject_id ] }
+        # tentatives: { only: [ :day, :schedule_from, :schedule_to ] }
       }
     )
   end
@@ -23,7 +23,7 @@ class AvailabilityTutorsController < ApplicationController
     @availability = AvailabilityTutor.find(params[:id])
 
     render json: @availability.as_json(
-      only: [ :id, :description, :date_from, :date_to, :link ],
+      only: [ :id, :description, :link, :availability ],
       include: { topic: { only: [ :id, :name, :subject_id ] } }
     )
   end
@@ -41,35 +41,15 @@ class AvailabilityTutorsController < ApplicationController
       end
     end
 
-    @availability = @topic.availability_tutors.new(availability_tutor_params.except(:tentatives))
-    @availability.user = @current_user
+    @availability = @topic.availability_tutors.new(availability_tutor_params)
+    @availability.user = @current_user.first
 
-    # Check if tentatives are provided
-    if availability_tutor_params[:tentatives].blank?
-      render json: { errors: "At least one tentative schedule is required." }, status: :unprocessable_entity
-      return
-    end
 
     if @availability.save
-      # Process tentatives
-      tentatives_data = availability_tutor_params[:tentatives].map do |tentative|
-        @availability.tentatives.new(tentative.permit(:day, :schedule_from, :schedule_to))
-      end
-
-      if tentatives_data.count > 7
-        render json: { errors: "Cannot create more than 7 tentatives for an availability" }, status: :unprocessable_entity
-        return
-      end
-
-      if tentatives_data.map(&:save).all?
-        render json: {
-          message: "Availability and tentatives created successfully",
-          availability: @availability.as_json(include: { topic: { only: [ :id, :name, :subject_id ] } }),
-          tentatives: @availability.tentatives
-        }, status: :created
-      else
-        render json: { errors: @availability.errors.full_messages + @availability.tentatives.errors.full_messages }, status: :unprocessable_entity
-      end
+      render json: {
+        message: "Availability created successfully",
+        availability: @availability.as_json(include: { topic: { only: [ :id, :name, :subject_id ] } })
+      }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
     end
@@ -118,6 +98,6 @@ class AvailabilityTutorsController < ApplicationController
   end
 
   def availability_tutor_params
-    params.require(:availability_tutor).permit(:description, :date_from, :date_to, :link, tentatives: [ :day, :schedule_from, :schedule_to ])
+    params.require(:availability_tutor).permit(:description, :link, :availability)
   end
 end

@@ -106,17 +106,8 @@ class TopicsController < ApplicationController
       idtopic: topic.id,
       nametopic: topic.name,
       descripcionTopic: topic.description,
-      date_toDisponibilidad: latest_availability&.date_to,
-      date_fromDisponibilidad: latest_availability&.date_from,
       descripciondisponibilidad: latest_availability&.description,
-      link: latest_availability&.link,
-      tentatives: latest_availability&.tentatives&.map do |tentative|
-        {
-          day: tentative.day,
-          schedule_from: tentative.schedule_from,
-          schedule_to: tentative.schedule_to
-        }
-      end
+      link: latest_availability&.link
     }
   end
 end

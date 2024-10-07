@@ -1,11 +1,10 @@
 class AvailabilityTutor < ApplicationRecord
   belongs_to :user
   belongs_to :topic
-  has_many :tentatives, dependent: :destroy
   has_many :interesteds
   has_many :interested_users, through: :interesteds, source: :user
   has_many :meets, dependent: :destroy
 
 
-  validates :description, :date_from, :date_to, :link, presence: true
+  validates :description, :link, presence: true
 end
