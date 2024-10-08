@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+    skip_before_action :authenticate_request, only: [ :fake_user ]
+
     def index
         users = User.all.select(:id, :name, :email, :description, :image_url)
         render json: users, status: 200
@@ -24,6 +26,12 @@ class UsersController < ApplicationController
         rescue ActionController::ParameterMissing => e
             render json: { error: e.message }, status: :unprocessable_entity
         end
+    end
+
+    def fake_user
+        user = User.where(name: "John Doe").last
+        token = JsonWebTokenService.encode(user_id: user.id)
+        render json: { user_token: token }, status: 200
     end
 
     private
