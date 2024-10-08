@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_subject, only: [ :index, :create, :show, :update, :destroy ]
+  before_action :set_subject, only: [:create, :show, :update, :destroy ]
   before_action :set_topic, only: [ :show, :update, :destroy ]
 
   # GET /topics
@@ -16,7 +16,7 @@ class TopicsController < ApplicationController
       availability_tutors = availability_tutors.where(topic_id: topics_by_subject)
     end
 
-    render json: availability_tutors, status: :ok
+    render json: format_topic_response(availability_tutors), status: :ok
   end
 
   # GET /topics/:id
@@ -97,6 +97,31 @@ class TopicsController < ApplicationController
   def topic_params
     params.require(:topic).permit(:name, :description)
   end
+
+  def format_topic_response(availability_tutors)
+  availability_tutors.map do |availability_tutor|
+    topic = availability_tutor.topic
+    user = availability_tutor.user
+    subject = topic.subject
+
+    {
+      availability_id: availability_tutor.id,
+      topic_name: topic.name,
+      topic_image: topic.image_url,
+      availability: availability_tutor.availability,
+      interesteds: availability_tutor.interesteds.count,
+      subject: {
+        id: subject.id,
+        name: subject.name,
+      },
+      tutor: {
+        id: user.id,
+        name: user.name
+      }
+
+    }
+  end
+end
 
   # Format the topic for the proposed_topics endpoint
   def format_proposed_topic(topic)
