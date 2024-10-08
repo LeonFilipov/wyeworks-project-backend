@@ -459,7 +459,7 @@ subjects.each do |subject|
 end
 
 # Crea un usuario tutor
-user = User.find_or_create_by!({
+user_1 = User.find_or_create_by!({
   name: "John Doe",
   email: "john.doe@example.com",
   uid: "123456789",
@@ -474,32 +474,72 @@ user = User.find_or_create_by!({
   attended_topics: 0
   }
 )
+
+user_2 = User.find_or_create_by!({
+  name: "Jane Doe",
+  email: "jane.doe@example.com",
+  uid: "123451789",
+  description: "Tutor especializado en algo.",
+  image_url: "data:image/jpeg;base64,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",
+  ranking: 0,
+  amount_given_lessons: 0,
+  amount_given_topics: 0,
+  amount_attended_students: 0,
+  attended_lessons: 0,
+  attended_tutors: 0,
+  attended_topics: 0
+  }
+)
+
+
+programacion1_id = Subject.find_by(name: "Programación 1").id
+logica_id = Subject.find_by(name: "Lógica").id
 # Topics Creation
 # Programación 1 - subject_id = 1
 Topic.find_or_create_by!([
-  { name: "Introducción a la Programación", description: "Conceptos básicos de programación.", subject_id: 1 },
-  { name: "Estructuras de Control", description: "Condicionales y bucles.", subject_id: 1 },
-  { name: "Funciones", description: "Cómo escribir funciones y modularizar código.", subject_id: 1 },
-  { name: "Manejo de Errores", description: "Técnicas para el manejo de errores en programación.", subject_id: 1 },
-  { name: "Programación Orientada a Objetos", description: "Fundamentos de POO.", subject_id: 1 }
+  { name: "Introducción a la Programación", description: "Conceptos básicos de programación.", subject_id: programacion1_id },
+  { name: "Estructuras de Control", description: "Condicionales y bucles.", subject_id: programacion1_id },
+  { name: "Funciones", description: "Cómo escribir funciones y modularizar código.", subject_id: programacion1_id },
+  { name: "Manejo de Errores", description: "Técnicas para el manejo de errores en programación.", subject_id: programacion1_id },
+  { name: "Programación Orientada a Objetos", description: "Fundamentos de POO.", subject_id: programacion1_id }
 ])
 
 # Lógica - subject_id = 5
 Topic.find_or_create_by!([
-  { name: "Proposiciones Lógicas", description: "Introducción a la lógica proposicional.", subject_id: 5 },
-  { name: "Tablas de Verdad", description: "Uso de tablas de verdad para evaluar expresiones.", subject_id: 5 },
-  { name: "Tautologías y Contradicciones", description: "Estudio de tautologías y contradicciones lógicas.", subject_id: 5 },
-  { name: "Lógica de Predicados", description: "Introducción a la lógica de predicados.", subject_id: 5 },
-  { name: "Cuantificadores", description: "Cuantificadores existenciales y universales.", subject_id: 5 }
+  { name: "Proposiciones Lógicas", description: "Introducción a la lógica proposicional.", subject_id: logica_id },
+  { name: "Tablas de Verdad", description: "Uso de tablas de verdad para evaluar expresiones.", subject_id: logica_id },
+  { name: "Tautologías y Contradicciones", description: "Estudio de tautologías y contradicciones lógicas.", subject_id: logica_id },
+  { name: "Lógica de Predicados", description: "Introducción a la lógica de predicados.", subject_id: logica_id },
+  { name: "Cuantificadores", description: "Cuantificadores existenciales y universales.", subject_id: logica_id }
 ])
 
 # Creation of Availabilities for two topics of subject_1 for the user created
-topics = Topic.where(subject_id: 1).limit(2)
+topics = Topic.where(subject_id: programacion1_id).limit(3)
 topics.each do |topic|
-  AvailabilityTutor.create!(
-    user_id: user.id,
+  AvailabilityTutor.find_or_create_by!({
+    user_id: user_1.id,
     topic_id: topic.id,
-    description: "Disponible para tutorías sobre #{topic.name}.",
-    link: "https://example.com/tutoring_session"
-  )
+    description: "Disponible para tutorías en #{topic.name}",
+    link: "https://meet.example.com/#{user_1.uid}",
+    availability: "Lunes a Viernes de 9am a 5pm"
+})
+end
+
+AvailabilityTutor.find_or_create_by!({
+  user_id: user_1.id,
+  topic_id: Topic.find_by(name: "Tautologías y Contradicciones").id,
+  description: "Disponible para tutorías en Tautologías y Contradicciones",
+  link: "https://meet.example.com/#{user_1.uid}",
+  availability: "Lunes a Viernes de 9am a 5pm"
+})
+
+topics = Topic.where(subject_id: logica_id).limit(2)
+topics.each do |topic|
+  AvailabilityTutor.find_or_create_by!({
+    user_id: user_2.id,
+    topic_id: topic.id,
+    description: "Disponible para tutorías en #{topic.name}",
+    link: "https://meet.example.com/#{user_2.uid}",
+    availability: "Lunes a Viernes de 1pm a 3pm"
+  })
 end
