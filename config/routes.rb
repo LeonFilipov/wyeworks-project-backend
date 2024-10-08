@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   # end
   get "topics" => "topics#index"
   get "fake_user" => "users#fake_user"
-  
+
   scope :profile do
     get "/", to: "users#profile", as: :profile
     put "/", to: "users#update"

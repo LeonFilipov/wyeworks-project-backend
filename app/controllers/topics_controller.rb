@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_subject, only: [:create, :show, :update, :destroy ]
+  before_action :set_subject, only: [ :create, :show, :update, :destroy ]
   before_action :set_topic, only: [ :show, :update, :destroy ]
 
   # GET /topics
@@ -112,7 +112,7 @@ class TopicsController < ApplicationController
       interesteds: availability_tutor.interesteds.count,
       subject: {
         id: subject.id,
-        name: subject.name,
+        name: subject.name
       },
       tutor: {
         id: user.id,
