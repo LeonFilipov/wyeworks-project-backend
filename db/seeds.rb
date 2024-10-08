@@ -457,3 +457,49 @@ subjects = [
 subjects.each do |subject|
   Subject.find_or_create_by!({ name: subject[:name], university: subject[:university] })
 end
+
+# Crea un usuario tutor
+user = User.find_or_create_by!({
+  name: "John Doe",
+  email: "john.doe@example.com",
+  uid: "123456789",
+  description: "Tutor especializado en matemáticas.",
+  image_url: "https://i.pinimg.com/550x/74/bb/34/74bb340ffe87e31837a04a538f1bbc10.jpg",
+  ranking: 0,
+  amount_given_lessons: 0,
+  amount_given_topics: 0,
+  amount_attended_students: 0,
+  attended_lessons: 0,
+  attended_tutors: 0,
+  attended_topics: 0
+  }
+)
+# Topics Creation
+# Programación 1 - subject_id = 1
+Topic.find_or_create_by!([
+  { name: "Introducción a la Programación", description: "Conceptos básicos de programación.", subject_id: 1 },
+  { name: "Estructuras de Control", description: "Condicionales y bucles.", subject_id: 1 },
+  { name: "Funciones", description: "Cómo escribir funciones y modularizar código.", subject_id: 1 },
+  { name: "Manejo de Errores", description: "Técnicas para el manejo de errores en programación.", subject_id: 1 },
+  { name: "Programación Orientada a Objetos", description: "Fundamentos de POO.", subject_id: 1 }
+])
+
+# Lógica - subject_id = 5
+Topic.find_or_create_by!([
+  { name: "Proposiciones Lógicas", description: "Introducción a la lógica proposicional.", subject_id: 5 },
+  { name: "Tablas de Verdad", description: "Uso de tablas de verdad para evaluar expresiones.", subject_id: 5 },
+  { name: "Tautologías y Contradicciones", description: "Estudio de tautologías y contradicciones lógicas.", subject_id: 5 },
+  { name: "Lógica de Predicados", description: "Introducción a la lógica de predicados.", subject_id: 5 },
+  { name: "Cuantificadores", description: "Cuantificadores existenciales y universales.", subject_id: 5 }
+])
+
+# Creation of Availabilities for two topics of subject_1 for the user created
+topics = Topic.where(subject_id: 1).limit(2)
+topics.each do |topic|
+  AvailabilityTutor.create!(
+    user_id: user.id,
+    topic_id: topic.id,
+    description: "Disponible para tutorías sobre #{topic.name}.",
+    link: "https://example.com/tutoring_session"
+  )
+end

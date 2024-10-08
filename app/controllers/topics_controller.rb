@@ -2,13 +2,24 @@ class TopicsController < ApplicationController
   before_action :set_subject, only: [ :index, :create, :show, :update, :destroy ]
   before_action :set_topic, only: [ :show, :update, :destroy ]
 
-  # GET /universities/:university_id/subjects/:subject_id/topics
+  # GET /topics
   def index
-    @topics = @subject.topics
-    render json: @topics.as_json(only: [ :id, :name, :description ], methods: [ :subject_id ]), status: :ok
+    # Filtro inicial
+    availability_tutors = AvailabilityTutor.all
+
+    # Filtrar por user_id si está presente
+    availability_tutors = availability_tutors.where(user_id: params[:user_id]) if params[:user_id].present?
+
+    # Filtrar por topic_id si subject_id está presente
+    if params[:subject_id].present?
+      topics_by_subject = Topic.where(subject_id: params[:subject_id]).pluck(:id)
+      availability_tutors = availability_tutors.where(topic_id: topics_by_subject)
+    end
+
+    render json: availability_tutors, status: :ok
   end
 
-  # GET /universities/:university_id/subjects/:subject_id/topics/:id
+  # GET /topics/:id
   def show
     render json: @topic.as_json(only: [ :id, :name, :description ], methods: [ :subject_id ]), status: :ok
   end
