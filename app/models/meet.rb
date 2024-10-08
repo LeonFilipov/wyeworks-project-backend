@@ -1,5 +1,6 @@
 class Meet < ApplicationRecord
   belongs_to :availability_tutor
+  has_many :interesteds, through: :availability_tutor
   validates :description, presence: true
   validates :link, presence: true
   validates :mode, inclusion: { in: [ "virtual", "in-person" ] }
