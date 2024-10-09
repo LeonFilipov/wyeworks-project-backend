@@ -59,18 +59,12 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
       - Users
-  /users/{user_id}/proposed_topics:
+  /proposed_topics:
     get:
-      summary: Get proposed topics for a user
+      summary: Get proposed topics for the current user
       tags:
         - Users
-      description: Retrieve a list of topics proposed by a specific user.
-      parameters:
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
+      description: Retrieve a list of topics proposed by the logged user with his availability.
       responses:
         '200':
           description: A list of proposed topics
@@ -81,26 +75,48 @@ paths:
                 items:
                   type: object
                   properties:
-                    idsubject:
+                    availability_id:
                       type: integer
-                      description: ID of the subject
-                    namesubject:
-                      type: string
-                      description: Name of the subject
-                    idtopic:
-                      type: integer
-                      description: ID of the topic
-                    nametopic:
+                      description: ID of the availability
+                    topic_name:
                       type: string
                       description: Name of the topic
-                    nombretutor:
+                    topic_image:
                       type: string
-                      description: Name of the tutor
-                    cantidadInteresados:
+                      nullable: true
+                      description: Image URL of the topic
+                    topic_description:
+                      type: string
+                      description: Description of the topic
+                    availability:
+                      type: string
+                      description: Time availability for tutoring
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
+                    interesteds:
                       type: integer
                       description: Number of interested students
-        '404':
-          description: User not found
+                    subject:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID of the subject
+                        name:
+                          type: string
+                          description: Name of the subject
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID of the tutor
+                        name:
+                          type: string
+                          description: Name of the tutor
+        '422':
+          description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
             application/json:
               schema:
@@ -108,19 +124,19 @@ paths:
                 properties:
                   error:
                     type: string
+                    example: "Required param can't be blank"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
 
-  /users/{user_id}/proposed_topics/{topic_id}:
+  /proposed_topics/{topic_id}:
     get:
-      summary: Get detailed information of a proposed topic
+      summary: Get detailed information of a proposed topic by the logged user
       tags:
         - Users
-      description: Retrieve detailed information about a specific topic proposed by a user.
+      description: Retrieve detailed information about a specific topic proposed by the logged user.
       parameters:
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
         - in: path
           name: topic_id
           required: true
@@ -134,23 +150,48 @@ paths:
               schema:
                 type: object
                 properties:
-                  idtopic:
+                  availability_id:
                     type: integer
-                    description: ID of the topic
-                  nametopic:
+                    description: ID of the availability
+                  topic_name:
                     type: string
                     description: Name of the topic
-                  descripcionTopic:
+                  topic_image:
+                    type: string
+                    nullable: true
+                    description: Image URL of the topic
+                  topic_description:
                     type: string
                     description: Description of the topic
-                  descripciondisponibilidad:
+                  availability:
                     type: string
-                    description: Description of the availability
-                  link:
+                    description: Time availability for tutoring
+                  availability_description:
                     type: string
-                    description: Link associated with the availability
-        '404':
-          description: User or Topic not found
+                    description: Description of the tutor's availability
+                  interesteds:
+                    type: integer
+                    description: Number of interested students
+                  subject:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: ID of the subject
+                      name:
+                        type: string
+                        description: Name of the subject
+                  tutor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ID of the tutor
+                      name:
+                        type: string
+                        description: Name of the tutor
+        '422':
+          description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
             application/json:
               schema:
@@ -158,6 +199,11 @@ paths:
                 properties:
                   error:
                     type: string
+                    example: "Required param can't be blank"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
 
 
   /profile:
@@ -319,9 +365,15 @@ paths:
                     topic_image:
                       type: string
                       description: The URL of the topic image
+                    topic_description:
+                      type: string
+                      description: Description of the topic
                     availability:
                       type: string
                       description: Tutor's availability times for the topic
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
                     interesteds:
                       type: integer
                       description: Number of interested students for the tutor's availability
@@ -356,15 +408,14 @@ paths:
 
   /tutor_availability:
     post:
-      summary: Create a new availability tutor (with optional topic creation)
+      summary: Create a new topic and availability
       description: |
-        This endpoint allows the creation of an availability tutor. If the `topic` field is provided, a new topic will be created alongside the availability tutor.
-        If no `topic` is provided, use the `/topics/{topic_id}/tutor_availability` endpoint to create an availability for an existing topic.
+        This endpoint allows the creation of an `availability` and `topic`.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAvailabilityTutorInputWithTopic'
+              $ref: '#/components/schemas/CreateAvailabilityAndTopic'
         required: true
       responses:
         '201':
@@ -373,18 +424,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  availability_tutor:
-                    $ref: '#/components/schemas/AvailabilityTutor'
-                  topic:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
-                      asset:
-                        type: string
-          description: Availability tutor created, possibly with a new topic.
+                  message:
+                    type: string
+                    example: "Topic and availability created successfully"
+
+          description: Availability and Topic created
         '422':
           description: Validation errors
       tags:
@@ -627,36 +671,39 @@ components:
         link:
           type: string
 
-    CreateAvailabilityTutorInputWithTopic:
+    CreateAvailabilityAndTopic:
       type: object
       required:
-        - description
-        - date_to
-        - link
+        - topic
+        - availability_tutor
       properties:
         topic:
           type: object
+          required:
+            - name
+            - subject_id
           properties:
             name:
               type: string
-            asset:
+            image_url:
               type: string
-        description:
-          type: string
-        link:
-          type: string
-
-    CreateAvailabilityTutorInputWithoutTopic:
-      type: object
-      required:
-        - description
-        - date_to
-        - link
-      properties:
-        description:
-          type: string
-        link:
-          type: string
+            description:
+              type: string
+            subject_id:
+              type: integer
+        availability_tutor:
+          type: object
+          required:
+            - availability
+            - description
+            - link
+          properties:
+            availability:
+              type: string
+            description:
+              type: string
+            link:
+              type: string
 
     Meet:
       type: object
