@@ -45,8 +45,7 @@ class AvailabilityTutorsController < ApplicationController
     # Try to save availability
     if @availability.save
       render json: {
-        message: "Topic and availability created successfully",
-        availability: @availability.as_json()
+        message: "Topic and availability created successfully"
       }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
