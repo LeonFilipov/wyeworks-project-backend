@@ -392,6 +392,81 @@ paths:
       tags:
       - Tutor availability
 
+  /topics:
+    get:
+      summary: Get a list of tutor availabilities filtered by user and/or subject
+      description: |
+        This endpoint retrieves a list of tutor availabilities. You can filter the availabilities by `user_id` and/or `subject_id`. 
+        The response includes details such as the availability ID, topic name, image, availability times, number of interested students, subject name, and tutor name.
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+            format: uuid
+          required: false
+          description: Filter availabilities by the user ID (tutor).
+        - in: query
+          name: subject_id
+          schema:
+            type: integer
+          required: false
+          description: Filter availabilities by the subject ID.
+      responses:
+        '200':
+          description: A list of tutor availabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availability_id:
+                      type: string
+                      format: uuid
+                      description: The availability ID
+                    topic_name:
+                      type: string
+                      description: The name of the topic
+                    topic_image:
+                      type: string
+                      description: The URL of the topic image
+                    availability:
+                      type: string
+                      description: Tutor's availability times for the topic
+                    interesteds:
+                      type: integer
+                      description: Number of interested students for the tutor's availability
+                    subject:
+                      type: object
+                      description: Information about the subject
+                      properties:
+                        id:
+                          type: integer
+                          description: The subject ID
+                        name:
+                          type: string
+                          description: The name of the subject
+                    tutor:
+                      type: object
+                      description: Information about the tutor
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The tutor ID
+                        name:
+                          type: string
+                          description: The name of the tutor
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Topics
+
+
   /tutor_availability:
     post:
       summary: Create a new availability tutor (with optional topic creation)
@@ -538,179 +613,6 @@ paths:
       tags:
       - Meets
 
-  /universities/{university_id}/subjects/{subject_id}/topics:
-    post:
-      summary: Create a new topic for a specific subject
-      tags:
-      - Universities
-      parameters:
-        - in: path
-          name: university_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the university
-        - in: path
-          name: subject_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the subject
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "80868"
-                asset:
-                  type: string
-                  example: "Buenardo"
-      responses:
-        '201':
-          description: Topic created successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  asset:
-                    type: string
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                  subject_id:
-                    type: integer
-
-    get:
-      summary: Get all topics for a specific subject
-      tags:
-      - Universities
-      parameters:
-        - in: path
-          name: university_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the university
-        - in: path
-          name: subject_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the subject
-      responses:
-        '200':
-          description: A list of topics
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-                    asset:
-                      type: string
-                    created_at:
-                      type: string
-                      format: date-time
-                    updated_at:
-                      type: string
-                      format: date-time
-                    subject_id:
-                      type: integer
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
-
-  /universities/{university_id}/subjects/{subject_id}/topics/{id}:
-    get:
-      summary: Get a specific topic by ID
-      tags:
-      - Universities
-      parameters:
-        - in: path
-          name: university_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the university
-        - in: path
-          name: subject_id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the subject
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the topic
-      responses:
-        '200':
-          description: A topic object
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  asset:
-                    type: string
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-                  subject_id:
-                    type: integer
-        '404':
-          description: Topic not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Topic not found
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
-
   /students/topics/{topic_id}/request_topic:
     post:
       summary: A Student request a Topic
@@ -834,6 +736,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+  
 
 security:
   - bearerAuth: []

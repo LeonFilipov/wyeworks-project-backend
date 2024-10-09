@@ -12,12 +12,14 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  resources :users, only: [ :index, :show, :create ] do
-    member do
-      get "proposed_topics", to: "topics#proposed_topics"
-      get "proposed_topics/:topic_id", to: "topics#proposed_topic"
-    end
-  end
+  # resources :users, only: [ :index, :show, :create ] do
+  #   member do
+  #     get "proposed_topics", to: "topics#proposed_topics"
+  #     get "proposed_topics/:topic_id", to: "topics#proposed_topic"
+  #   end
+  # end
+  get "topics" => "topics#index"
+  get "fake_user" => "users#fake_user"
 
   scope :profile do
     get "/", to: "users#profile", as: :profile
