@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-160]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=8221b91104a6450d95d4f1fda32e3ef7&pm=s)
++ Refactorized `/proposed_topics`
++ Added uniqueness for :name attribute in topics table
++ Added precense for :subject_id and :name
++ Removed from Swagger unnecesary endpoints
+
+
 - [[Backend-141]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=11624a6692a480ce9ea4ea7fbbef7fe1&pm=s)
 + Added endpoint `/topics` to list topics using query params for filtering.
 + The query params used are `subject_id` and `user_id`, both optional.
