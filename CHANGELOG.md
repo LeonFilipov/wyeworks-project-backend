@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-142]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=11624a6692a48000a735f00401688e36&pm=s) -Talle M: Crear / modificar endpoint para que el usuario logueado pueda interesarse en un tema 
++ Developed an endpoint that allows a user to express interest in a topic.
++ If a pending meeting does not exist for the topic, the system creates a new tentative meeting and adds the user to it.
++ If a pending meeting is already present, the system only adds the user to the existing meeting, without creating a new one.
+
 - [[Backend-139]](https://www.notion.so/Talle-S-Transformar-la-disponibilidad-a-un-string-y-eliminar-fechas-tentativas-11624a6692a480d081f1c8a5af8d7e9e?pvs=4) - Transformar la disponibilidad a un string y eliminar fechas tentativas.
 + Removed Tentatives entity, date_to and date_from fields from availability_tutors.
 + Added avalability field to availability_tutors.
