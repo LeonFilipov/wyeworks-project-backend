@@ -31,24 +31,21 @@ class AvailabilityTutorsController < ApplicationController
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
   # POST /tutor_availability
   def create
-    if params[:topic_id]
-      @topic = Topic.find(params[:topic_id])
-    else
-      @topic = Topic.new(topic_params)
-      unless @topic.save
-        render json: { errors: @topic.errors.full_messages }, status: :unprocessable_entity
-        return
-      end
+    @topic = Topic.new(topic_params)
+    begin
+      @topic.save!
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { errors: @topic.errors.full_messages }, status: :unprocessable_entity
+      return
     end
-
+    # Create availability
     @availability = @topic.availability_tutors.new(availability_tutor_params)
-    @availability.user = @current_user
-
-
+    # Get the current user
+    @availability.user = @current_user.first
+    # Try to save availability
     if @availability.save
       render json: {
-        message: "Availability created successfully",
-        availability: @availability.as_json(include: { topic: { only: [ :id, :name, :subject_id ] } })
+        message: "Topic and availability created successfully"
       }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
@@ -124,13 +121,14 @@ def update_meet
   end
 end
 
-
+  
   private
-  def topic_params
-    params.require(:topic).permit(:name, :description, :subject_id)
-  end
+    def topic_params
+      params.require(:topic).permit(:name, :description, :image_url, :subject_id)
+    end
 
-  def availability_tutor_params
-    params.require(:availability_tutor).permit(:description, :link, :availability)
-  end
+    def availability_tutor_params
+      params.require(:availability_tutor).permit(:availability, :description, :link)
+    end
+
 end
