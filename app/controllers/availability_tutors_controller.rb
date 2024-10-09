@@ -121,7 +121,7 @@ def update_meet
   end
 end
 
-  
+
   private
     def topic_params
       params.require(:topic).permit(:name, :description, :image_url, :subject_id)
@@ -130,5 +130,4 @@ end
     def availability_tutor_params
       params.require(:availability_tutor).permit(:availability, :description, :link)
     end
-
 end
