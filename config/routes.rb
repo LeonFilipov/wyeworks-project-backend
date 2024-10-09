@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#proposed_topic"
-  
+
   get "topics" => "topics#index"
   get "fake_user" => "users#fake_user"
 

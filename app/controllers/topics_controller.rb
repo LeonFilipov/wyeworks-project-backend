@@ -13,7 +13,7 @@ class TopicsController < ApplicationController
       topics_by_subject = Topic.where(subject_id: params[:subject_id]).pluck(:id)
       availability_tutors = availability_tutors.where(topic_id: topics_by_subject)
     end
-    
+
     render json: format_topic_response(availability_tutors), status: :ok
   end
 

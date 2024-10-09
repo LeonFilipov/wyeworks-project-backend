@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+
+- [[Backend-165]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=fa262195ca984d08acfe4e20bd24d264&pm=s)
++ Refactorize POST to `/tutor_availability`
+
 - [[Backend-160]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=8221b91104a6450d95d4f1fda32e3ef7&pm=s)
-+ Refactorized `/proposed_topics`
++ Refactorize `/proposed_topics`
 + Added uniqueness for :name attribute in topics table
 + Added precense for :subject_id and :name
 + Removed from Swagger unnecesary endpoints
