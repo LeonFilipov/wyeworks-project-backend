@@ -52,40 +52,74 @@ class AvailabilityTutorsController < ApplicationController
     end
   end
 
-  # POST /tutor_availability/:id/interesteds
+  # POST tutor_availability/:id/intersteds
   def add_interest
     @availability = AvailabilityTutor.find(params[:id])
+    debug_messages = []  # Array para almacenar mensajes de depuración
 
-    existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
+    # Verificar si el usuario ya expresó interés en una meet actual en estado 'pending'
+    pending_meet = @availability.meets.find_by(status: "pending")
+    debug_messages << "Found pending meet: #{pending_meet.present?}"
 
-    if existing_interest
-      render json: { message: "You have already expressed interest in this availability." }, status: :unprocessable_entity
-      return
+    if pending_meet
+      # Verificar si el usuario ya está interesado en la meet actual en estado 'pending'
+      pending_meet_interest = pending_meet.interesteds.exists?(user_id: @current_user.id)
+      debug_messages << "User interested in current pending meet: #{pending_meet_interest}"
+
+      if pending_meet_interest
+        render json: { message: "You have already expressed interest in the current pending meet.", debug: debug_messages }, status: :unprocessable_entity
+        return
+      end
     end
 
-    interested_record = Interested.new(user: @current_user, availability_tutor: @availability)
+    # Verificar si el usuario ya expresó interés en esta disponibilidad
+    existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
+    debug_messages << "User has existing interest: #{existing_interest.present?}"
 
-    if interested_record.save
-      if @availability.meets.empty?
-        @meet = @availability.meets.new(
-          description: "Meeting for #{@availability.description}",
-          link: "https://meeting-link.com",
-          mode: "virtual",
-          status: "pending"
-        )
+    unless existing_interest
+      Interested.create!(user: @current_user, availability_tutor: @availability)
+      debug_messages << "User's interest added to availability tutor."
+    end
 
-        if @meet.save
-          render json: { message: "Interest added and meet created", meet: @meet }, status: :created
-        else
-          render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages }, status: :unprocessable_entity
-        end
+    # Verificar si ya existe una reunión en estado 'pending'
+    pending_meet = @availability.meets.find_by(status: "pending")
+
+    if pending_meet.nil?
+      # Si no existe una meet en estado 'pending', crear una nueva
+      @meet = @availability.meets.new(
+        description: "Meeting for #{@availability.description}",
+        link: "https://meeting-link.com",
+        mode: "virtual",
+        status: "pending",
+        date_time: nil,  # Campo date_time vacío
+        count_interesteds: 1  # Inicializamos con 1 interesado
+      )
+
+      if @meet.save
+        debug_messages << "New meet created successfully."
+        render json: { message: "Interest added and meet created", meet: @meet, debug: debug_messages }, status: :created
       else
-        render json: { message: "Interest added, meet already exists" }, status: :ok
+        debug_messages << "Failed to create meet: #{@meet.errors.full_messages.join(', ')}"
+        render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
       end
     else
-      render json: { errors: interested_record.errors.full_messages }, status: :unprocessable_entity
+      # Si ya hay una reunión 'pending', incrementar el contador de interesados
+      pending_meet.increment!(:count_interesteds)
+      debug_messages << "Incremented count_interesteds for existing meet."
+      render json: { message: "Interest added, and meet updated", meet: pending_meet, debug: debug_messages }, status: :ok
     end
   end
+
+# PATCH /meets/:id
+def update_meet
+  @meet = Meet.find(params[:id])
+
+  if @meet.update(date_time: params[:date_time])
+    render json: { message: "Meet updated successfully", meet: @meet }, status: :ok
+  else
+    render json: { errors: @meet.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
 
   private

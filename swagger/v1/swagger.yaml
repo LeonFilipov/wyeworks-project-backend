@@ -199,12 +199,125 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Required param can't be blank"
+                example:
+                  error: "Required param can't be blank"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-
+          
+  /tutor_availability/{id}/interesteds:
+    post:
+      summary: Add interest to a tutor's availability
+      description: |
+        This endpoint allows a user to express interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the tutor's availability
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: ID of the user expressing interest
+        required: true
+      responses:
+        '201':
+          description: Interest added and new meet created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest added and meet created"
+                  meet:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        example: "Meeting for Tutor Availability"
+                      link:
+                        type: string
+                        example: "https://meeting-link.com"
+                      mode:
+                        type: string
+                        example: "virtual"
+                      status:
+                        type: string
+                        example: "pending"
+                      date_time:
+                        type: string
+                        example: null
+                      count_interesteds:
+                        type: integer
+                        example: 1
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "New meet created successfully."
+        '200':
+          description: Interest added and meet updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest added, and meet updated"
+                  meet:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        example: "Meeting for Tutor Availability"
+                      link:
+                        type: string
+                        example: "https://meeting-link.com"
+                      mode:
+                        type: string
+                        example: "virtual"
+                      status:
+                        type: string
+                        example: "pending"
+                      date_time:
+                        type: string
+                        example: null
+                      count_interesteds:
+                        type: integer
+                        example: 2
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "Incremented count_interesteds for existing meet."
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You have already expressed interest in the current pending meet."
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User interested in current pending meet: true"
+      tags:
+        - Tutor availability
 
   /profile:
     get:
@@ -704,6 +817,23 @@ components:
               type: string
             link:
               type: string
+    CreateAvailabilityTutorInputWithoutTopic:
+      type: object
+      properties:
+        description:
+          type: string
+        date_from:
+          type: string
+          format: date-time
+        date_to:
+          type: string
+          format: date-time
+        link:
+          type: string
+      required:
+        - description
+        - date_from
+        - date_to
 
     Meet:
       type: object

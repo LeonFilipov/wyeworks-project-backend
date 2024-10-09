@@ -45,6 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_150624) do
     t.bigint "availability_tutor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "count_interesteds", default: 0
     t.index ["availability_tutor_id"], name: "index_meets_on_availability_tutor_id"
   end
 
@@ -67,10 +68,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_150624) do
 
   create_table "topics", force: :cascade do |t|
     t.string "name"
-    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "subject_id", null: false
+    t.string "description"
     t.string "image_url"
     t.index ["subject_id"], name: "index_topics_on_subject_id"
   end
