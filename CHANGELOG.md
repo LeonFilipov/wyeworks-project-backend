@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-141]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=11624a6692a480ce9ea4ea7fbbef7fe1&pm=s)
++ Added endpoint `/topics` to list topics using query params for filtering.
++ The query params used are `subject_id` and `user_id`, both optional.
++ Added image_url column to the topics table.
++ Test endpoint /fake_user for testing purposes.
+
 - [[Backend-139]](https://www.notion.so/Talle-S-Transformar-la-disponibilidad-a-un-string-y-eliminar-fechas-tentativas-11624a6692a480d081f1c8a5af8d7e9e?pvs=4) - Transformar la disponibilidad a un string y eliminar fechas tentativas.
 + Removed Tentatives entity, date_to and date_from fields from availability_tutors.
 + Added avalability field to availability_tutors.
