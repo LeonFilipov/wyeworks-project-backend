@@ -35,12 +35,11 @@ class StudentsController < UsersController
         service=StudentsService.new(@current_user)
         meetings=service.get_my_interested_meetings
 
-        if result.is_a?(Hash)
-            render json: result, status: :not_found
+        if meetings.is_a?(Hash)
+            render json: meetings, status: :not_found
         else
-            render json: result, status: :ok
+            render json: meetings, status: :ok
         end
-    
     end
 
     private
