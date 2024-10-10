@@ -318,6 +318,40 @@ paths:
                       example: "User interested in current pending meet: true"
       tags:
         - Tutor availability
+  
+  /interested_meetings:
+    get:
+      summary: Gets meeting that im interested.
+      description: |
+        This endpoint allows a user as a studento to show interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
+      responses:
+        '200':
+          description: Interest added and meet updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    topic_name:
+                      type: string
+                      example: "topic 1111111111111"
+                    tutor_name:
+                      type: string
+                      example: "Tutor name"
+                    meet_status:
+                      type: string
+                      example: "confirmed"
+                    date_time:
+                      oneOf:
+                        - type: string
+                          format: date-time
+                          example: "2024-11-11T22:13:39.937+00:00"
+                        - type: string
+                          example: "Indefinida"
+      tags:
+        - Meetings
 
   /profile:
     get:
