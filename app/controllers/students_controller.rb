@@ -31,6 +31,18 @@ class StudentsController < UsersController
         end
     end
 
+    def interested_meetings
+        service=StudentsService.new(@current_user)
+        meetings=service.get_my_interested_meetings
+
+        if result.is_a?(Hash)
+            render json: result, status: :not_found
+        else
+            render json: result, status: :ok
+        end
+    
+    end
+
     private
         # Set the topic within the context of the subject
         def set_topic

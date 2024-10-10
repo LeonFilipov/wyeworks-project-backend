@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # get "profile" => "users#profile"
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
+  
+  get "interested_meetings", to: "students#interested_meetings"
 
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#proposed_topic"
