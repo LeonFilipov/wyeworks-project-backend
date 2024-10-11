@@ -6,16 +6,19 @@ class TopicsController < ApplicationController
   def index
     # Filtro inicial
     availability_tutors = AvailabilityTutor.all
-
     # Filtrar por user_id si está presente
     availability_tutors = availability_tutors.where(user_id: params[:user_id]) if params[:user_id].present?
-
     # Filtrar por topic_id si subject_id está presente
     if params[:subject_id].present?
       topics_by_subject = Topic.where(subject_id: params[:subject_id]).pluck(:id)
       availability_tutors = availability_tutors.where(topic_id: topics_by_subject)
     end
-
+    availability_tutors = availability_tutors.
+                          left_joins(:interesteds).
+                          select('availability_tutors.*, COUNT(interesteds.id) AS interested_count').
+                          group('availability_tutors.id').
+                          order(Arel.sql("MAX(CASE WHEN interesteds.user_id = '#{ActiveRecord::Base.connection.quote_string(@current_user.first.id)}' THEN 1 ELSE 0 END) DESC, availability_tutors.created_at DESC")) 
+  
     render json: format_topic_response(availability_tutors), status: :ok
   end
 
@@ -103,13 +106,14 @@ class TopicsController < ApplicationController
     topic = availability_tutor.topic
     user = availability_tutor.user
     subject = topic.subject
-
+    interesteds = availability_tutor.interesteds
     {
       availability_id: availability_tutor.id,
       topic_name: topic.name,
       topic_image: topic.image_url,
       availability: availability_tutor.availability,
-      interesteds: availability_tutor.interesteds.count,
+      interesteds: availability_tutor.interested_count,
+      interested: availability_tutor.interesteds.exists?(user_id: @current_user.first.id) ? true : false, 
       subject: {
         id: subject.id,
         name: subject.name
@@ -118,7 +122,6 @@ class TopicsController < ApplicationController
         id: user.id,
         name: user.name
       }
-
     }
   end
 end
