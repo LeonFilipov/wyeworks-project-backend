@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
+  get "interested_meetings", to: "students#interested_meetings"
+
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#proposed_topic"
 
@@ -46,6 +48,7 @@ Rails.application.routes.draw do
     resources :meets, only: [ :index, :show ] # Nested meet routes under availability_tutors
     resources :interesteds, only: [ :index, :show ] # Nested interested routes under availability_tutors
   end
+  post "tutor_availability/:id/intersteds", to: "availability_tutors#add_interest"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
