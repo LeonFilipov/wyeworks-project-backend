@@ -325,6 +325,9 @@ paths:
                     interesteds:
                       type: integer
                       description: Number of interested students for the tutor's availability
+                    intrested:
+                      type: boolean
+                      description: Indicates if the user is interested in the availability
                     subject:
                       type: object
                       description: Information about the subject
