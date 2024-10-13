@@ -57,9 +57,8 @@ gem "bcrypt", "~> 3.1.7"
 
 gem "pundit"
 
+gem "i18n"
 # Consistencia testing
-gem "faker", "~> 1.6", ">= 1.6.6"
-
 group :development, :test do
   # Debugging tools
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -79,7 +78,8 @@ group :development, :test do
 
   # Audit for vulnerable dependencies
   gem "bundler-audit", require: false
-
+  
+  gem "faker", "~> 3.4", ">= 3.4.2"
   # Preload application to speed up development tasks
   gem "spring"
 end
