@@ -559,8 +559,6 @@ topics.each do |topic|
   })
   Interested.find_or_create_by!({
     user_id: user_3.id,
-    availability_tutor_id: availability.id,
+    availability_tutor_id: availability.id
   })
 end
-
-

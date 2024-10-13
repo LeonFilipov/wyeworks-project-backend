@@ -15,10 +15,10 @@ class TopicsController < ApplicationController
     end
     availability_tutors = availability_tutors.
                           left_joins(:interesteds).
-                          select('availability_tutors.*, COUNT(interesteds.id) AS interested_count').
-                          group('availability_tutors.id').
-                          order(Arel.sql("MAX(CASE WHEN interesteds.user_id = '#{ActiveRecord::Base.connection.quote_string(@current_user.first.id)}' THEN 1 ELSE 0 END) DESC, availability_tutors.created_at DESC")) 
-  
+                          select("availability_tutors.*, COUNT(interesteds.id) AS interested_count").
+                          group("availability_tutors.id").
+                          order(Arel.sql("MAX(CASE WHEN interesteds.user_id = '#{ActiveRecord::Base.connection.quote_string(@current_user.first.id)}' THEN 1 ELSE 0 END) DESC, availability_tutors.created_at DESC"))
+
     render json: format_topic_response(availability_tutors), status: :ok
   end
 
