@@ -12,12 +12,11 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  # resources :users, only: [ :index, :show, :create ] do
-  #   member do
-  #     get "proposed_topics", to: "topics#proposed_topics"
-  #     get "proposed_topics/:topic_id", to: "topics#proposed_topic"
-  #   end
-  # end
+  get "interested_meetings", to: "students#interested_meetings"
+
+  get "proposed_topics", to: "topics#proposed_topics"
+  get "proposed_topics/:availability_id", to: "topics#proposed_topic"
+
   get "topics" => "topics#index"
   get "fake_user" => "users#fake_user"
 
@@ -28,9 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :universities, only: [ :index, :show, :create ] do
-    resources :subjects, only: [ :index, :show, :create ] do
-      resources :topics
-    end
+    resources :subjects, only: [ :index, :show, :create ]
   end
 
   post "students/topics/:topic_id/request_topic" => "students#request_topic"
@@ -44,13 +41,14 @@ Rails.application.routes.draw do
   # end
 
   # Routes for availability_tutors, including adding interest
-  resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors" do
+  resources :tutor_availability, only: [ :show, :create ], controller: "availability_tutors" do
     member do
       post "interesteds", to: "availability_tutors#add_interest"
     end
     resources :meets, only: [ :index, :show ] # Nested meet routes under availability_tutors
     resources :interesteds, only: [ :index, :show ] # Nested interested routes under availability_tutors
   end
+  post "tutor_availability/:id/intersteds", to: "availability_tutors#add_interest"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

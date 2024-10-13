@@ -24,6 +24,29 @@ class StudentsService
       { error: "Requested topics not found" }
     end
 
+    def get_my_interested_meetings
+        query=Meet.joins("INNER JOIN availability_tutors ON availability_tutors.id = meets.availability_tutor_id")
+        .joins("INNER JOIN interesteds ON availability_tutors.id = interesteds.availability_tutor_id")
+        .joins("INNER JOIN users ON availability_tutors.user_id = users.id")
+        .joins("INNER JOIN topics ON availability_tutors.topic_id = topics.id")
+        .select("topics.name AS topic_name,
+               users.name AS tutor_name,
+               meets.status,
+               meets.date_time AS date_time")
+        .where(interesteds: { user_id: @current_user.first.id })
+
+        result = query.map do |record|
+          {
+            topic_name: record.topic_name,
+            tutor_name: record.tutor_name,
+            meet_status: record.status,
+            date_time: record.date_time.nil? ? "Indefinida" : record.date_time
+          }
+        end
+        result
+    rescue ActiveRecord::RecordNotFound
+      { error: "Intereted meetings not found" }
+    end
 
 
     def self.get_requested_topics
