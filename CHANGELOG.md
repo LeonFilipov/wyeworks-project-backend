@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
++ [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
++ Updated endpoint `/topics` with new field `intrested`.
++ Added new user. This user is interested in two topics.
 
 - [[Backend-143]](https://www.notion.so/Talle-M-Crear-modificar-endpoint-para-listar-las-meetings-en-las-que-el-usuario-est-anotado-11624a6692a480aa830dc9120393c6b3?pvs=4)
 + Added new enpoint to list my interested meetings as a student
@@ -19,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + Added uniqueness for :name attribute in topics table
 + Added precense for :subject_id and :name
 + Removed from Swagger unnecesary endpoints
-
 
 - [[Backend-141]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=11624a6692a480ce9ea4ea7fbbef7fe1&pm=s)
 + Added endpoint `/topics` to list topics using query params for filtering.
