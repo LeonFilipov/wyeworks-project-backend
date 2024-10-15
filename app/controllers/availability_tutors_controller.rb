@@ -73,11 +73,11 @@ class AvailabilityTutorsController < ApplicationController
     end
 
     # Verificar si el usuario ya expresó interés en esta disponibilidad
-    existing_interest = Interested.find_by(user: @current_user.first, availability_tutor: @availability)
+    existing_interest = Interested.find_by(user: @current_user, availability_tutor: @availability)
     debug_messages << "User has existing interest: #{existing_interest.present?}"
 
     unless existing_interest
-      Interested.create!(user: @current_user.first, availability_tutor: @availability)
+      Interested.create!(user: @current_user, availability_tutor: @availability)
       debug_messages << "User's interest added to availability tutor."
     end
 
