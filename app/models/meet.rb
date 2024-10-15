@@ -5,6 +5,9 @@ class Meet < ApplicationRecord
   validates :mode, inclusion: { in: [ "virtual", "in-person" ] }
   validates :status, inclusion: { in: [ "pending", "confirmed" ] }
 
+  has_many :participants, dependent: :destroy
+  has_many :users, through: :participants
+
   # Custom validation: Only validate date_time if status is confirmed
   validate :date_time_required_for_confirmed_meeting
 
