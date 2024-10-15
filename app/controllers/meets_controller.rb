@@ -60,11 +60,18 @@ class MeetsController < ApplicationController
       end
 
       meets_data = meets.map do |meet|
+        subject = meet.availability_tutor.topic.subject
+
         {
           id: meet.id,
           topic_name: meet.availability_tutor.topic.name,
           tutor_name: meet.availability_tutor.user.name,
           meeting_date: meet.date_time,
+          meet_status: meet.status,
+          subject: {
+            id: subject.id,
+            name: subject.name
+          },
           interested: meet.users.include?(@current_user),
           number_of_interested: meet.users.size
         }

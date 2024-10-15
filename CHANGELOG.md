@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-201]](https://www.notion.so/Talle-S-Fix-available_meets-6d2484b35b9f4945ab2329d6a669cd96)
++ Add meet_status and subject fields to endpoint /available_meets
+
 - [[Backend-180]](https://www.notion.so/Talle-M-Endpoint-reuniones-existentes-b4a7d3d80788448b98962ebb95a6f221?pvs=4)
 + New list available meetings endpoint
 

@@ -643,6 +643,18 @@ paths:
                       type: string
                       format: date-time
                       description: The date and time of the meeting
+                    meet_status:
+                      type: string
+                      description: The status of the meeting
+                    subject:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the subject
+                        name:
+                          type: string
+                          description: The name of the subject
                     interested:
                       type: boolean
                       description: Whether the current user is interested in the meeting
