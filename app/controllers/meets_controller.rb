@@ -79,21 +79,66 @@ class MeetsController < ApplicationController
 
       render json: meets_data, status: :ok
     end
+    # GET /profile/meets
+    def my_meets
+      meets = Meet.joins(:availability_tutor)
+                  .where(availability_tutors: { 
+                    user_id: @current_user.first.id 
+                  })
+      response = meets.map do |meet|
+                  format_meet(meet)
+                 end
+      render json: response, status: :ok
+    end
+    # GET /profile/meets/:id
+    def my_meet
+      meet = Meet.find_by(id: params[:id])
+      if meet.nil? || meet.availability_tutor.user_id != @current_user.first.id # Verifica si la reunión pertenece al usuario
+        render json: { error: "Meet not found" }, status: :not_found # 404
+        return
+      end
+      render json: format_meet(meet), status: :ok
+    end
+    
 
     private
-
-    def map_meeting_status(status_param)
-      case status_param.to_i
-      when 0
-        "pending"
-      when 1
-        "confirmed"
-      when 2
-        "completed"
-      when 3
-        "canceled"
-      else
-        nil
+      def format_meet(meet)
+        availability = meet.availability_tutor
+        topic = availability.topic
+        subject = topic.subject
+        {
+          id: meet.id,
+          date: meet.date_time,
+          status: meet.status,
+          description: meet.description,
+          interesteds: meet.count_interesteds,
+          topic: {
+            id: topic.id,
+            name: topic.name,
+            image_url: topic.image_url
+          },
+          subject: {
+            id: subject.id,
+            name: subject.name
+          },
+          tutor: {
+            name: @current_user.first.name
+          }
+        }
       end
-    end
+
+      def map_meeting_status(status_param)
+        case status_param.to_i
+        when 0
+          "pending"
+        when 1
+          "confirmed"
+        when 2
+          "completed"
+        when 3
+          "canceled"
+        else
+          nil
+        end
+      end
 end
