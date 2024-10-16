@@ -63,7 +63,7 @@ class AvailabilityTutorsController < ApplicationController
 
     if pending_meet
       # Verificar si el usuario ya está interesado en la meet actual en estado 'pending'
-      pending_meet_interest = pending_meet.interesteds.exists?(user_id: @current_user.first.id)
+      pending_meet_interest = pending_meet.users.exists?(id: @current_user.first.id)
       debug_messages << "User interested in current pending meet: #{pending_meet_interest}"
 
       if pending_meet_interest

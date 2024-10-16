@@ -770,7 +770,7 @@ paths:
                     interested:
                       type: boolean
                       description: Whether the current user is interested in the meeting
-                    number_of_interested:
+                    count_interesteds:
                       type: integer
                       description: The number of users interested in the meeting
         '400':
