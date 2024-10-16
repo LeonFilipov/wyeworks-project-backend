@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     end
 
     def fake_user
-        user = User.where(name: "John Doe").last
+        user = User.where(name: "Juan Pablo").last
         token = JsonWebTokenService.encode(user_id: user.id)
         render json: { user_token: token }, status: 200
     end

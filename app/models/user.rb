@@ -12,6 +12,9 @@ class User < ApplicationRecord
     has_many :interesteds
     has_many :interested_availability_tutors, through: :interesteds, source: :availability_tutor
 
+    has_many :participants, dependent: :destroy
+    has_many :meets, through: :participants
+
     def self.google_auth(user_info)
         where(email: user_info["email"]).first_or_initialize do |user|
             user.name = user_info["name"]

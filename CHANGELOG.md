@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[Backend-202]](https://www.notion.so/Talle-M-Crear-un-endpoint-para-confirmar-la-reuni-n-11e24a6692a4800d9cbac99df793f850?pvs=4)
 + Added new endpoint to update meeting status from pending to confirmed.
 
+- [[Backend-201]](https://www.notion.so/Talle-S-Fix-available_meets-6d2484b35b9f4945ab2329d6a669cd96)
++ Add meet_status and subject fields to endpoint /available_meets
+
+- [[Backend-180]](https://www.notion.so/Talle-M-Endpoint-reuniones-existentes-b4a7d3d80788448b98962ebb95a6f221?pvs=4)
++ New list available meetings endpoint
+
++ [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
++ Updated endpoint `/topics` with new field `intrested`.
++ Added new user. This user is interested in two topics.
+
 - [[Backend-143]](https://www.notion.so/Talle-M-Crear-modificar-endpoint-para-listar-las-meetings-en-las-que-el-usuario-est-anotado-11624a6692a480aa830dc9120393c6b3?pvs=4)
 + Added new enpoint to list my interested meetings as a student
 
@@ -21,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + Added uniqueness for :name attribute in topics table
 + Added precense for :subject_id and :name
 + Removed from Swagger unnecesary endpoints
-
 
 - [[Backend-141]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=11624a6692a480ce9ea4ea7fbbef7fe1&pm=s)
 + Added endpoint `/topics` to list topics using query params for filtering.
