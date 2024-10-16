@@ -77,7 +77,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_151737) do
 
   create_table "tags", force: :cascade do |t|
     t.string "name"
-    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "topic_id", null: false
@@ -94,6 +93,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_151737) do
     t.index ["subject_id"], name: "index_topics_on_subject_id"
   end
 
+  create_table "tutors", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.integer "ranking"
+    t.integer "amount_given_lessons"
+    t.integer "amount_given_topics"
+    t.integer "amount_attended_students"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tutors_on_user_id"
+  end
+
   create_table "universities", force: :cascade do |t|
     t.string "name"
     t.string "location"
@@ -107,17 +117,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_151737) do
     t.string "uid"
     t.string "description"
     t.string "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "attended_lessons", default: 0
-    t.integer "attended_tutors", default: 0
-    t.integer "attended_topics", default: 0
     t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
     t.integer "ranking"
     t.integer "amount_given_lessons"
     t.integer "amount_given_topics"
     t.integer "amount_attended_students"
+    t.integer "attended_lessons", default: 0
+    t.integer "attended_tutors", default: 0
+    t.integer "attended_topics", default: 0
   end
 
   add_foreign_key "availability_tutors", "topics", name: "availability_tutors_topic_id_fkey"
@@ -132,4 +140,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_151737) do
   add_foreign_key "subjects", "universities"
   add_foreign_key "tags", "topics"
   add_foreign_key "topics", "subjects"
+  add_foreign_key "tutors", "users"
 end
