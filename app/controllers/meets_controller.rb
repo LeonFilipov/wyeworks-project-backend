@@ -82,9 +82,54 @@ class MeetsController < ApplicationController
 
       render json: meets_data, status: :ok
     end
+    # GET /profile/meets
+    def my_meets
+      meets = Meet.joins(:availability_tutor)
+                  .where(availability_tutors: {
+                    user_id: @current_user.first.id
+                  })
+      response = meets.map do |meet|
+                  format_meet(meet)
+                 end
+      render json: response, status: :ok
+    end
+    # GET /profile/meets/:id
+    def my_meet
+      meet = Meet.find_by(id: params[:id])
+      if meet.nil? || meet.availability_tutor.user_id != @current_user.first.id # Verifica si la reunión pertenece al usuario
+        render json: { error: "Meet not found" }, status: :not_found # 404
+        return
+      end
+      render json: format_meet(meet), status: :ok
+    end
+
 
     private
-
+      def format_meet(meet)
+        availability = meet.availability_tutor
+        topic = availability.topic
+        subject = topic.subject
+        {
+          id: meet.id,
+          date: meet.date_time,
+          status: meet.status,
+          description: meet.description,
+          interesteds: meet.count_interesteds,
+          topic: {
+            id: topic.id,
+            name: topic.name,
+            image_url: topic.image_url
+          },
+          subject: {
+            id: subject.id,
+            name: subject.name
+          },
+          tutor: {
+            name: @current_user.first.name
+          }
+        }
+      end
+  
     # Find the AvailabilityTutor based on the ID in the URL
     def set_availability_tutor
       @availability_tutor = AvailabilityTutor.find(params[:tutor_availability_id])
@@ -116,5 +161,4 @@ class MeetsController < ApplicationController
       else
           nil
       end
-    end
 end

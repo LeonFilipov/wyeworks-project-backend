@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+
 - [[Backend-202]](https://www.notion.so/Talle-M-Crear-un-endpoint-para-confirmar-la-reuni-n-11e24a6692a4800d9cbac99df793f850?pvs=4)
 + Added new endpoint to update meeting status from pending to confirmed.
+
+- [[Backend-203]](https://www.notion.so/Talle-S-Endpoint-para-ver-mis-reuniones-como-tutor-c2230ca8b34847c395d092a9fb2b0c1b)
++ New endpoint to list my meetings as a tutor /profile/meets and /profile/meets/:meet_id
 
 - [[Backend-201]](https://www.notion.so/Talle-S-Fix-available_meets-6d2484b35b9f4945ab2329d6a669cd96)
 + Add meet_status and subject fields to endpoint /available_meets

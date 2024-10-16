@@ -474,6 +474,57 @@ paths:
       tags:
       - Users
 
+  /profile/meets:
+    get:
+      summary: Get the tutors's meetings
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+  /profile/meets/:id:
+    get:
+      summary: Get the tutor's meeting by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A meeting object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meeting not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Meeting not found
+      tags:
+      - Users
 
   /auth/google_oauth2/callback:
     get:
@@ -1036,6 +1087,54 @@ components:
           enum:
             - pending
             - confirmed
+
+    TutorMeet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-22T15:20:02.093+01:00"
+        status:
+          type: string
+          example: "pending"
+        description:
+          type: string
+          example: "Sesión sobre Tautologías y Contradicciones"
+        interesteds:
+          type: integer
+          example: 1
+        topic:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 8
+            name:
+              type: string
+              example: "Tautologías y Contradicciones"
+            image_url:
+              type: string
+              nullable: true
+              example: null
+        subject:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 446
+            name:
+              type: string
+              example: "Lógica"
+        tutor:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Doe"
 
   responses:
     UnauthorizedError:
