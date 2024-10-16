@@ -26,8 +26,8 @@ class MeetsController < ApplicationController
         render json: { error: "Meet already confirmed" }, status: :bad_request
       else
         @meet.status = "confirmed"
-        @meet.date_time = params[:meet][:fechaReunion]
-        @meet.link = params[:meet][:linkVideollamada]
+        @meet.date_time = params[:meet][:date]
+        @meet.description = params[:meet][:description]
         @meet.save
         render json: { message: "Meet confirmed successfully" }, status: :ok
       end
@@ -143,15 +143,6 @@ class MeetsController < ApplicationController
       @meet = Meet.find(params[:idReunion])
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Meet not found" }, status: :not_found
-    end
-
-    def set_link
-      @link = params.require(:meet).permit[:linkVideollamada]
-    end
-
-    # Find the date in timestamp in the URL
-    def set_date
-      @dateTS = params.require(:meet).permit[:fechaReunion]
     end
 
     def map_meeting_status(status_param)

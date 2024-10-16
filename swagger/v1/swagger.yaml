@@ -374,14 +374,14 @@ paths:
                 meet:
                   type: object
                   properties:
-                    fechaReunion:
+                    date:
                       type: string
                       format: date-time
                       description: "Date of the meeting"
                       example: "2024-11-11 13:39:37"
-                    linkVideollamada:
+                    description:
                       type: string
-                      description: "Link of the meeting"
+                      description: "Description of the meeting, can be the link"
                       example: "www.meet-link.com"
         required: true
       responses:
