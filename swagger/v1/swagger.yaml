@@ -353,6 +353,67 @@ paths:
       tags:
         - Meetings
 
+  /meet/{id}:
+    post:
+      summary: Confirm pending meeting.
+      description: |
+        This endpoint allows a user as a tutor to update the meeting state to confirmed and set the date in timestamp. Its only possible to confirm a pending meeting by the user that created it.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the meeting
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                meet:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                      description: "Date of the meeting"
+                      example: "2024-11-11 13:39:37"
+        required: true
+      responses:
+        '200':
+          description: Meet confirmed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet confirmed successfully"
+        '400':
+          description: Meet already confirmed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet already confirmed"
+        '401':
+          description: User not allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not allowed"
+      tags:
+        - Meetings
+
   /profile:
     get:
       summary: Get the user profile
