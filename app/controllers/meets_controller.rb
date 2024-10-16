@@ -1,8 +1,6 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
     before_action :set_meet, only: [ :show, :confirm_pending_meet ]
-    before_action :set_date, only: [ :confirm_pending_meet ]
-    before_action :set_link, only: [ :confirm_pending_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
