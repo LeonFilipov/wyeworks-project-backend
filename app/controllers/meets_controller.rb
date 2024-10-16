@@ -17,7 +17,7 @@ class MeetsController < ApplicationController
     end
 
     # POST /meets/:id
-    def confirm_pending_meet 
+    def confirm_pending_meet
       @availability_tutor = AvailabilityTutor.find(@meet.availability_tutor_id)
       if @current_user.first.id != @availability_tutor.user_id
         render json: { error: "User not allowed" }, status: :unauthorized
