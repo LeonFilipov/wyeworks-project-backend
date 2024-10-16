@@ -129,7 +129,7 @@ class MeetsController < ApplicationController
           }
         }
       end
-  
+
     # Find the AvailabilityTutor based on the ID in the URL
     def set_availability_tutor
       @availability_tutor = AvailabilityTutor.find(params[:tutor_availability_id])
@@ -161,4 +161,5 @@ class MeetsController < ApplicationController
       else
           nil
       end
+    end
 end
