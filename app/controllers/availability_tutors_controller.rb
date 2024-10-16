@@ -93,7 +93,7 @@ class AvailabilityTutorsController < ApplicationController
         date_time: nil,
         count_interesteds: 1
       )
-  
+
       if @meet.save
         Participant.create!(meet: @meet, user: @current_user.first)
         debug_messages << "New meet created successfully, and user added as participant."
@@ -105,12 +105,12 @@ class AvailabilityTutorsController < ApplicationController
     else
       pending_meet.increment!(:count_interesteds)
       debug_messages << "Incremented count_interesteds for existing meet."
-  
+
       unless pending_meet.participants.exists?(user_id: @current_user.first.id)
         Participant.create!(meet: pending_meet, user: @current_user.first)
         debug_messages << "User added as participant to existing pending meet."
       end
-  
+
       render json: { message: "Interest added, and meet updated", meet: pending_meet, debug: debug_messages }, status: :ok
     end
   end
