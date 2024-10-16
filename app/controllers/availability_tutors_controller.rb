@@ -85,27 +85,32 @@ class AvailabilityTutorsController < ApplicationController
     pending_meet = @availability.meets.find_by(status: "pending")
 
     if pending_meet.nil?
-      # Si no existe una meet en estado 'pending', crear una nueva
       @meet = @availability.meets.new(
         description: "Meeting for #{@availability.description}",
         link: "https://meeting-link.com",
         mode: "virtual",
         status: "pending",
-        date_time: nil,  # Campo date_time vacío
-        count_interesteds: 1  # Inicializamos con 1 interesado
+        date_time: nil,
+        count_interesteds: 1
       )
-
+  
       if @meet.save
-        debug_messages << "New meet created successfully."
+        Participant.create!(meet: @meet, user: @current_user.first)
+        debug_messages << "New meet created successfully, and user added as participant."
         render json: { message: "Interest added and meet created", meet: @meet, debug: debug_messages }, status: :created
       else
         debug_messages << "Failed to create meet: #{@meet.errors.full_messages.join(', ')}"
         render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
       end
     else
-      # Si ya hay una reunión 'pending', incrementar el contador de interesados
       pending_meet.increment!(:count_interesteds)
       debug_messages << "Incremented count_interesteds for existing meet."
+  
+      unless pending_meet.participants.exists?(user_id: @current_user.first.id)
+        Participant.create!(meet: pending_meet, user: @current_user.first)
+        debug_messages << "User added as participant to existing pending meet."
+      end
+  
       render json: { message: "Interest added, and meet updated", meet: pending_meet, debug: debug_messages }, status: :ok
     end
   end
