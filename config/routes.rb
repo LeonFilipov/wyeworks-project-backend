@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     get "/", to: "users#profile", as: :profile
     put "/", to: "users#update"
     patch "/", to: "users#update"
+    get "meets", to: "meets#my_meets"
+    get "meets/:id", to: "meets#my_meet"
   end
 
   resources :universities, only: [ :index, :show, :create ] do
