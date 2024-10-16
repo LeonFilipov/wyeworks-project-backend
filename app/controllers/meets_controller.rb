@@ -82,8 +82,8 @@ class MeetsController < ApplicationController
     # GET /profile/meets
     def my_meets
       meets = Meet.joins(:availability_tutor)
-                  .where(availability_tutors: { 
-                    user_id: @current_user.first.id 
+                  .where(availability_tutors: {
+                    user_id: @current_user.first.id
                   })
       response = meets.map do |meet|
                   format_meet(meet)
@@ -99,7 +99,7 @@ class MeetsController < ApplicationController
       end
       render json: format_meet(meet), status: :ok
     end
-    
+
 
     private
       def format_meet(meet)
