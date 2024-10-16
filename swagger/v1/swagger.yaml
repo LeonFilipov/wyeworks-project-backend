@@ -357,9 +357,9 @@ paths:
     post:
       summary: Confirm pending meeting.
       description: |
-        This endpoint allows a user as a tutor to update the meeting state to confirmed and set the date in timestamp. Its only possible to confirm a pending meeting by the user that created it.
+        This endpoint allows a user as a tutor to update the meeting state to confirmed, set the date in timestamp and set the link. Its only possible to confirm a pending meeting by the user that created it.
       parameters:
-        - name: id
+        - name: idReunion
           in: path
           required: true
           description: ID of the meeting
@@ -379,6 +379,10 @@ paths:
                       format: date-time
                       description: "Date of the meeting"
                       example: "2024-11-11 13:39:37"
+                    description:
+                      type: string
+                      description: "Description of the meeting, can be the link"
+                      example: "www.meet-link.com"
         required: true
       responses:
         '200':

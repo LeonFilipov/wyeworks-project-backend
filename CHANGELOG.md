@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+- [[Backend-181]](https://www.notion.so/Talle-S-Modificaci-n-de-reuni-n-para-confirmaci-n-86c949de58f34d81a83ae02880a6d5dd?pvs=4)
++ Updated the last endpoint to allow update the link of the meet when confirmed.
 
 - [[Backend-202]](https://www.notion.so/Talle-M-Crear-un-endpoint-para-confirmar-la-reuni-n-11e24a6692a4800d9cbac99df793f850?pvs=4)
 + Added new endpoint to update meeting status from pending to confirmed.
@@ -20,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[Backend-180]](https://www.notion.so/Talle-M-Endpoint-reuniones-existentes-b4a7d3d80788448b98962ebb95a6f221?pvs=4)
 + New list available meetings endpoint
 
-+ [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
+- [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
 + Updated endpoint `/topics` with new field `intrested`.
 + Added new user. This user is interested in two topics.
 
@@ -60,43 +62,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + Added table 'tentatives' with references to 'availability_tutor' and fields for scheduling details.
 + Added table 'interesteds' with references to 'user' and 'availability_tutor'.
 + Added table 'meets' with scheduling, description, and mode fields, referencing 'availability_tutor'.
-+ 
-- [[Backend-126]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=e03be58673d54ad8a9c8f75922af8604&pm=s)
-- Added preload subjects and universities in the database
-- Fixed the type of the user ID in create_availability migration 
-- Added database seed to render-build.sh
 
--[[Backend-88]](https://www.notion.so/Tutor-se-ofrece-a-dar-tutoria-sobre-un-tema-solicitado-4b1792c3912845118fbfbfd7c37534bf?pvs=4) - Create an availability for existing topic, create both a topic and an availability
+- [[Backend-126]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=e03be58673d54ad8a9c8f75922af8604&pm=s)
++ Added preload subjects and universities in the database
++ Fixed the type of the user ID in create_availability migration 
++ Added database seed to render-build.sh
+
+-[[Backend-88]](https://www.notion.so/Tutor-se-ofrece-a-dar-tutoria-sobre-un-tema-solicitado-4b1792c3912845118fbfbfd7c37534bf?pvs=4)
++ Create an availability for existing topic, create both a topic and an availability
 
 - [[Backend-116]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=4ad2fae2b891400bbea5f6f896e24afd&pm=s)
 + Successfully deployed to Render
 + New config for development and test environments
 
 - [[Backend-36]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=2b0cb01cb3994c38bd126dcb3162a272&pm=s)
-- New endpoint /api-docs to access the Swagger documentation
-- Accept bearer token in the Authorization header to authenticate the user
-- Removed unused spec tests
++ New endpoint /api-docs to access the Swagger documentation
++ Accept bearer token in the Authorization header to authenticate the user
++ Removed unused spec tests
 
 - New endpoint profile to get the user's information
 
 - [[Backend-85]](https://www.notion.so/Sumarse-Crear-a-una-solicitud-de-tutor-a-sobre-un-tema-Estudiante-b8c99b9dc6414efd94a62313cfeeeaa3?pvs=4)
-- Student management:
-- Request of topic from student
-- Show requested topics
-- Show my requested topics
-- Build Services to manage endpoints logic
++ Student management:
++ Request of topic from student
++ Show requested topics
++ Show my requested topics
++ Build Services to manage endpoints logic
 
 - [[Backend-109]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b88a9bbe9595475b815dc5b89c47affb&pm=s)
-User management:
-- Get all users
-- Get a user by id
-- Update self information
++ User management:
++ Get all users
++ Get a user by id
++ Update self information
 
 
 - [[Backend-18]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=196e9335976640ac8ec9ab580992aa3e&pm=s)
-- Google OAuth2 login and registration
-- JWT Service for sessions
-- New migration: CreateUsers with name, email, uid, description, and image_url
++ Google OAuth2 login and registration
++ JWT Service for sessions
++ New migration: CreateUsers with name, email, uid, description, and image_url
 
 - [[Backend-40]](https://www.notion.so/Desarrollo-gestion-de-Temas-b47179ce78f14a32ab1f2116cc2e47bc?pvs=4) Topic management with University and Subject associations
 + University table with name and location
@@ -106,4 +109,4 @@ User management:
 
 ### Removed
 - [[PIS2024-11]](https://ianaraznyc.atlassian.net/jira/software/projects/PIS2024/boards/1?selectedIssue=PIS2024-111) 
-- Repo chores after initial setup and testing
++ Repo chores after initial setup and testing
