@@ -76,7 +76,7 @@ class MeetsController < ApplicationController
             name: subject.name
           },
           interested: meet.users.include?(@current_user),
-          number_of_interested: meet.users.size
+          count_interesteds: meet.users.size
         }
       end
 
