@@ -1,6 +1,7 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :show ]
+    before_action :set_meet, only: [ :show, :confirm_pending_meet ]
+    before_action :set_date, only: [ :confirm_pending_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
@@ -15,17 +16,19 @@ class MeetsController < ApplicationController
       render json: @meet, status: :ok
     end
 
-    # Find the AvailabilityTutor based on the ID in the URL
-    def set_availability_tutor
-      @availability_tutor = AvailabilityTutor.find(params[:tutor_availability_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Availability tutor not found" }, status: :not_found
-    end
-
-    def set_meet
-      @meet = Meet.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Meet not found" }, status: :not_found
+    # POST /meets/:id
+    def confirm_pending_meet
+      @availability_tutor = AvailabilityTutor.find(@meet.availability_tutor_id)
+      if @current_user.first.id != @availability_tutor.user_id
+        render json: { error: "User not allowed" }, status: :unauthorized
+      elsif @meet.status != "pending"
+        render json: { error: "Meet already confirmed" }, status: :bad_request
+      else
+        @meet.status = "confirmed"
+        @meet.date_time = params[:meet][:date]
+        @meet.save
+        render json: { message: "Meet confirmed successfully" }, status: :ok
+      end
     end
 
     def available_meets
@@ -127,18 +130,36 @@ class MeetsController < ApplicationController
         }
       end
 
-      def map_meeting_status(status_param)
-        case status_param.to_i
-        when 0
+    # Find the AvailabilityTutor based on the ID in the URL
+    def set_availability_tutor
+      @availability_tutor = AvailabilityTutor.find(params[:tutor_availability_id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: "Availability tutor not found" }, status: :not_found
+    end
+
+    def set_meet
+      @meet = Meet.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: "Meet not found" }, status: :not_found
+    end
+
+    # Find the date in timestamp in the URL
+    def set_date
+      @dateTS = params.require(:meet).permit[:date]
+    end
+
+    def map_meeting_status(status_param)
+      case status_param.to_i
+      when 0
           "pending"
-        when 1
+      when 1
           "confirmed"
-        when 2
+      when 2
           "completed"
-        when 3
+      when 3
           "canceled"
-        else
+      else
           nil
-        end
       end
+    end
 end
