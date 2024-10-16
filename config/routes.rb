@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  post "meet/:id" => "meets#confirm_pending_meet"
+  post "meet/:idReunion" => "meets#confirm_pending_meet"
 
   get "interested_meetings", to: "students#interested_meetings"
 

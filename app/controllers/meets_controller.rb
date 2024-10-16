@@ -1,7 +1,6 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
     before_action :set_meet, only: [ :show, :confirm_pending_meet ]
-    before_action :set_date, only: [ :confirm_pending_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
@@ -26,6 +25,7 @@ class MeetsController < ApplicationController
       else
         @meet.status = "confirmed"
         @meet.date_time = params[:meet][:date]
+        @meet.description = params[:meet][:description]
         @meet.save
         render json: { message: "Meet confirmed successfully" }, status: :ok
       end
@@ -138,14 +138,9 @@ class MeetsController < ApplicationController
     end
 
     def set_meet
-      @meet = Meet.find(params[:id])
+      @meet = Meet.find(params[:idReunion])
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Meet not found" }, status: :not_found
-    end
-
-    # Find the date in timestamp in the URL
-    def set_date
-      @dateTS = params.require(:meet).permit[:date]
     end
 
     def map_meeting_status(status_param)
