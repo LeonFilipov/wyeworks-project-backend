@@ -3,7 +3,7 @@ FactoryBot.define do
   factory :user do
     name { name }
     email { Faker::Internet.email(name: name)}
-    uid { "1234567890" }
+    uid { Faker::Number.number(digits: 10) }
     description { "I am a profesor" }
     image_url { "https://www.google.com" }
   end
