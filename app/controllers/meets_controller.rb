@@ -47,9 +47,9 @@ class MeetsController < ApplicationController
       if params[:interested].present?
         interested = params[:interested].to_s.downcase == "true"
         if interested
-          meets = meets.joins(:participants).where(participants: { user_id: @current_user.id })
+          meets = meets.joins(:participants).where(participants: { user_id: @current_user.first.id })
         else
-          meets = meets.where.not(id: meets.joins(:participants).where(participants: { user_id: @current_user.id }))
+          meets = meets.where.not(id: meets.joins(:participants).where(participants: { user_id: @current_user.first.id }))
         end
       end
 
