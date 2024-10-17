@@ -353,6 +353,71 @@ paths:
       tags:
         - Meetings
 
+  /meet/{idReunion}:
+    post:
+      summary: Confirm pending meeting.
+      description: |
+        This endpoint allows a user as a tutor to update the meeting state to confirmed, set the date in timestamp and set the link. Its only possible to confirm a pending meeting by the user that created it.
+      parameters:
+        - name: idReunion
+          in: path
+          required: true
+          description: ID of the meeting
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                meet:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                      description: "Date of the meeting"
+                      example: "2024-11-11 13:39:37"
+                    description:
+                      type: string
+                      description: "Description of the meeting, can be the link"
+                      example: "www.meet-link.com"
+        required: true
+      responses:
+        '200':
+          description: Meet confirmed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet confirmed successfully"
+        '400':
+          description: Meet already confirmed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet already confirmed"
+        '401':
+          description: User not allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not allowed"
+      tags:
+        - Meetings
+
   /profile:
     get:
       summary: Get the user profile
@@ -413,6 +478,154 @@ paths:
       tags:
       - Users
 
+  /profile/meets:
+    get:
+      summary: Get the tutors's meetings
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+  /profile/meets/{idReunion}:
+    get:
+      summary: Get the tutor's meeting by ID
+      parameters:
+        - in: path
+          name: idReunion
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A meeting object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meeting not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Meeting not found
+      tags:
+      - Users
+  
+  /meets/{id}/interest:
+    post:
+      summary: Express interest in a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to express interest in
+      responses:
+        '200':
+          description: Interest expressed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest expressed successfully"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User's interest added to availability tutor."
+        '400':
+          description: User already interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User already interested in this meet"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User has existing interest in availability tutor."
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+  /meets/{id}/uninterest:
+    delete:
+      summary: Remove interest from a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to remove interest from
+      responses:
+        '200':
+          description: Interest removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest removed successfully"
+        '400':
+          description: User not interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User is not interested in this meet"
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
 
   /auth/google_oauth2/callback:
     get:
@@ -583,6 +796,90 @@ paths:
           description: Validation errors
       tags:
       - Tutor availability
+      
+  /available_meets:
+    get:
+      summary: Get a list of available meetings
+      description: Retrieve a list of upcoming meetings, filtered by various parameters.
+      parameters:
+        - name: id_availability_tutor
+          in: query
+          description: Filter by the availability tutor ID
+          required: false
+          schema:
+            type: integer
+        - name: topic_id
+          in: query
+          description: Filter by the topic ID
+          required: false
+          schema:
+            type: integer
+        - name: subject_id
+          in: query
+          description: Filter by the subject ID
+          required: false
+          schema:
+            type: integer
+        - name: interested
+          in: query
+          description: Filter by user's interest status (`true` or `false`)
+          required: false
+          schema:
+            type: boolean
+        - name: meet_state
+          in: query
+          description: Filter by meeting state.
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique ID of the meeting
+                    topic_name:
+                      type: string
+                      description: The name of the topic for the meeting
+                    tutor_name:
+                      type: string
+                      description: The name of the tutor hosting the meeting
+                    meeting_date:
+                      type: string
+                      format: date-time
+                      description: The date and time of the meeting
+                    meet_status:
+                      type: string
+                      description: The status of the meeting
+                    subject:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the subject
+                        name:
+                          type: string
+                          description: The name of the subject
+                    interested:
+                      type: boolean
+                      description: Whether the current user is interested in the meeting
+                    count_interesteds:
+                      type: integer
+                      description: The number of users interested in the meeting
+        '400':
+          description: Invalid parameters provided
+        '500':
+          description: Internal server error
+      tags:
+      - Meetings
                   
   # /tutor_availability/{availability_tutor_id}/meets:
   #   get:
@@ -891,6 +1188,54 @@ components:
           enum:
             - pending
             - confirmed
+
+    TutorMeet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-22T15:20:02.093+01:00"
+        status:
+          type: string
+          example: "pending"
+        description:
+          type: string
+          example: "Sesión sobre Tautologías y Contradicciones"
+        interesteds:
+          type: integer
+          example: 1
+        topic:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 8
+            name:
+              type: string
+              example: "Tautologías y Contradicciones"
+            image_url:
+              type: string
+              nullable: true
+              example: null
+        subject:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 446
+            name:
+              type: string
+              example: "Lógica"
+        tutor:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Doe"
 
   responses:
     UnauthorizedError:

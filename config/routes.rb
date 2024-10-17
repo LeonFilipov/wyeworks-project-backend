@@ -12,10 +12,14 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
+  post "meet/:idReunion" => "meets#confirm_pending_meet"
+
   get "interested_meetings", to: "students#interested_meetings"
 
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#proposed_topic"
+
+  get "available_meets", to: "meets#available_meets"
 
   get "topics" => "topics#index"
   get "fake_user" => "users#fake_user"
@@ -24,6 +28,8 @@ Rails.application.routes.draw do
     get "/", to: "users#profile", as: :profile
     put "/", to: "users#update"
     patch "/", to: "users#update"
+    get "meets", to: "meets#my_meets"
+    get "meets/:id", to: "meets#my_meet"
   end
 
   resources :universities, only: [ :index, :show, :create ] do
@@ -53,6 +59,10 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+
+
+  post "meets/:id/interest", to: "meets#express_interest", as: "express_interest_meet"
+  delete "meets/:id/uninterest", to: "meets#remove_interest", as: "remove_interest_meet"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

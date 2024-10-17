@@ -93,7 +93,6 @@ class TopicsController < ApplicationController
         topic = availability_tutor.topic
         user = availability_tutor.user
         subject = topic.subject
-
         {
           availability_id: availability_tutor.id,
           topic_name: topic.name,
@@ -102,6 +101,7 @@ class TopicsController < ApplicationController
           availability: availability_tutor.availability,
           availability_description: availability_tutor.description,
           interesteds: availability_tutor.interesteds.count,
+          interested: availability_tutor.interesteds.exists?(user_id: @current_user.first.id),
           subject: {
             id: subject.id,
             name: subject.name
