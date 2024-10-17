@@ -100,7 +100,7 @@ class TopicsController < ApplicationController
           topic_description: topic.description,
           availability: availability_tutor.availability,
           availability_description: availability_tutor.description,
-          interesteds: availability_tutor.interested_count,
+          interesteds: availability_tutor.interesteds.count,
           interested: availability_tutor.interesteds.exists?(user_id: @current_user.first.id),
           subject: {
             id: subject.id,
