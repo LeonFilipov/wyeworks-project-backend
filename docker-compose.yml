@@ -10,7 +10,11 @@ services:
     volumes:
       - .:/api # Volumen para persistir los cambios en el código}
     environment:
-      - DATABASE_URL=postgres://postgres:password@postgres:5432/studycircle
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=studycircle
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
     depends_on:
       - postgres
 
