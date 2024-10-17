@@ -353,7 +353,7 @@ paths:
       tags:
         - Meetings
 
-  /meet/{id}:
+  /meet/{idReunion}:
     post:
       summary: Confirm pending meeting.
       description: |
@@ -497,12 +497,12 @@ paths:
       tags:
       - Users
 
-  /profile/meets/:id:
+  /profile/meets/{idReunion}:
     get:
       summary: Get the tutor's meeting by ID
       parameters:
         - in: path
-          name: id
+          name: idReunion
           required: true
           schema:
             type: integer
@@ -529,6 +529,103 @@ paths:
                     example: Meeting not found
       tags:
       - Users
+  
+  /meets/{id}/interest:
+    post:
+      summary: Express interest in a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to express interest in
+      responses:
+        '200':
+          description: Interest expressed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest expressed successfully"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User's interest added to availability tutor."
+        '400':
+          description: User already interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User already interested in this meet"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User has existing interest in availability tutor."
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+  /meets/{id}/uninterest:
+    delete:
+      summary: Remove interest from a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to remove interest from
+      responses:
+        '200':
+          description: Interest removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest removed successfully"
+        '400':
+          description: User not interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User is not interested in this meet"
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
 
   /auth/google_oauth2/callback:
     get:

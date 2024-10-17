@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
+
+- [[Backend-171]](https://www.notion.so/Talle-S-Modificaci-n-de-reuni-n-para-confirmaci-n-86c949de58f34d81a83ae02880a6d5dd?pvs=4)
++ New endpoint to interest an student about a pending or confirmed Meet.
+
 - [[Backend-181]](https://www.notion.so/Talle-S-Modificaci-n-de-reuni-n-para-confirmaci-n-86c949de58f34d81a83ae02880a6d5dd?pvs=4)
 + Updated the last endpoint to allow update the link of the meet when confirmed.
 
