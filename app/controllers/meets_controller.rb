@@ -1,18 +1,12 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :show, :confirm_pending_meet ]
+    before_action :set_meet, only: [ :confirm_pending_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
       # Return all meetings associated with a specific availability tutor
       @meets = @availability_tutor.meets
       render json: @meets, status: :ok
-    end
-
-    # GET /meets/:id
-    def show
-      # Return a specific meeting's details
-      render json: @meet, status: :ok
     end
 
     # POST /meets/:id

@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :availability_tutor do
-    tutor { nil }
-    description { "MyString" }
-    effective_date { "2024-09-21 21:24:53" }
-    link { "MyString" }
+    association :user
+    association :topic
+    description { Faker::Religion::Bible.quote }
+    link { Faker::Internet.url }
+    availability { "Lunes a viernes" }
   end
 end
