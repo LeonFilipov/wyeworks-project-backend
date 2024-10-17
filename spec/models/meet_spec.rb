@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Meet, type: :model do
-  univerisity = FactoryBot.create(:university)
-  subject = FactoryBot.create(:subject, university: univerisity)
-  topic = FactoryBot.create(:topic, subject: subject)
-  user_tutor = FactoryBot.create(:user)
-  availability_tutor = FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic)
-  let(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
+  let!(:university) { FactoryBot.create(:university) }
+  let!(:subject) { FactoryBot.create(:subject, university: university) }
+  let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+  let!(:user_tutor) { FactoryBot.create(:user) }
+  let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic) }
+  let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
 
   it "is valid with valid attributes" do
     expect(meet).to be_valid    

@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Meets", type: :request do
-  univerisity = FactoryBot.create(:university)
-  subject = FactoryBot.create(:subject, university: univerisity)
-  topic = FactoryBot.create(:topic, subject: subject)
-  user_tutor = FactoryBot.create(:user)
-  availability_tutor = FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic)
-  token = JsonWebTokenService.encode(user_id: user_tutor.id)
+  let!(:university) { FactoryBot.create(:university) }
+  let!(:subject) { FactoryBot.create(:subject, university: university) }
+  let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+  let!(:user_tutor) { FactoryBot.create(:user) }
+  let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic) }
+  let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
 
   describe "GET /available_meets (get all meets for a availability)" do
     it "Return no meets" do
@@ -16,46 +16,48 @@ RSpec.describe "Meets", type: :request do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to eq([])
     end
+    
+    context "Only one meet created endpoint" do
+      let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
+      
+      it "Return meets without params" do
+        get "/available_meets", 
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
+      end
 
-    it "Return meets without params" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      get "/available_meets", 
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
-    end
+      it "Return meets with params" do
+        get "/available_meets", 
+          params: { id_availability_tutor: availability_tutor.id },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
 
-    it "Return meets with params" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      get "/available_meets", 
-        params: { id_availability_tutor: availability_tutor.id },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
+        get "/available_meets",
+          params: { topic_id: topic.id },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
 
-      get "/available_meets",
-        params: { topic_id: topic.id },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
+        get "/available_meets",
+          params: { subject_id: subject.id },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
 
-      get "/available_meets",
-        params: { subject_id: subject.id },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
+        get "/available_meets",
+          params: { interested: false },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
 
-      get "/available_meets",
-        params: { interested: false },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
-
-      get "/available_meets",
-        params: { meet_state: "pending" },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(1)
+        get "/available_meets",
+          params: { meet_state: "pending" },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(1)
+      end
     end
   end
 
@@ -84,7 +86,38 @@ RSpec.describe "Meets", type: :request do
       expect(response).to have_http_status(:bad_request)
       expect(JSON.parse(response.body)["error"]).to eq("Meet already confirmed")
     end
+
+    it "Meet dont exist" do
+      post "/meet/0",
+        params: { meet: { date: "2021-12-12 12:00:00", description: "Description" } },
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
+    end
   end
 
+  describe "GET /profile/meets and /profile/meets/:id (get all meets for a user)" do
+    it "Return no meets" do
+      get "/profile/meets",
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)).to eq([])
+    end
+    
+    it "Return meets" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      get "/profile/meets", 
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(1)
+    end
 
+    it "Return a specific meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      get "/profile/meets/#{meet.id}",
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["id"]).to eq(meet.id)
+    end
+  end
 end
