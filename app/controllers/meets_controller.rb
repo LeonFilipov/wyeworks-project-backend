@@ -96,6 +96,8 @@ class MeetsController < ApplicationController
         render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
       else
         meet.users << @current_user.first
+        meet.count_interesteds += 1
+        meet.save
         debug_messages << "User's interest added to meet."
         render json: { message: "Interest expressed successfully", debug: debug_messages }, status: :ok
       end
@@ -109,6 +111,8 @@ class MeetsController < ApplicationController
 
       if meet.users.include?(@current_user.first)
         meet.users.delete(@current_user.first)
+        meet.count_interesteds -= 1
+        meet.save
         render json: { message: "Interest removed successfully" }, status: :ok
       else
         render json: { error: "User is not interested in this meet" }, status: :bad_request
