@@ -310,6 +310,7 @@ DEPENDENCIES
   httparty
   i18n
   jwt
+  mail
   nokogiri (>= 1.8.5)
   pg (~> 1.1)
   pgcrypto

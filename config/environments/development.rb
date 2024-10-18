@@ -82,4 +82,5 @@ Rails.application.configure do
   config.time_zone = ActiveSupport::TimeZone[Time.now.strftime("%z").gsub("0", "").to_i]
 
   # config.action_controller.allow_forgery_protection = false # Desactivar protección CSRF en desarrollo
+
 end

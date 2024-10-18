@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido a StudyCircle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      background-color: rgb(0, 132, 127);
+      color: #ffffff;
+      border-radius: 10px 10px 0 0;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .content {
+      padding: 20px;
+      text-align: center;
+    }
+    .content p {
+      font-size: 18px;
+      color: #333333;
+      line-height: 1.6;
+    }
+    .content a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: rgb(0, 132, 127);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #777777;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>¡Bienvenido a StudyCircle!</h1>
+    </div>
+    <div class="content">
+      <p>¡Hola <strong><%= @current_user.first.name %></strong>!</p>
+      <p>Estamos emocionados de que te unas a <strong>StudyCircle</strong>, una plataforma diseñada para mejorar tu experiencia de aprendizaje.</p>
+      <p>Comienza a explorar nuestra comunidad, participa en tutorías, y disfruta de encuentros educativos hechos para estudiantes como vos.</p>
+      <a href="https://wyeworks-project.web.app/">Explorar StudyCircle</a>
+    </div>
+    <div class="footer">
+      <p>&copy; 2024 StudyCircle. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -82,4 +82,7 @@ group :development, :test do
   gem "faker", "~> 3.4", ">= 3.4.2"
   # Preload application to speed up development tasks
   gem "spring"
+
+  # Mailer gem
+  gem "mail"
 end

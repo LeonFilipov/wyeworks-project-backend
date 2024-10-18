@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     end
 
     def profile
+        UserMailer.welcome_email(@current_user).deliver_now
         render json: @current_user.as_json(only: [ :id, :name, :email, :description, :image_url ]), status: 200
     end
 
