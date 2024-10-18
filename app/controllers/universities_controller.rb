@@ -22,21 +22,6 @@ class UniversitiesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /universities/:id
-  def update
-    if @university.update(university_params)
-      render json: @university, status: :ok
-    else
-      render json: @university.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /universities/:id
-  def destroy
-    @university.destroy
-    head :no_content
-  end
-
   private
 
   # Method to get a university by ID
