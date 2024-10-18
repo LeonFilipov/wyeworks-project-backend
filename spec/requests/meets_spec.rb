@@ -10,25 +10,25 @@ RSpec.describe "Meets", type: :request do
 
   describe "GET /available_meets (get all meets for a availability)" do
     it "Return no meets" do
-      get "/available_meets", 
+      get "/available_meets",
         params: { id_availability_tutor: availability_tutor.id },
-        headers: { "Authorization" => "Bearer #{token}" } 
+        headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to eq([])
     end
-    
+
     context "Only one meet created endpoint" do
       let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
-      
+
       it "Return meets without params" do
-        get "/available_meets", 
+        get "/available_meets",
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).size).to eq(1)
       end
 
       it "Return meets with params" do
-        get "/available_meets", 
+        get "/available_meets",
           params: { id_availability_tutor: availability_tutor.id },
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
@@ -71,15 +71,15 @@ RSpec.describe "Meets", type: :request do
       headers: { "Authorization" => "Bearer #{unauthorized_token}" }
       expect(response).to have_http_status(:unauthorized)
     end
-    
+
     it "Confirm a meet two times" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      post "/meet/#{meet.id}", 
+      post "/meet/#{meet.id}",
         params: { meet: { date: "2021-12-12 12:00:00", description: "Description" } },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["message"]).to eq("Meet confirmed successfully")
-      
+
       post "/meet/#{meet.id}",
         params: { meet: { date: "2021-12-12 12:00:01", description: "Description 2" } },
         headers: { "Authorization" => "Bearer #{token}" }
@@ -103,10 +103,10 @@ RSpec.describe "Meets", type: :request do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to eq([])
     end
-    
+
     it "Return meets" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      get "/profile/meets", 
+      get "/profile/meets",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body).size).to eq(1)
@@ -150,7 +150,7 @@ RSpec.describe "Meets", type: :request do
       expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
     end
   end
-  
+
   describe "DELETE /meet/:id/uninterest (remove interest to a meet)" do
     it "Successfully uninterested in a meet" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
@@ -162,7 +162,7 @@ RSpec.describe "Meets", type: :request do
       expect(JSON.parse(response.body)["message"]).to eq("Interest removed successfully")
       meet = Meet.find(meet.id)
       expect(meet.users.size).to eq(0)
-      expect(meet.count_interesteds).to eq(0) 
+      expect(meet.count_interesteds).to eq(0)
     end
 
     it "Not interested in a meet" do

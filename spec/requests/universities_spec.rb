@@ -5,6 +5,7 @@ RSpec.describe "UniversitiesController", type: :request do
   let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
   let!(:university) { FactoryBot.create(:university) }
 
+
   # GET #index
   describe "GET #index" do
     it "returns a success response" do
