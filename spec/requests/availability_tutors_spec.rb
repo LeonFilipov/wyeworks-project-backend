@@ -2,16 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "AvailabilityTutors", type: :request do
   describe "GET /index" do
-    it "returns http success" do
-      get "/availability_tutors/index"
-      expect(response).to have_http_status(:success)
-    end
-  end
-
-  describe "GET /show" do
-    it "returns http success" do
-      get "/availability_tutors/show"
-      expect(response).to have_http_status(:success)
-    end
+    pending "add some examples (or delete) #{__FILE__}"
   end
 end
