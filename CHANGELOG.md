@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
++ [[Backend-176]](https://www.notion.so/Talle-L-Enviar-Mail-d8721b7b9c5f4b2a9caa63f426f045b1?pvs=4)
++ Now you receive an email when you register in StudyCircle.
++ Added a gem to work with mail features.
+
 + [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
 + Updated endpoint `/topics` with new field `intrested`.
 + Added new user. This user is interested in two topics.
