@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
++ [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
++ Updated endpoint `/topics` with new field `intrested`.
++ Added new user. This user is interested in two topics.
 
 - [[Backend-171]](https://www.notion.so/Talle-S-Modificaci-n-de-reuni-n-para-confirmaci-n-86c949de58f34d81a83ae02880a6d5dd?pvs=4)
 + New endpoint to interest an student about a pending or confirmed Meet.

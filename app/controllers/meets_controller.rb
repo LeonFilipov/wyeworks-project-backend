@@ -1,18 +1,12 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :show, :confirm_pending_meet ]
+    before_action :set_meet, only: [ :confirm_pending_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
       # Return all meetings associated with a specific availability tutor
       @meets = @availability_tutor.meets
       render json: @meets, status: :ok
-    end
-
-    # GET /meets/:id
-    def show
-      # Return a specific meeting's details
-      render json: @meet, status: :ok
     end
 
     # POST /meets/:id
@@ -53,9 +47,9 @@ class MeetsController < ApplicationController
       if params[:interested].present?
         interested = params[:interested].to_s.downcase == "true"
         if interested
-          meets = meets.joins(:participants).where(participants: { user_id: @current_user.id })
+          meets = meets.joins(:participants).where(participants: { user_id: @current_user.first.id })
         else
-          meets = meets.where.not(id: meets.joins(:participants).where(participants: { user_id: @current_user.id }))
+          meets = meets.where.not(id: meets.joins(:participants).where(participants: { user_id: @current_user.first.id }))
         end
       end
 
@@ -102,6 +96,8 @@ class MeetsController < ApplicationController
         render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
       else
         meet.users << @current_user.first
+        meet.count_interesteds += 1
+        meet.save
         debug_messages << "User's interest added to meet."
         render json: { message: "Interest expressed successfully", debug: debug_messages }, status: :ok
       end
@@ -115,6 +111,8 @@ class MeetsController < ApplicationController
 
       if meet.users.include?(@current_user.first)
         meet.users.delete(@current_user.first)
+        meet.count_interesteds -= 1
+        meet.save
         render json: { message: "Interest removed successfully" }, status: :ok
       else
         render json: { error: "User is not interested in this meet" }, status: :bad_request

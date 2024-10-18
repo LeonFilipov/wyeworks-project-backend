@@ -1,10 +1,11 @@
 FactoryBot.define do
   factory :meet do
-    date_time { "2024-09-29 22:12:17" }
-    description { "MyString" }
-    link { "MyString" }
-    mode { "MyString" }
-    status { "MyString" }
-    availability_tutor { nil }
+    date_time { Faker::Time.forward(days: 23, period: :morning) }
+    description { Faker::Religion::Bible.quote }
+    link { Faker::Internet.url }
+    mode { "virtual" } # meet can be virtual or in-person
+    status { "pending" } # meet can be pending or confirmed
+    association :availability_tutor
+    count_interesteds { 0 }
   end
 end
