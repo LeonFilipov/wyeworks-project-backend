@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "UniversitiesController", type: :request do
-
     let!(:user_tutor) { FactoryBot.create(:user) }
     let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
     let!(:university) { FactoryBot.create(:university) }

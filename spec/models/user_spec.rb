@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
 
     it "creates a new user if the email does not exist" do
       user = User.google_auth(user_info)
-      user.save 
+      user.save
       expect(user).to be_persisted
       expect(user.name).to eq("Test User")
       expect(user.email).to eq("test@example.com")

@@ -9,7 +9,7 @@ RSpec.describe Meet, type: :model do
   let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
 
   it "is valid with valid attributes" do
-    expect(meet).to be_valid    
+    expect(meet).to be_valid
   end
 
   it "is not valid without a description or link" do
