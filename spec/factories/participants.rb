@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :participant do
-    meet { nil }
-    user { nil }
+    association :user
+    association :meet
   end
 end
