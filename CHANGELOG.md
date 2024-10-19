@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + [[Backend-176]](https://www.notion.so/Talle-L-Enviar-Mail-d8721b7b9c5f4b2a9caa63f426f045b1?pvs=4)
 + Now you receive an email when you register in StudyCircle.
 + Added a gem to work with mail features.
++ [[Backend-234]](https://www.notion.so/Talle-M-Borrar-temas-propuestos-8b0633585771457ea02638c7884fe8e0)
++ New endpoint to delete a proposed topic.
++ Minor fixes to topic model
 
 + [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
 + Updated endpoint `/topics` with new field `intrested`.

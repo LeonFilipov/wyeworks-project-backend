@@ -205,7 +205,43 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-          
+    delete:
+      summary: Delete a proposed topic
+      tags:
+        - Users
+      description: Delete a proposed topic by the logged user.
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Proposed topic deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Topic deleted successfully"
+        '404':
+          description: Proposed topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Topic not found"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+
   /tutor_availability/{id}/interesteds:
     post:
       summary: Add interest to a tutor's availability
