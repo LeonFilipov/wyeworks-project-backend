@@ -82,6 +82,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          JWT_SECRET: secret
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
           bin/rails db:test:prepare

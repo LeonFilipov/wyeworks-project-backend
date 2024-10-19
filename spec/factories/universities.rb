@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :university do
-    name { "MyString" }
-    location { "MyString" }
+    name { "FING" }
+    location { "montevideo" }
   end
 end
