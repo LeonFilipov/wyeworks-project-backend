@@ -30,7 +30,7 @@ RSpec.describe "Topics", type: :request do
 
     context "With meets created" do
       let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
-      
+
       it "returns http success without intrested in meet" do
         delete "/proposed_topics/#{availability_tutor.id}",
         headers: { 'Authorization': "Bearer #{token}" }
