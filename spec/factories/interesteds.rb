@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :interested do
-    user { nil }
-    availability_tutor { nil }
+    association :user
+    association :availability_tutor
   end
 end
