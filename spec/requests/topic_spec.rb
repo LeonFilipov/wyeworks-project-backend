@@ -44,8 +44,8 @@ RSpec.describe "Topics", type: :request do
         },
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(response.body).to include(subject.id)
-        expect(response.body).to_not include(subject1.id)
+        expect(response.body).to include(subject.id.to_s)
+        expect(response.body).to_not include(subject1.id.to_s)
       end
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe "Topics", type: :request do
         get "/proposed_topics",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(response).to be_nil
+        expect(response.body).to eq("[]")
       end
     end
 
@@ -83,7 +83,7 @@ RSpec.describe "Topics", type: :request do
     end
   end
 
-  describe "GET /proposed_topics/:availability_id" do
+  describe "GET /proposed_topic/:availability_id" do
     let!(:user) { FactoryBot.create(:user) }
     let!(:university) { FactoryBot.create(:university) }
     let!(:subject) { FactoryBot.create(:subject, university: university) }
@@ -95,7 +95,8 @@ RSpec.describe "Topics", type: :request do
         get "/proposed_topics/0",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
-      end
+        expect(JSON.parse(response.body)).to include("error" => "Topic not found")
+     end
     end
 
     context "availability_id found" do
