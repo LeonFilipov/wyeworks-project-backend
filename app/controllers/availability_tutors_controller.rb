@@ -21,7 +21,7 @@ class AvailabilityTutorsController < ApplicationController
   # GET /tutor_availability/:id
   def show
     @availability = AvailabilityTutor.find(params[:id])
-    
+
     if @availability
     render json: @availability.as_json(
       only: [ :id, :description, :link, :availability ],
@@ -30,7 +30,6 @@ class AvailabilityTutorsController < ApplicationController
     else
       render json: { message: "Availability not found" }, status: :not_found
     end
-
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
