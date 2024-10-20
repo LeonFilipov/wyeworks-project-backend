@@ -36,7 +36,7 @@ RSpec.describe "UniversitiesController", type: :request do
     context "with valid parameters" do
       it "creates a new university" do
         expect {
-          post "/universities/", params: { university: { name: "New University", location: "New Location" } }, headers: { "Authorization" => "Bearer #{token}" }
+          post "/universities", params: { university: { name: "New University", location: "New Location" } }, headers: { "Authorization" => "Bearer #{token}" }
         }.to change(University, :count).by(1)
         expect(response).to have_http_status(:created)
       end
@@ -44,7 +44,7 @@ RSpec.describe "UniversitiesController", type: :request do
 
     context "with invalid parameters" do
       it "returns an unprocessable entity response" do
-        post "/universities/", params: { university: { name: "", location: "" } }, headers: { "Authorization" => "Bearer #{token}" }
+        post "/universities", params: { university: { name: "", location: "" } }, headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
