@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - In Progress
 
 ### Added
++ [[Backend-223]](https://www.notion.so/Talle-M-Unit-testing-of-Topics-Controller-a66bd212d0c34d70af6fd12012e617d5?pvs=4)
++ Unit Testing para Topics Controller
+
 + [[Backend-234]](https://www.notion.so/Talle-M-Borrar-temas-propuestos-8b0633585771457ea02638c7884fe8e0)
 + New endpoint to delete a proposed topic.
 + Minor fixes to topic model
