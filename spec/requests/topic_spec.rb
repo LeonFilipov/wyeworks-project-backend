@@ -8,7 +8,7 @@ RSpec.describe "Topics", type: :request do
     let!(:topic) { FactoryBot.create(:topic, subject: subject) }
     let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
     let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
-    
+
     context "Without params" do
       it "returns http success" do
         get "/topics",
