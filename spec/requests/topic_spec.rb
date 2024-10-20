@@ -1,6 +1,113 @@
 require 'rails_helper'
 
 RSpec.describe "Topics", type: :request do
+  describe "GET /topics" do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:university) { FactoryBot.create(:university) }
+    let!(:subject) { FactoryBot.create(:subject, university: university) }
+    let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+    let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
+    let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
+    
+    context "Without params" do
+      it "returns http success" do
+        get "/topics",
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context "With user_id" do
+      let!(:user1) { FactoryBot.create(:user) }
+      let!(:availability_tutor1) { FactoryBot.create(:availability_tutor, user: user1, topic: topic) }
+
+      it "returns http success with topics given by the tutor" do
+        get "/topics", params: {
+          'user_id': user.id
+        },
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include(user.id)
+        expect(response.body).to_not include(user1.id)
+      end
+    end
+
+    context "With subject_id" do
+      let!(:user1) { FactoryBot.create(:user) }
+      let!(:subject1) { FactoryBot.create(:subject, university: university) }
+      let!(:topic1) { FactoryBot.create(:topic, subject: subject1) }
+      let!(:availability_tutor1) { FactoryBot.create(:availability_tutor, user: user1, topic: topic1) }
+
+      it "returns http success with topics belonging to any subject" do
+        get "/topics", params: {
+          'subject_id': subject.id
+        },
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include(subject.id)
+        expect(response.body).to_not include(subject1.id)
+      end
+    end
+  end
+
+  describe "GET /proposed_topics" do
+    context "Without proposed topics" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:university) { FactoryBot.create(:university) }
+      let!(:subject) { FactoryBot.create(:subject, university: university) }
+      let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+      let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
+
+      it "returns http success" do
+        get "/proposed_topics",
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+        expect(response).to be_nil
+      end
+    end
+
+    context "With proposed topics" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:university) { FactoryBot.create(:university) }
+      let!(:subject) { FactoryBot.create(:subject, university: university) }
+      let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+      let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
+      let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
+
+      it "returns http success" do
+        get "/proposed_topics",
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+        expect(response).to_not be_nil
+      end
+    end
+  end
+
+  describe "GET /proposed_topics/:availability_id" do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:university) { FactoryBot.create(:university) }
+    let!(:subject) { FactoryBot.create(:subject, university: university) }
+    let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+    let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
+
+    context "availability_id not found" do
+      it "returns http Topic not found" do
+        get "/proposed_topics/0",
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "availability_id found" do
+      let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
+      it "returns http success" do
+        get "/proposed_topics/#{availability_tutor.id}",
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
   describe "DELETE /proposed_topics/:availability_id" do
     let!(:user) { FactoryBot.create(:user) }
     let!(:university) { FactoryBot.create(:university) }
