@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-224]](https://www.notion.so/Talle-S-Unit-testing-of-Subject-Controller-6658c603e36540dcb1a502abb6a39a2f)
++ Unit Tests for subject controller
++ Unit Tests for subject model
+
 + [[Backend-176]](https://www.notion.so/Talle-L-Enviar-Mail-d8721b7b9c5f4b2a9caa63f426f045b1?pvs=4)
 + Now you receive an email when you register in StudyCircle.
 + Added a gem to work with mail features.
