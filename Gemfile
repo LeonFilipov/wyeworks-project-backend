@@ -3,6 +3,8 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.0"
 
+gem "nokogiri", ">= 1.8.5"
+
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
@@ -13,7 +15,7 @@ gem "puma", "~> 6.4.2"
 gem "rack-cors", "~> 2.0", ">= 2.0.2"
 
 # To manage environment variables
-gem "dotenv-rails", "~> 3.1.2"
+gem "dotenv-rails"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -24,7 +26,15 @@ gem "bootsnap", require: false
 gem "sidekiq", "~> 7.1", ">= 7.1.2"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
-
+# Gem for http requests
+gem "httparty"
+# Gem for JWT service
+gem "jwt"
+# For use of UUIDs in the database
+gem "pgcrypto"
+#
+gem "rswag-api"
+gem "rswag-ui"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -43,15 +53,22 @@ gem "rack-attack"
 # Secured password handling
 gem "bcrypt", "~> 3.1.7"
 
+# gem "devise"
+
+gem "pundit"
+
+gem "i18n"
+# Consistencia testing
 group :development, :test do
   # Debugging tools
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+  gem "brakeman", "~> 6.2.2", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem "rubocop", require: false
 
   # Test suite gem
   gem "rspec-rails", "~> 7.0"
@@ -62,6 +79,10 @@ group :development, :test do
   # Audit for vulnerable dependencies
   gem "bundler-audit", require: false
 
+  gem "faker", "~> 3.4", ">= 3.4.2"
   # Preload application to speed up development tasks
   gem "spring"
+
+  # Mailer gem
+  gem "mail"
 end

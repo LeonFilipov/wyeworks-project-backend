@@ -1,0 +1,1304 @@
+openapi: '3.0.0'
+info:
+  title: Study Circle API
+  version: 1.0.0
+  description: This is the backend for the Study Circle project
+servers:
+  - url: http://localhost:3000
+    description: Development server
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+  /users/{id}:
+    get:
+      summary: Get a specific user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+  /proposed_topics:
+    get:
+      summary: Get proposed topics for the current user
+      tags:
+        - Users
+      description: Retrieve a list of topics proposed by the logged user with his availability.
+      responses:
+        '200':
+          description: A list of proposed topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availability_id:
+                      type: integer
+                      description: ID of the availability
+                    topic_name:
+                      type: string
+                      description: Name of the topic
+                    topic_image:
+                      type: string
+                      nullable: true
+                      description: Image URL of the topic
+                    topic_description:
+                      type: string
+                      description: Description of the topic
+                    availability:
+                      type: string
+                      description: Time availability for tutoring
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
+                    interesteds:
+                      type: integer
+                      description: Number of interested students
+                    subject:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: ID of the subject
+                        name:
+                          type: string
+                          description: Name of the subject
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID of the tutor
+                        name:
+                          type: string
+                          description: Name of the tutor
+        '422':
+          description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Required param can't be blank"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+
+  /proposed_topics/{topic_id}:
+    get:
+      summary: Get detailed information of a proposed topic by the logged user
+      tags:
+        - Users
+      description: Retrieve detailed information about a specific topic proposed by the logged user.
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detailed information about a proposed topic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  availability_id:
+                    type: integer
+                    description: ID of the availability
+                  topic_name:
+                    type: string
+                    description: Name of the topic
+                  topic_image:
+                    type: string
+                    nullable: true
+                    description: Image URL of the topic
+                  topic_description:
+                    type: string
+                    description: Description of the topic
+                  availability:
+                    type: string
+                    description: Time availability for tutoring
+                  availability_description:
+                    type: string
+                    description: Description of the tutor's availability
+                  interesteds:
+                    type: integer
+                    description: Number of interested students
+                  subject:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: ID of the subject
+                      name:
+                        type: string
+                        description: Name of the subject
+                  tutor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ID of the tutor
+                      name:
+                        type: string
+                        description: Name of the tutor
+        '422':
+          description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Required param can't be blank"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+    delete:
+      summary: Delete a proposed topic
+      tags:
+        - Users
+      description: Delete a proposed topic by the logged user.
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Proposed topic deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Topic deleted successfully"
+        '404':
+          description: Proposed topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Topic not found"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+
+  /tutor_availability/{id}/interesteds:
+    post:
+      summary: Add interest to a tutor's availability
+      description: |
+        This endpoint allows a user to express interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the tutor's availability
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: ID of the user expressing interest
+        required: true
+      responses:
+        '201':
+          description: Interest added and new meet created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest added and meet created"
+                  meet:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        example: "Meeting for Tutor Availability"
+                      link:
+                        type: string
+                        example: "https://meeting-link.com"
+                      mode:
+                        type: string
+                        example: "virtual"
+                      status:
+                        type: string
+                        example: "pending"
+                      date_time:
+                        type: string
+                        example: null
+                      count_interesteds:
+                        type: integer
+                        example: 1
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "New meet created successfully."
+        '200':
+          description: Interest added and meet updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest added, and meet updated"
+                  meet:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        example: "Meeting for Tutor Availability"
+                      link:
+                        type: string
+                        example: "https://meeting-link.com"
+                      mode:
+                        type: string
+                        example: "virtual"
+                      status:
+                        type: string
+                        example: "pending"
+                      date_time:
+                        type: string
+                        example: null
+                      count_interesteds:
+                        type: integer
+                        example: 2
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "Incremented count_interesteds for existing meet."
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You have already expressed interest in the current pending meet."
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User interested in current pending meet: true"
+      tags:
+        - Tutor availability
+  
+  /interested_meetings:
+    get:
+      summary: Gets meeting that im interested.
+      description: |
+        This endpoint allows a user as a studento to show interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
+      responses:
+        '200':
+          description: Interest added and meet updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    topic_name:
+                      type: string
+                      example: "topic 1111111111111"
+                    tutor_name:
+                      type: string
+                      example: "Tutor name"
+                    meet_status:
+                      type: string
+                      example: "confirmed"
+                    date_time:
+                      oneOf:
+                        - type: string
+                          format: date-time
+                          example: "2024-11-11T22:13:39.937+00:00"
+                        - type: string
+                          example: "Indefinida"
+      tags:
+        - Meetings
+
+  /meet/{idReunion}:
+    post:
+      summary: Confirm pending meeting.
+      description: |
+        This endpoint allows a user as a tutor to update the meeting state to confirmed, set the date in timestamp and set the link. Its only possible to confirm a pending meeting by the user that created it.
+      parameters:
+        - name: idReunion
+          in: path
+          required: true
+          description: ID of the meeting
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                meet:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                      description: "Date of the meeting"
+                      example: "2024-11-11 13:39:37"
+                    description:
+                      type: string
+                      description: "Description of the meeting, can be the link"
+                      example: "www.meet-link.com"
+        required: true
+      responses:
+        '200':
+          description: Meet confirmed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet confirmed successfully"
+        '400':
+          description: Meet already confirmed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet already confirmed"
+        '401':
+          description: User not allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not allowed"
+      tags:
+        - Meetings
+
+  /profile:
+    get:
+      summary: Get the user profile
+      responses:
+        '200':
+          description: The user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+    put:
+      summary: Update the user information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                description:
+                  type: string
+                  example: "A brief description of the user."
+      responses:
+        '200':
+          description: The updated user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated"
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "param is missing or the value is empty"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+  /profile/meets:
+    get:
+      summary: Get the tutors's meetings
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
+
+  /profile/meets/{idReunion}:
+    get:
+      summary: Get the tutor's meeting by ID
+      parameters:
+        - in: path
+          name: idReunion
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A meeting object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meeting not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Meeting not found
+      tags:
+      - Users
+  
+  /meets/{id}/interest:
+    post:
+      summary: Express interest in a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to express interest in
+      responses:
+        '200':
+          description: Interest expressed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest expressed successfully"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User's interest added to availability tutor."
+        '400':
+          description: User already interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User already interested in this meet"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User has existing interest in availability tutor."
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+  /meets/{id}/uninterest:
+    delete:
+      summary: Remove interest from a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to remove interest from
+      responses:
+        '200':
+          description: Interest removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest removed successfully"
+        '400':
+          description: User not interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User is not interested in this meet"
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+
+  /auth/google_oauth2/callback:
+    get:
+      summary: Callback for Google OAuth2
+      responses:
+        '200':
+          description: Register/login the user and generate the JWT token 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: JWT
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzQwZjQwZjQwZjQwZjQwZjQwZiIsImlhdCI6MTYxNjIwNjQwMn0.1
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      tags:
+      - Authentication
+
+
+  /topics/{topic_id}/tutor_availability:
+    post:
+      summary: Create an availability tutor for an existing topic
+      description: |
+        This endpoint allows the creation of an availability tutor for an existing topic by providing the `topic_id`. You do not need to provide the `topic` structure in the request.
+      parameters:
+      - in: path
+        name: topic_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAvailabilityTutorInputWithoutTopic'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityTutor'
+          description: Availability tutor created for the existing topic.
+        '422':
+          description: Validation errors
+      tags:
+      - Tutor availability
+
+  /topics:
+    get:
+      summary: Get a list of tutor availabilities filtered by user and/or subject
+      description: |
+        This endpoint retrieves a list of tutor availabilities. You can filter the availabilities by `user_id` and/or `subject_id`. 
+        The response includes details such as the availability ID, topic name, image, availability times, number of interested students, subject name, and tutor name.
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+            format: uuid
+          required: false
+          description: Filter availabilities by the user ID (tutor).
+        - in: query
+          name: subject_id
+          schema:
+            type: integer
+          required: false
+          description: Filter availabilities by the subject ID.
+      responses:
+        '200':
+          description: A list of tutor availabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availability_id:
+                      type: string
+                      format: uuid
+                      description: The availability ID
+                    topic_name:
+                      type: string
+                      description: The name of the topic
+                    topic_image:
+                      type: string
+                      description: The URL of the topic image
+                    topic_description:
+                      type: string
+                      description: Description of the topic
+                    availability:
+                      type: string
+                      description: Tutor's availability times for the topic
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
+                    interesteds:
+                      type: integer
+                      description: Number of interested students for the tutor's availability
+                    intrested:
+                      type: boolean
+                      description: Indicates if the user is interested in the availability
+                    subject:
+                      type: object
+                      description: Information about the subject
+                      properties:
+                        id:
+                          type: integer
+                          description: The subject ID
+                        name:
+                          type: string
+                          description: The name of the subject
+                    tutor:
+                      type: object
+                      description: Information about the tutor
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The tutor ID
+                        name:
+                          type: string
+                          description: The name of the tutor
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Topics
+
+
+  /tutor_availability:
+    post:
+      summary: Create a new topic and availability
+      description: |
+        This endpoint allows the creation of an `availability` and `topic`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAvailabilityAndTopic'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Topic and availability created successfully"
+
+          description: Availability and Topic created
+        '422':
+          description: Validation errors
+      tags:
+      - Tutor availability
+      
+  /available_meets:
+    get:
+      summary: Get a list of available meetings
+      description: Retrieve a list of upcoming meetings, filtered by various parameters.
+      parameters:
+        - name: id_availability_tutor
+          in: query
+          description: Filter by the availability tutor ID
+          required: false
+          schema:
+            type: integer
+        - name: topic_id
+          in: query
+          description: Filter by the topic ID
+          required: false
+          schema:
+            type: integer
+        - name: subject_id
+          in: query
+          description: Filter by the subject ID
+          required: false
+          schema:
+            type: integer
+        - name: interested
+          in: query
+          description: Filter by user's interest status (`true` or `false`)
+          required: false
+          schema:
+            type: boolean
+        - name: meet_state
+          in: query
+          description: Filter by meeting state.
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique ID of the meeting
+                    topic_name:
+                      type: string
+                      description: The name of the topic for the meeting
+                    meeting_date:
+                      type: string
+                      format: date-time
+                      description: The date and time of the meeting
+                    meet_status:
+                      type: string
+                      description: The status of the meeting
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The unique ID of the tutor
+                        name:
+                          type: string
+                          description: The name of the tutor
+                    subject:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the subject
+                        name:
+                          type: string
+                          description: The name of the subject
+                    interested:
+                      type: boolean
+                      description: Whether the current user is interested in the meeting
+                    count_interesteds:
+                      type: integer
+                      description: The number of users interested in the meeting
+        '400':
+          description: Invalid parameters provided
+        '500':
+          description: Internal server error
+      tags:
+      - Meetings
+                  
+  # /tutor_availability/{availability_tutor_id}/meets:
+  #   get:
+  #     parameters:
+  #     - in: path
+  #       name: availability_tutor_id
+  #       required: true
+  #       schema:
+  #         type: integer
+  #     responses:
+  #       '200':
+  #         content:
+  #           application/json:
+  #             schema:
+  #               items:
+  #                 $ref: '#/components/schemas/Meet'
+  #               type: array
+  #         description: A list of meetings
+  #       '404':
+  #         description: Availability tutor not found
+  #     summary: List all meetings for a specific availability tutor
+  #     tags:
+  #     - Meets
+  # /meets/{id}:
+  #   get:
+  #     parameters:
+  #     - in: path
+  #       name: id
+  #       required: true
+  #       schema:
+  #         type: integer
+  #     responses:
+  #       '200':
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Meet'
+  #         description: Meeting details
+  #       '404':
+  #         description: Meeting not found
+  #     summary: Get details of a specific meeting
+  #     tags:
+  #     - Meets
+  # /tutor_availability/{id}/interesteds:
+  #   post:
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         required: true
+  #         schema:
+  #           type: integer
+  #     responses:
+  #       '201':
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Meet'
+  #         description: >
+  #           Interest added successfully. A new meeting is created only if one does not already exist for this availability tutor.
+  #       '200':
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #         description: >
+  #           Interest added, but a meeting already exists for this availability tutor.
+  #       '422':
+  #         description: Interest already exists or validation errors
+  #     summary: Add interest to an availability tutor
+  #     tags:
+  #     - Interesteds
+
+  # /students/topics/{topic_id}/request_topic:
+  #   post:
+  #     summary: A Student request a Topic
+  #     tags:
+  #     - Students
+  #     description: A student can request a topic, if the topic is not registered in the database, it will be created (use -1 as topic_id in this case and post a json with the topic name, asset, and subject_id)
+  #     parameters:
+  #       - in: path
+  #         name: topic_id
+  #         required: true
+  #         schema:
+  #           type: integer
+  #     requestBody:
+  #       required: false
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               topic:
+  #                 type: object
+  #                 properties:
+  #                   name:
+  #                     type: string
+  #                     example: "topic name"
+  #                   asset:
+  #                     type: string
+  #                     example: "asset"
+  #                   subject_id:
+  #                     type: integer
+  #                     example: 10
+  #     responses:
+  #       '200':
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   example: "Student successfully added to topic"
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  #       '400':
+  #         $ref: '#/components/responses/AuthHeaderMissingError'
+  #       '422':
+  #         description: Unprocessable entity
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 error:
+  #                   type: string
+  #                   example: "Failed to add student to topic"
+
+  # /students/my_requested_topics:
+  #   get:
+  #     summary: Get all the topics requested by the user
+  #     tags:
+  #     - Students
+  #     responses:
+  #       '200':
+  #         description: A list of topics requested by the user
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 type: object
+  #                 properties:
+  #                   subject_id:
+  #                     type: integer
+  #                     example: 12
+  #                   subject_name:
+  #                     type: string
+  #                     example: "GAL 2"
+  #                   topic_id:
+  #                     type: integer
+  #                     example: 7
+  #                   topic_name:
+  #                     type: string
+  #                     example: "Valores Propios"
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  #       '400':
+  #         $ref: '#/components/responses/AuthHeaderMissingError'
+
+  # /students/requested_topics:
+  #   get:
+  #     summary: Get all the requested topics
+  #     tags:
+  #     - Students
+  #     responses:
+  #       '200':
+  #         description: A list of topics requested by all users
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 type: object
+  #                 properties:
+  #                   subject_id:
+  #                     type: integer
+  #                     example: 12
+  #                   subject_name:
+  #                     type: string
+  #                     example: "GAL 2"
+  #                   topic_id:
+  #                     type: integer
+  #                     example: 7
+  #                   topic_name:
+  #                     type: string
+  #                     example: "Valores Propios"
+  #                   user_count:
+  #                     type: integer
+  #                     example: 3
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  #       '400':
+  #         $ref: '#/components/responses/AuthHeaderMissingError'
+  
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # Indicates that this is a JWT token
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        description:
+          type: string
+        image_url:
+          type: string
+          format: uri
+
+    AvailabilityTutor:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        link:
+          type: string
+
+    CreateAvailabilityAndTopic:
+      type: object
+      required:
+        - topic
+        - availability_tutor
+      properties:
+        topic:
+          type: object
+          required:
+            - name
+            - subject_id
+          properties:
+            name:
+              type: string
+            image_url:
+              type: string
+            description:
+              type: string
+            subject_id:
+              type: integer
+        availability_tutor:
+          type: object
+          required:
+            - availability
+            - description
+            - link
+          properties:
+            availability:
+              type: string
+            description:
+              type: string
+            link:
+              type: string
+    CreateAvailabilityTutorInputWithoutTopic:
+      type: object
+      properties:
+        description:
+          type: string
+        date_from:
+          type: string
+          format: date-time
+        date_to:
+          type: string
+          format: date-time
+        link:
+          type: string
+      required:
+        - description
+        - date_from
+        - date_to
+
+    Meet:
+      type: object
+      properties:
+        id:
+          type: integer
+        date_time:
+          type: string
+          format: date-time
+        description:
+          type: string
+        link:
+          type: string
+        mode:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - confirmed
+
+    TutorMeet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        date:
+          type: string
+          format: date-time
+          example: "2024-10-22T15:20:02.093+01:00"
+        status:
+          type: string
+          example: "pending"
+        description:
+          type: string
+          example: "Sesión sobre Tautologías y Contradicciones"
+        interesteds:
+          type: integer
+          example: 1
+        topic:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 8
+            name:
+              type: string
+              example: "Tautologías y Contradicciones"
+            image_url:
+              type: string
+              nullable: true
+              example: null
+        subject:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 446
+            name:
+              type: string
+              example: "Lógica"
+        tutor:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Doe"
+
+  responses:
+    UnauthorizedError:
+      description: Unauthorized error by invalid token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Invalid token
+
+    AuthHeaderMissingError:
+      description: Bad request error by missing Authorization header
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Authorization header is missing

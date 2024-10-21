@@ -7,14 +7,14 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 # Load dotenv
-if Rails.env.development? || Rails.env.test?
-  require "dotenv/load"
-end
+Dotenv::Rails.load
 # https://edgeapi.rubyonrails.org/classes/Rails/Application/Configuration.html#method-i-load_defaults
 
 module WyerworksProjectBackend
   class Application < Rails::Application
     config.load_defaults 7.2
+
+    ENV["RAILS_ENV"] ||= ENV["AMBIENTE"] || "development"
 
     # Set Timezone
     config.time_zone = "America/Montevideo"
@@ -66,14 +66,25 @@ module WyerworksProjectBackend
 
     # Middleware and security settings
     config.middleware.use Rack::Attack
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "*"
-        resource "*", headers: :any, methods: [ :get, :post, :options ]
-      end
-    end
+
+    #
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
+
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: "smtp.gmail.com",
+      port: 587,
+      user_name: "studycirclewye@gmail.com",
+      password: "clmb lkbf qokx qgzc",
+      authentication: "plain",
+      enable_starttls_auto: true
+    }
+
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.perform_deliveries = true
   end
 end

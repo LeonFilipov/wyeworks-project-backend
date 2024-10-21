@@ -12,9 +12,9 @@ This is the backend side of the project developed for WyeWorks. It's designed to
 4. Ejecutar `docker-compose up --build -d` desde el directorio que contiene el clone de git.
 > El -d es _opcional_, es para poder seguir utilizando la consola luego de levantar los contenedores.
 5. Si es la primera vez que inicializas todo ejecuta el siguiente comando:
-`docker exec -it rails-api /bin/sh`
+`docker exec -it tutorias-api /bin/sh`
 > Esto te permitirá ingresar a la consola del contenedor que contiene la API, de esta manera puedes utilizar comandos dentro del contenedor.
-6. Ejecuta `rails db:migrate` para crear el esquema de la base de datos (dentro del contendor).
+6. Ejecuta `rails db:create` (si es la primera vez) y luego `rails db:migrate` para crear el esquema de la base de datos (dentro del contendor).
 7. En el caso de que hayan datos iniciales para cargar, también se debe de ingresar `rails db:seed`.
 
 En este punto deberías de tener lo siguiente disponible:
