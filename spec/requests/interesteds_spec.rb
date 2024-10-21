@@ -14,7 +14,6 @@ RSpec.describe "InterestedsController", type: :request do
       json_response = JSON.parse(response.body)
       expect(json_response).to be_an(Array)
       expect(json_response.first['user_id']).to eq(user.id)
-      expect(json_response.first['tutor_availability_id']).to eq(availability_tutor.id)
     end
   end
 

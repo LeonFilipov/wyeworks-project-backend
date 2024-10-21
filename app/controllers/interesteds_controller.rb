@@ -1,5 +1,5 @@
 class InterestedsController < ApplicationController
-    before_action :set_availability_tutor, only: [ :create, :destroy ]
+    before_action :set_availability_tutor, only: [ :index ]
 
     # GET /tutor_availability/:tutor_availability_id/interesteds
     def index
@@ -8,15 +8,15 @@ class InterestedsController < ApplicationController
         render json: interesteds.as_json(only: [ :user_id, :tutor_availability_id ])
     end
 
-    # DELETE /interesteds/:tutor_availability_id
-    def destroy
-      # Remove an AvailabilityTutor from the current user's interested list
-      if @current_user.interested_availability_tutors.destroy(@availability_tutor)
-        render json: { message: "Interest removed successfully" }, status: :ok
-      else
-        render json: { errors: "Unable to remove interest" }, status: :unprocessable_entity
-      end
-    end
+    # # DELETE /interesteds/:tutor_availability_id
+    # def destroy
+    #   # Remove an AvailabilityTutor from the current user's interested list
+    #   if @current_user.interested_availability_tutors.destroy(@availability_tutor)
+    #     render json: { message: "Interest removed successfully" }, status: :ok
+    #   else
+    #     render json: { errors: "Unable to remove interest" }, status: :unprocessable_entity
+    #   end
+    # end
 
     private
 
