@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - In Progress
+
+### Added
++ [[Backend-222]](https://www.notion.so/Talle-M-Unit-testing-of-Interesteds-Controller-acbe39570f0e446ab0050fc25c6febb7)
++ Unit tests for interesteds controller.
+
 ## [0.2.0] - In Progress
 
 ### Added
