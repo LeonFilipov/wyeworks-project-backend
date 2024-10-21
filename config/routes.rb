@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     resources :meets, only: [ :index, :show ] # Nested meet routes under availability_tutors
     resources :interesteds, only: [ :index, :show ] # Nested interested routes under availability_tutors
   end
-  post "tutor_availability/:id/intersteds", to: "availability_tutors#add_interest"
+  #post "tutor_availability/:id/intersteds", to: "availability_tutors#add_interest"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

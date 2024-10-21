@@ -8,16 +8,6 @@ class InterestedsController < ApplicationController
         render json: interesteds.as_json(only: [ :user_id, :tutor_availability_id ])
     end
 
-    # # POST /availability_tutors/:tutor_availability_id/interesteds
-    # def create
-    #   # Add an AvailabilityTutor to the current user's interested list
-    #   if @current_user.interested_availability_tutors << @availability_tutor
-    #     render json: { message: "Interest added successfully" }, status: :created
-    #   else
-    #     render json: { errors: "Unable to add interest" }, status: :unprocessable_entity
-    #   end
-    # end
-
     # DELETE /interesteds/:tutor_availability_id
     def destroy
       # Remove an AvailabilityTutor from the current user's interested list
