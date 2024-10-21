@@ -63,9 +63,12 @@ class MeetsController < ApplicationController
         {
           id: meet.id,
           topic_name: meet.availability_tutor.topic.name,
-          tutor_name: meet.availability_tutor.user.name,
           meeting_date: meet.date_time,
           meet_status: meet.status,
+          tutor: {
+            id: meet.availability_tutor.user.id,
+            name: meet.availability_tutor.user.name
+          },
           subject: {
             id: subject.id,
             name: subject.name

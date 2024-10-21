@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-317]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b8b8e463edba4a9e8dc896db1e72d343&pm=s)
++ Added field `tutor` in GET /available_meet response with fields `id` and `name`.
+
 + [[Backend-176]](https://www.notion.so/Talle-L-Enviar-Mail-d8721b7b9c5f4b2a9caa63f426f045b1?pvs=4)
 + Now you receive an email when you register in StudyCircle.
 + Added a gem to work with mail features.
