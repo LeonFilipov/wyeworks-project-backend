@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - In Progress
 
-## Added
+### Added
+
++ [[Backend-222]](https://www.notion.so/Talle-M-Unit-testing-of-Interesteds-Controller-acbe39570f0e446ab0050fc25c6febb7)
++ Unit tests for interesteds controller.
 
 + [[Backend-229]](https://www.notion.so/Talle-S-Unit-testing-of-Availability-Controller-c70048a03e214b4da866eb21f2bb0bfb?pvs=4)
 + Unit Tests for availability_tutor controller
@@ -30,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 + [[Backend-223]](https://www.notion.so/Talle-M-Unit-testing-of-Topics-Controller-a66bd212d0c34d70af6fd12012e617d5?pvs=4)
 + Unit Testing para Topics Controller
-+ 
+
 + [[Backend-222]](https://www.notion.so/Talle-S-Unit-testing-of-Universities-Controller-4da22f95b776410988ff588316994291?pvs=4)
 + Unit tests for university controller.
 
