@@ -79,7 +79,7 @@ group :development, :test do
   # Audit for vulnerable dependencies
   gem "bundler-audit", require: false
 
-  gem "faker", "~> 3.4", ">= 3.4.2"
+  gem "faker", "~> 3.5"
   # Preload application to speed up development tasks
   gem "spring"
 
