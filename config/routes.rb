@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     put "/", to: "users#update"
     patch "/", to: "users#update"
     get "meets", to: "meets#my_meets"
-    get "meets/:id", to: "meets#my_meet"
+    match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
   resources :universities, only: [ :index, :show, :create ] do
@@ -61,8 +61,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
 
-  post "meets/:id/interest", to: "meets#express_interest", as: "express_interest_meet"
-  delete "meets/:id/uninterest", to: "meets#remove_interest", as: "remove_interest_meet"
+  match "meets/:id/interest", to: "meets#interest", via: [ :post, :delete ], as: "interest_meet"
+
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

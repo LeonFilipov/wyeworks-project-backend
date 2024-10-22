@@ -3,7 +3,7 @@ class Meet < ApplicationRecord
   validates :description, presence: true
   validates :link, presence: true
   validates :mode, inclusion: { in: [ "virtual", "in-person" ] }
-  validates :status, inclusion: { in: [ "pending", "confirmed" ] }
+  validates :status, inclusion: { in: [ "pending", "confirmed", "cancelled", "finished" ] }
 
   has_many :participants, dependent: :destroy
   has_many :users, through: :participants
