@@ -20,11 +20,16 @@ RSpec.describe "Meets", type: :request do
     context "Only one meet created endpoint" do
       let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
 
-      it "Return meets without params" do
+      it "Return meets without params and fields check" do
         get "/available_meets",
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(1)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response.size).to eq(1)
+        expect(parsed_response[0].keys).to eq([ "id", "topic_name", "meeting_date", "meet_status", "tutor", "subject", "interested", "count_interesteds" ])
+        tutor = parsed_response[0]["tutor"]
+        expect(tutor["id"]).to eq(user_tutor.id)
+        expect(tutor["name"]).to eq(user_tutor.name)
       end
 
       it "Return meets with params" do
