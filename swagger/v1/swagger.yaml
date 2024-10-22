@@ -583,9 +583,9 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
-  /meets/{id}/uninterest:
-    delete:
-      summary: Remove interest from a meet
+  
+    patch:
+      summary: Cancel a meet
       tags:
         - Meets
       parameters:
@@ -594,10 +594,21 @@ paths:
           required: true
           schema:
             type: integer
-          description: ID of the meet to remove interest from
+          description: ID of the meet to cancel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [cancelled]
+                  description: Status to set for the meet (only "cancelled" for this operation)
       responses:
         '200':
-          description: Interest removed successfully
+          description: Meet cancelled successfully
           content:
             application/json:
               schema:
@@ -605,17 +616,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Interest removed successfully"
-        '400':
-          description: User not interested or bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "User is not interested in this meet"
+                    example: "Meet cancelled successfully"
         '404':
           description: Meet not found
           content:
@@ -626,6 +627,8 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
+
+
 
   /auth/google_oauth2/callback:
     get:
