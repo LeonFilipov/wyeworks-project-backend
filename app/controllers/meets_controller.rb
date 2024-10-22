@@ -1,6 +1,6 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :confirm_pending_meet ]
+    before_action :set_meet, only: [ :confirm_pending_meet, :show_available_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
@@ -79,6 +79,30 @@ class MeetsController < ApplicationController
       end
 
       render json: meets_data, status: :ok
+    end
+
+    # GET /available_meets/:id
+    def show_available_meet
+      subject = @meet.availability_tutor.topic.subject
+
+      meet_data = {
+        id: @meet.id,
+        topic_name: @meet.availability_tutor.topic.name,
+        meeting_date: @meet.date_time,
+        meet_status: @meet.status,
+        tutor: {
+          id: @meet.availability_tutor.user.id,
+          name: @meet.availability_tutor.user.name
+        },
+        subject: {
+          id: subject.id,
+          name: subject.name
+        },
+        interested: @meet.users.include?(@current_user.first),
+        count_interesteds: @meet.users.size
+      }
+
+      render json: meet_data, status: :ok
     end
 
     # POST /meets/:id/interest

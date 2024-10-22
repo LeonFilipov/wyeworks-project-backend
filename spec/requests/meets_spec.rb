@@ -66,6 +66,30 @@ RSpec.describe "Meets", type: :request do
     end
   end
 
+  describe "GET /available_meets/:id (show details for a specific meet)" do
+    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
+
+    it "returns meet details successfully" do
+      get "/available_meets/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["id"]).to eq(meet.id)
+      expect(parsed_response["topic_name"]).to eq(meet.availability_tutor.topic.name)
+      expect(parsed_response["tutor"]["id"]).to eq(user_tutor.id)
+      expect(parsed_response["tutor"]["name"]).to eq(user_tutor.name)
+      expect(parsed_response["subject"]["id"]).to eq(subject.id)
+      expect(parsed_response["subject"]["name"]).to eq(subject.name)
+    end
+
+    it "returns not found for an invalid meet id" do
+      get "/available_meets/0",
+          headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
+    end
+  end
+
   describe "POST /meet/:id (confirm a meet)" do
     it "No authorization" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
