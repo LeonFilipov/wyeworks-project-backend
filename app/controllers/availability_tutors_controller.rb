@@ -25,7 +25,9 @@ class AvailabilityTutorsController < ApplicationController
     render json: @availability.as_json(
       only: [ :id, :description, :link, :availability ],
       include: { topic: { only: [ :id, :name, :subject_id ] } }
-    )
+    ), status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: { message: "Availability not found" }, status: :not_found
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
