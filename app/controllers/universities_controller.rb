@@ -1,5 +1,5 @@
 class UniversitiesController < ApplicationController
-  before_action :set_university, only: [ :show, :update, :destroy ]
+  before_action :set_university, only: [ :show ]
 
   # GET /universities
   def index
@@ -20,21 +20,6 @@ class UniversitiesController < ApplicationController
     else
       render json: @university.errors, status: :unprocessable_entity
     end
-  end
-
-  # PATCH/PUT /universities/:id
-  def update
-    if @university.update(university_params)
-      render json: @university, status: :ok
-    else
-      render json: @university.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /universities/:id
-  def destroy
-    @university.destroy
-    head :no_content
   end
 
   private
