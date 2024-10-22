@@ -204,7 +204,7 @@ class MeetsController < ApplicationController
     end
 
     def set_meet
-      @meet = Meet.find(params[:idReunion])
+      @meet = Meet.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Meet not found" }, status: :not_found
     end
