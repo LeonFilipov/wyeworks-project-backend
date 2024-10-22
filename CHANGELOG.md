@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 21 Oct 2024
+## [0.3.0] - In Progress
 
-### Added
+## Added
 
 + [[Backend-229]](https://www.notion.so/Talle-S-Unit-testing-of-Availability-Controller-c70048a03e214b4da866eb21f2bb0bfb?pvs=4)
 + Unit Tests for availability_tutor controller
 + Unit Tests for availability_tutor model
+
+## [0.2.0] - 21 Oct 2024
+
+### Added
 
 + [[Backend-317]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b8b8e463edba4a9e8dc896db1e72d343&pm=s)
 + Added field `tutor` in GET /available_meet response with fields `id` and `name`.
