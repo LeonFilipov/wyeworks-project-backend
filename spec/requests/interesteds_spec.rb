@@ -16,5 +16,4 @@ RSpec.describe "InterestedsController", type: :request do
       expect(json_response.first['user_id']).to eq(user.id)
     end
   end
-
 end
