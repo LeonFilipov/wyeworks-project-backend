@@ -10,9 +10,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [[Backend-318]](https://www.notion.so/Talle-XS-Cambiar-endpoint-uninterested-342bd86702be42e68462b7e13de1e2be)
 + Combined endpoint to interest and uninterest in the same one. 
 
-## [0.2.0] - In Progress
-
+## [0.2.0] - 21 Oct 2024
 ### Added
+
++ [[Backend-317]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b8b8e463edba4a9e8dc896db1e72d343&pm=s)
++ Added field `tutor` in GET /available_meet response with fields `id` and `name`.
+
++ [[Backend-224]](https://www.notion.so/Talle-S-Unit-testing-of-Subject-Controller-6658c603e36540dcb1a502abb6a39a2f)
++ Unit Tests for subject controller
++ Unit Tests for subject model
+
++ [[Backend-176]](https://www.notion.so/Talle-L-Enviar-Mail-d8721b7b9c5f4b2a9caa63f426f045b1?pvs=4)
++ Now you receive an email when you register in StudyCircle.
++ Added a gem to work with mail features.
+
+
++ [[Backend-223]](https://www.notion.so/Talle-M-Unit-testing-of-Topics-Controller-a66bd212d0c34d70af6fd12012e617d5?pvs=4)
++ Unit Testing para Topics Controller
++ 
++ [[Backend-222]](https://www.notion.so/Talle-S-Unit-testing-of-Universities-Controller-4da22f95b776410988ff588316994291?pvs=4)
++ Unit tests for university controller.
+
++ [[Backend-234]](https://www.notion.so/Talle-M-Borrar-temas-propuestos-8b0633585771457ea02638c7884fe8e0)
++ New endpoint to delete a proposed topic.
++ Minor fixes to topic model
+
++ [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
++ Updated endpoint `/topics` with new field `intrested`.
++ Added new user. This user is interested in two topics.
 
 - [[Backend-171]](https://www.notion.so/Talle-S-Modificaci-n-de-reuni-n-para-confirmaci-n-86c949de58f34d81a83ae02880a6d5dd?pvs=4)
 + New endpoint to interest an student about a pending or confirmed Meet.

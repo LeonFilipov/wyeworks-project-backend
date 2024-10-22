@@ -1,7 +1,4 @@
 class TopicsController < ApplicationController
-  before_action :set_subject, only: [ :create, :show, :update, :destroy ]
-  before_action :set_topic, only: [ :show, :update, :destroy ]
-
   # GET /topics
   def index
     # Filtro inicial
@@ -22,11 +19,6 @@ class TopicsController < ApplicationController
     render json: format_topic_response(availability_tutors), status: :ok
   end
 
-  # GET /topics/:id
-  def show
-    render json: @topic.as_json(only: [ :id, :name, :description ], methods: [ :subject_id ]), status: :ok
-  end
-
   # GET /proposed_topics
   def proposed_topics
     tutor_availability = AvailabilityTutor.where(user_id: @current_user.first.id)
@@ -37,57 +29,28 @@ class TopicsController < ApplicationController
   def proposed_topic
     availability = AvailabilityTutor.where(id: params[:availability_id], user_id: @current_user.first.id)
     # Manejo de error si no se encuentra el topic
+    if availability.empty?
+      render json: { error: "Topic not found" }, status: :not_found
+    else
+      render json: format_topic_response(availability), status: :ok
+    end
+  end
+
+  # DELETE /proposed_topics/:availability_id
+  def destroy_proposed_topic
+    availability = AvailabilityTutor.find_by(id: params[:availability_id])
     if availability.nil?
       render json: { error: "Topic not found" }, status: :not_found
-    end
-    render json: format_topic_response(availability), status: :ok
-  end
-
-  # POST /universities/:university_id/subjects/:subject_id/topics
-  def create
-    @topic = @subject.topics.build(topic_params)
-    if @topic.save
-      render json: @topic, status: :created
+    elsif availability.user_id != @current_user.first.id
+      render json: { error: "You do not have permission to delete this topic" }, status: :unauthorized
     else
-      render json: @topic.errors, status: :unprocessable_entity
+      topic = availability.topic
+      topic.destroy
+      render json: { message: "Topic deleted successfully" }, status: :ok
     end
-  end
-
-  # PATCH/PUT /universities/:university_id/subjects/:subject_id/topics/:id
-  def update
-    if @topic.update(topic_params)
-      render json: @topic, status: :ok
-    else
-      render json: @topic.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /universities/:university_id/subjects/:subject_id/topics/:id
-  def destroy
-    @topic.destroy
-    head :no_content
   end
 
   private
-    # Set the subject based on the university and subject ID
-    def set_subject
-      @subject = Subject.find(params[:subject_id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Subject not found" }, status: :not_found
-    end
-
-    # Set the topic within the context of the subject
-    def set_topic
-      @topic = @subject.topics.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Topic not found" }, status: :not_found
-    end
-
-    # Permit only allowed parameters
-    def topic_params
-      params.require(:topic).permit(:name, :description)
-    end
-
     def format_topic_response(availability_tutors)
       availability_tutors.map do |availability_tutor|
         topic = availability_tutor.topic

@@ -205,7 +205,43 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-          
+    delete:
+      summary: Delete a proposed topic
+      tags:
+        - Users
+      description: Delete a proposed topic by the logged user.
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Proposed topic deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Topic deleted successfully"
+        '404':
+          description: Proposed topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Topic not found"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+
   /tutor_availability/{id}/interesteds:
     post:
       summary: Add interest to a tutor's availability
@@ -852,9 +888,6 @@ paths:
                     topic_name:
                       type: string
                       description: The name of the topic for the meeting
-                    tutor_name:
-                      type: string
-                      description: The name of the tutor hosting the meeting
                     meeting_date:
                       type: string
                       format: date-time
@@ -862,6 +895,16 @@ paths:
                     meet_status:
                       type: string
                       description: The status of the meeting
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The unique ID of the tutor
+                        name:
+                          type: string
+                          description: The name of the tutor
                     subject:
                       type: object
                       properties:
