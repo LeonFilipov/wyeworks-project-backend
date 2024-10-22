@@ -885,9 +885,6 @@ paths:
                     topic_name:
                       type: string
                       description: The name of the topic for the meeting
-                    tutor_name:
-                      type: string
-                      description: The name of the tutor hosting the meeting
                     meeting_date:
                       type: string
                       format: date-time
@@ -895,6 +892,16 @@ paths:
                     meet_status:
                       type: string
                       description: The status of the meeting
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The unique ID of the tutor
+                        name:
+                          type: string
+                          description: The name of the tutor
                     subject:
                       type: object
                       properties:
