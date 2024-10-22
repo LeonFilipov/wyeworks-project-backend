@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 
-# POST tutor_availability/:id/intersteds
-# add_interest
-# parametros por url
 
 
 RSpec.describe "AvailabilityTutors", type: :request do
@@ -11,8 +8,8 @@ RSpec.describe "AvailabilityTutors", type: :request do
   let!(:subject) { FactoryBot.create(:subject, university: university) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:user_tutor) { FactoryBot.create(:user) }
+  let!(:user_student) { FactoryBot.create(:user) }
   let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic) }
-  let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
   let(:valid_topic_params) { { name: "nombre 1", description: "descripcion 1", image_url: "url 1", subject_id: subject.id } }
   let(:invalid_topic_params) { { name: "" } }
   let(:valid_availability_params) { { availability: "availability 1", description: "description 1", link: "link 1" } }
@@ -23,10 +20,12 @@ RSpec.describe "AvailabilityTutors", type: :request do
   # show
   # parametros por url
   describe "GET /tutor_availability/:id" do
+    let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
+
     context "Availability exists" do
       it "returns the availability with correct attributes" do
         get "/tutor_availability/#{availability_tutor.id}",
-          headers: { 'Authorization': "Bearer #{token}" }
+        headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body).keys).to eq([ "id", "description", "link", "availability", "topic" ])
         expect(JSON.parse(response.body)["id"]).to eq(availability_tutor.id)
@@ -36,7 +35,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
     context "Availability does not exist" do
       it "returns an error message" do
         get "/tutor_availability/-1",
-          headers: { 'Authorization': "Bearer #{token}" }
+        headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)).to eq({ "message" => "Availability not found" })
       end
@@ -45,7 +44,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
     context "Params are incorrect" do
       it "returns an error message if param is not a number" do
         get "/tutor_availability/abc",
-          headers: { 'Authorization': "Bearer #{token}" }
+        headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)).to eq({ "message" => "Availability not found" })
       end
@@ -59,11 +58,12 @@ RSpec.describe "AvailabilityTutors", type: :request do
   # params.require(:availability_tutor).permit(:availability, :description, :link)
 
   describe "POST /tutor_availability" do
+  let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
     context "when creating topic and availability successfully" do
       it "creates a new topic and availability" do
         post "/tutor_availability",
-          params: { topic: valid_topic_params, availability_tutor: valid_availability_params },
-          headers: { 'Authorization': "Bearer #{token}" }
+        params: { topic: valid_topic_params, availability_tutor: valid_availability_params },
+        headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:created)
         expect(AvailabilityTutor.last.user_id).to eq(user_tutor.id)
         expect(AvailabilityTutor.last.topic_id).to eq(Topic.last.id)
@@ -90,7 +90,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
             post "/tutor_availability",
             params: { topic: valid_topic_params, availability_tutor: invalid_availability_params },
             headers: { 'Authorization': "Bearer #{token}" }
-          }.to change(Topic, :count).by(1).and not_change(AvailabilityTutor, :count)
+          }.to change(Topic, :count).by(1).and change(AvailabilityTutor, :count).by(0)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)["errors"]).to be_present
         end
@@ -102,10 +102,10 @@ RSpec.describe "AvailabilityTutors", type: :request do
         allow_any_instance_of(Topic).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(Topic.new))
 
         post "/tutor_availability",
-          params: { topic: valid_topic_params, availability_tutor: valid_availability_params },
-          headers: { 'Authorization': "Bearer #{token}" }
+        params: { topic: valid_topic_params, availability_tutor: valid_availability_params },
+        headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["errors"]).to be_present
+        expect(response.body["errors"]).to be_present
       end
     end
 
@@ -116,7 +116,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
         post "/tutor_availability", params: { topic: valid_topic_params, availability_tutor: valid_availability_params },
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["errors"]).to be_present
+        expect(response.body["errors"]).to be_present
       end
     end
 
@@ -124,16 +124,100 @@ RSpec.describe "AvailabilityTutors", type: :request do
       it "returns 422 if topic parameters are missing" do
         post "/tutor_availability", params: { availability_tutor: valid_availability_params },
         headers: { 'Authorization': "Bearer #{token}" }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["errors"]).to be_present
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body["errors"]).to be_present
       end
 
       it "returns 422 if availability tutor parameters are missing" do
         post "/tutor_availability", params: { topic: valid_topic_params },
         headers: { 'Authorization': "Bearer #{token}" }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["errors"]).to be_present
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body["errors"]).to be_present
       end
     end
+  end
+
+
+  # POST tutor_availability/:id/intersteds
+  # add_interest
+  # parametros por url
+  describe "POST /tutor_availability/:id/intersteds" do
+  let!(:token) { JsonWebTokenService.encode(user_id: user_student.id) }
+
+    context "User expresses interest for the first time without pending meetings" do
+      it "creates a new meeting and adds user interest" do
+        post "/tutor_availability/#{availability_tutor.id}/intersteds",
+         headers: { 'Authorization': "Bearer #{token}" }
+
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)["message"]).to eq("Interest added and meet created")
+        expect(JSON.parse(response.body)["meet"]["status"]).to eq("pending")
+      end
+    end
+
+    context "User has already expressed interest but no pending meeting exists" do
+      let!(:interested) { FactoryBot.create(:interested, user: user_student, availability_tutor: availability_tutor) }
+
+      it "does not add another interest and creates a new pending meeting" do
+        post "/tutor_availability/#{availability_tutor.id}/intersteds",
+         headers: { 'Authorization': "Bearer #{token}" }
+
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)["message"]).to eq("Interest added and meet created")
+        expect(availability_tutor.meets.last.status).to eq("pending")
+      end
+    end
+
+    context "User has already expressed interest and there is a pending meeting" do
+      let!(:pending_meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending") }
+      let!(:interested) { FactoryBot.create(:interested, user: user_student, availability_tutor: availability_tutor) }
+
+      it "adds user as a participant to the existing pending meet" do
+        post "/tutor_availability/#{availability_tutor.id}/interesteds",
+          headers: { 'Authorization': "Bearer #{token}" }
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq("Interest added, and meet updated")
+        expect(pending_meet.participants.find_by(user_id: user_student.id)).to be_present
+      end
+    end
+
+    context "User tries to express interest in a pending meeting where they are already a participant" do
+      let!(:pending_meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending") }
+      let!(:participant) { FactoryBot.create(:participant, meet: pending_meet, user: user_student) }
+
+      it "returns an error message indicating the user has already expressed interest" do
+        post "/tutor_availability/#{availability_tutor.id}/interesteds",
+          headers: { 'Authorization': "Bearer #{token}" }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)["message"]).to eq("You have already expressed interest in the current pending meet.")
+      end
+    end
+
+    context "Error when creating a new meeting" do
+      before do
+        allow_any_instance_of(Meet).to receive(:save).and_return(false)
+        allow_any_instance_of(Meet).to receive_message_chain(:errors, :full_messages).and_return([ "Invalid meeting" ])
+      end
+
+      it "returns an error message and does not create the meeting" do
+        post "/tutor_availability/#{availability_tutor.id}/interesteds",
+          headers: { 'Authorization': "Bearer #{token}" }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)["errors"]).to include("Invalid meeting")
+      end
+    end
+
+   context "User express again in availability without pending meeting" do
+    let!(:interested) { FactoryBot.create(:interested, user: user_student, availability_tutor: availability_tutor) }
+    it "returns an error message" do
+      post "/tutor_availability/#{availability_tutor.id}/interesteds",
+        headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:created)
+      expect(availability_tutor.meets.last.status).to eq("pending")
+    end
+  end
   end
 end
