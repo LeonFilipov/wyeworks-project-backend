@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   delete "proposed_topics/:availability_id", to: "topics#destroy_proposed_topic"
 
   get "available_meets", to: "meets#available_meets"
+  get "available_meets/:id", to: "meets#show_available_meet"
+
 
   get "topics" => "topics#index"
   get "fake_user" => "users#fake_user"
