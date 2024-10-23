@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- [[Backend-291]](https://www.notion.so/Talle-M-Implementar-l-gica-de-cancelar-una-meet-como-tutor-18acf3f80fff4e5bb50858a9a210168c)
++ Cancel a meet as a tutor of that meet.
+
+- [[Backend-318]](https://www.notion.so/Talle-XS-Cambiar-endpoint-uninterested-342bd86702be42e68462b7e13de1e2be)
++ Combined endpoint to interest and uninterest in the same one.
+
 + [[Backend-222]](https://www.notion.so/Talle-M-Unit-testing-of-Interesteds-Controller-acbe39570f0e446ab0050fc25c6febb7)
 + Unit tests for interesteds controller.
 
