@@ -148,6 +148,11 @@ class MeetsController < ApplicationController
         if meet.status == "cancelled" || meet.status == "completed"
           render json: { error: "Meet is already #{meet.status}, cannot cancel" }, status: :unprocessable_entity
         elsif meet.update(status: "cancelled")
+          service = MeetsService.new(meet)
+          participants = service.get_participants_and_topic()
+          participants.each do |participant|  
+            UserMailer.meet_cancelada_email(@current_user, participant).deliver_now   
+          end
           render json: { message: "Meet cancelled successfully" }, status: :ok
         else
           render json: { error: "Failed to cancel meet" }, status: :unprocessable_entity
