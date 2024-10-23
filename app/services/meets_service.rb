@@ -3,7 +3,7 @@ class MeetsService
         @current_user=current_user
     end
 
-    def self.date_check()
+    def self.date_check
         Meet.mark_finished_meets
     end
 end

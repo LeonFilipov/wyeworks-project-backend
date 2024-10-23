@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
   def current_user
     @current_user
   end
-  
+
   # Check if all the meeting been in the past are finished
   def check_meets
     MeetsService.date_check()
