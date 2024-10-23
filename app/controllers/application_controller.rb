@@ -17,4 +17,8 @@ class ApplicationController < ActionController::API
       render json: { error: "Authorization header is missing" }, status: 400
     end
   end
+
+  def current_user
+    @current_user
+  end
 end

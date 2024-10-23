@@ -205,43 +205,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-    delete:
-      summary: Delete a proposed topic
-      tags:
-        - Users
-      description: Delete a proposed topic by the logged user.
-      parameters:
-        - in: path
-          name: topic_id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Proposed topic deleted successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Topic deleted successfully"
-        '404':
-          description: Proposed topic not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Topic not found"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '400':
-          $ref: '#/components/responses/AuthHeaderMissingError'
-
+          
   /tutor_availability/{id}/interesteds:
     post:
       summary: Add interest to a tutor's availability
@@ -387,7 +351,7 @@ paths:
                         - type: string
                           example: "Indefinida"
       tags:
-        - Meetings
+        - Meets
 
   /meet/{idReunion}:
     post:
@@ -452,7 +416,7 @@ paths:
                     type: string
                     example: "User not allowed"
       tags:
-        - Meetings
+        - Meets
 
   /profile:
     get:
@@ -533,12 +497,12 @@ paths:
       tags:
       - Users
 
-  /profile/meets/{idReunion}:
+  /profile/meets/{id}:
     get:
       summary: Get the tutor's meeting by ID
       parameters:
         - in: path
-          name: idReunion
+          name: id
           required: true
           schema:
             type: integer
@@ -565,6 +529,49 @@ paths:
                     example: Meeting not found
       tags:
       - Users
+    patch:
+      summary: Cancel a meeting
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meeting to cancel
+      responses:
+        '200':
+          description: Meeting cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet cancelled successfully"
+        '422':
+          description: Meet is already cancelled or completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet is already cancelled, cannot cancel"
+        '404':
+          description: Meet not found or user is not the tutor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found or you are not the tutor"
+
   
   /meets/{id}/interest:
     post:
@@ -619,9 +626,9 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
-  /meets/{id}/uninterest:
+  
     delete:
-      summary: Remove interest from a meet
+      summary: Remove interest in a meet
       tags:
         - Meets
       parameters:
@@ -643,7 +650,7 @@ paths:
                     type: string
                     example: "Interest removed successfully"
         '400':
-          description: User not interested or bad request
+          description: User is not interested in this meet
           content:
             application/json:
               schema:
@@ -662,6 +669,8 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
+
+
 
   /auth/google_oauth2/callback:
     get:
@@ -915,7 +924,7 @@ paths:
         '500':
           description: Internal server error
       tags:
-      - Meetings
+      - Meets
                   
   # /tutor_availability/{availability_tutor_id}/meets:
   #   get:

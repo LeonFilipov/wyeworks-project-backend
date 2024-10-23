@@ -73,5 +73,18 @@ module WyerworksProjectBackend
 
     config.api_only = true
     config.action_controller.allow_forgery_protection = false
+
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: "smtp.gmail.com",
+      port: 587,
+      user_name: "studycirclewye@gmail.com",
+      password: "clmb lkbf qokx qgzc",
+      authentication: "plain",
+      enable_starttls_auto: true
+    }
+
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.perform_deliveries = true
   end
 end
