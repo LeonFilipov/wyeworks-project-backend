@@ -99,22 +99,6 @@ RSpec.describe "Topics", type: :request do
     end
   end
 
-  describe "GET /proposed_topic/:availability_id" do
-    it "returns http not found" do
-      get "/proposed_topics/1",
-      headers: { 'Authorization': "Bearer #{token}" }
-      expect(response.body).to include("Topic not found")
-    end
-
-    it "returns http success" do
-      availability_tutor = FactoryBot.create(:availability_tutor, user: user, topic: topic)
-      get "/proposed_topics/#{availability_tutor.id}",
-      headers: { 'Authorization': "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["availability_id"]).to eq(availability_tutor.id)
-    end
-  end
-
   describe "DELETE /proposed_topics/:availability_id" do
     let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
 

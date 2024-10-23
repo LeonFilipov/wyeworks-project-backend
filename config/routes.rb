@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
-  get "proposed_topics/:availability_id", to: "topics#proposed_topic"
+  get "proposed_topics/:availability_id", to: "topics#show"
   delete "proposed_topics/:availability_id", to: "topics#destroy_proposed_topic"
 
   get "available_meets", to: "meets#available_meets"

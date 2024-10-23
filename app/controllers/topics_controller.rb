@@ -43,17 +43,6 @@ class TopicsController < ApplicationController
     render json: format_index_response(tutor_availability), status: :ok
   end
 
-  # GET /proposed_topics/:availability_id
-  def proposed_topic
-    availability = AvailabilityTutor.find_by(id: params[:availability_id], user_id: @current_user.first.id)
-    # Manejo de error si no se encuentra el topic
-    if availability.nil?
-      render json: { error: "Topic not found" }, status: :not_found
-    else
-      render json: format_topic_response(availability), status: :ok
-    end
-  end
-
   # DELETE /proposed_topics/:availability_id
   def destroy_proposed_topic
     availability = AvailabilityTutor.find_by(id: params[:availability_id])
