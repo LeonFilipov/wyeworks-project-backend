@@ -16,24 +16,31 @@ class TopicsController < ApplicationController
                           group("availability_tutors.id").
                           order(Arel.sql("MAX(CASE WHEN interesteds.user_id = '#{ActiveRecord::Base.connection.quote_string(@current_user.first.id)}' THEN 1 ELSE 0 END) DESC, availability_tutors.created_at DESC"))
 
-    render json: format_topic_response(availability_tutors), status: :ok
+    render json: format_index_response(availability_tutors), status: :ok
+  end
+
+  # GET /topics/:id
+  def show
+    availability_tutor = AvailabilityTutor.find_by(id: params[:id])
+    if availability_tutor.nil?
+      render json: { error: "Topic not found" }, status: :not_found
+    else
+      topic_response = format_topic_response(availability_tutor)
+      topic_response[:interested_users] = availability_tutor.interested_users.map do |interested|
+        {
+          id: interested.id,
+          name: interested.name,
+          image_url: interested.image_url
+        }
+      end
+      render json: topic_response, status: :ok
+    end
   end
 
   # GET /proposed_topics
   def proposed_topics
     tutor_availability = AvailabilityTutor.where(user_id: @current_user.first.id)
-    render json: format_topic_response(tutor_availability), status: :ok
-  end
-
-  # GET /proposed_topics/:availability_id
-  def proposed_topic
-    availability = AvailabilityTutor.where(id: params[:availability_id], user_id: @current_user.first.id)
-    # Manejo de error si no se encuentra el topic
-    if availability.empty?
-      render json: { error: "Topic not found" }, status: :not_found
-    else
-      render json: format_topic_response(availability), status: :ok
-    end
+    render json: format_index_response(tutor_availability), status: :ok
   end
 
   # DELETE /proposed_topics/:availability_id
@@ -51,29 +58,34 @@ class TopicsController < ApplicationController
   end
 
   private
-    def format_topic_response(availability_tutors)
+    def format_index_response(availability_tutors)
       availability_tutors.map do |availability_tutor|
-        topic = availability_tutor.topic
-        user = availability_tutor.user
-        subject = topic.subject
-        {
-          availability_id: availability_tutor.id,
-          topic_name: topic.name,
-          topic_image: topic.image_url,
-          topic_description: topic.description,
-          availability: availability_tutor.availability,
-          availability_description: availability_tutor.description,
-          interesteds: availability_tutor.interesteds.count,
-          interested: availability_tutor.interesteds.exists?(user_id: @current_user.first.id),
-          subject: {
-            id: subject.id,
-            name: subject.name
-          },
-          tutor: {
-            id: user.id,
-            name: user.name
-          }
-        }
+        format_topic_response(availability_tutor)
       end
+    end
+
+    def format_topic_response(availability_tutor)
+      topic = availability_tutor.topic
+      user = availability_tutor.user
+      subject = topic.subject
+      {
+        availability_id: availability_tutor.id,
+        topic_name: topic.name,
+        topic_image: topic.image_url,
+        topic_description: topic.description,
+        availability: availability_tutor.availability,
+        availability_description: availability_tutor.description,
+        interesteds: availability_tutor.interesteds.count,
+        interested: availability_tutor.interesteds.exists?(user_id: @current_user.first.id),
+        subject: {
+          id: subject.id,
+          name: subject.name
+        },
+        tutor: {
+          id: user.id,
+          name: user.name,
+          image_url: user.image_url
+        }
+      }
     end
 end

@@ -115,6 +115,9 @@ paths:
                         name:
                           type: string
                           description: Name of the tutor
+                        image_url:
+                          type: string
+                          description: Image URL of the tutor
         '422':
           description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
@@ -190,6 +193,9 @@ paths:
                       name:
                         type: string
                         description: Name of the tutor
+                      image_url:
+                        type: string
+                        description: Image URL of the tutor
         '422':
           description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
@@ -806,6 +812,9 @@ paths:
                         name:
                           type: string
                           description: The name of the tutor
+                        image_url:
+                          type: string
+                          description: The URL of the tutor's image
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
@@ -813,6 +822,106 @@ paths:
       tags:
       - Topics
 
+  /topics/{topic_id}:
+    get:
+      summary: Get a specific topic by ID
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the topic
+      responses:
+        '200':
+          description: A list of tutor availabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availability_id:
+                      type: string
+                      format: uuid
+                      description: The availability ID
+                    topic_name:
+                      type: string
+                      description: The name of the topic
+                    topic_image:
+                      type: string
+                      description: The URL of the topic image
+                    topic_description:
+                      type: string
+                      description: Description of the topic
+                    availability:
+                      type: string
+                      description: Tutor's availability times for the topic
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
+                    interesteds:
+                      type: integer
+                      description: Number of interested students for the tutor's availability
+                    intrested:
+                      type: boolean
+                      description: Indicates if the user is interested in the availability
+                    subject:
+                      type: object
+                      description: Information about the subject
+                      properties:
+                        id:
+                          type: integer
+                          description: The subject ID
+                        name:
+                          type: string
+                          description: The name of the subject
+                    tutor:
+                      type: object
+                      description: Information about the tutor
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The tutor ID
+                        name:
+                          type: string
+                          description: The name of the tutor
+                        image_url:
+                          type: string
+                          description: The URL of the tutor's image
+                    interested_users:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                            description: The user ID
+                          name:
+                            type: string
+                            description: The name of the user
+                          image_url:
+                            type: string
+                            description: The URL of the user's image
+        '404':
+          description: Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Topic not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Topics
 
   /tutor_availability:
     post:
