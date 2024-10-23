@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
++ [[Backend-226]](https://www.notion.so/Talle-S-Unit-testing-of-Sessions-Controller-f53edbd90f9b423298e270b8a2a7ba13?pvs=4)
++ Unit Tests for sessions controller
+
 + [[Backend-229]](https://www.notion.so/Talle-S-Unit-testing-of-Availability-Controller-c70048a03e214b4da866eb21f2bb0bfb?pvs=4)
 + Unit Tests for availability_tutor controller
 + Unit Tests for availability_tutor model
