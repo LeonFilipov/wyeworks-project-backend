@@ -19,4 +19,10 @@ class Meet < ApplicationRecord
       errors.add(:date_time, "must be set when the meeting is confirmed")
     end
   end
+
+  scope :past_meets, -> { where("date_time < ?", Time.current) }
+
+  def self.mark_finished_meets
+    past_meets.update_all(status: "completed")
+  end
 end
