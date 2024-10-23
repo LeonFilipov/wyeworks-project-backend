@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   get "available_meets", to: "meets#available_meets"
 
-  get "topics" => "topics#index"
+  resources :topics, only: [ :index, :show ]
   get "fake_user" => "users#fake_user"
 
   scope :profile do
