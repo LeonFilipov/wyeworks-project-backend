@@ -18,7 +18,7 @@ class TopicsController < ApplicationController
 
     render json: format_index_response(availability_tutors), status: :ok
   end
-  
+
   # GET /topics/:id
   def show
     availability_tutor = AvailabilityTutor.find_by(id: params[:id])
