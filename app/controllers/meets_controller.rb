@@ -27,6 +27,8 @@ class MeetsController < ApplicationController
 
     # GET /available_meets
     def available_meets
+      # Return all available meetings
+
       meets = Meet.includes(:availability_tutor, :users)
                   .joins(:availability_tutor)
 

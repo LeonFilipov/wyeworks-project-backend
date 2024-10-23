@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - In Progress
 
++ [[Backend-255]](https://www.notion.so/Talle-M-Actualizar-el-estado-de-las-reuniones-pasadas-a-finished-5753d477aa974851b6c11975ecb91d7e?pvs=4)
++ Verificacion del estado completed de las meets
+
 + [[Backend-226]](https://www.notion.so/Talle-S-Unit-testing-of-Sessions-Controller-f53edbd90f9b423298e270b8a2a7ba13?pvs=4)
 + Unit Tests for sessions controller
 
