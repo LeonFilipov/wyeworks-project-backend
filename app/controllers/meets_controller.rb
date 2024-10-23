@@ -99,6 +99,11 @@ class MeetsController < ApplicationController
           debug_messages << "User's interest added to availability tutor."
         end
 
+        if meet.status == "cancelled" || meet.status == "completed"
+          render json: { error: "You cannot express interest in a #{meet.status} meet", debug: debug_messages }, status: :bad_request
+          return
+        end
+
         if meet.users.include?(@current_user.first)
           render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
         else

@@ -165,38 +165,60 @@ RSpec.describe "Meets", type: :request do
 
 
   describe "POST/DELETE /meets/:id/interest (manage interest in a meet)" do
-    it "Successfully interested in a meet" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      post "/meets/#{meet.id}/interest",
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Interest expressed successfully")
-      meet = Meet.find(meet.id)
-      expect(meet.users.size).to eq(1)
-      expect(meet.count_interesteds).to eq(1)
+    context "POST" do
+      it "Successfully interested in a meet" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq("Interest expressed successfully")
+        meet = Meet.find(meet.id)
+        expect(meet.users.size).to eq(1)
+        expect(meet.count_interesteds).to eq(1)
+      end
+
+      it "Already interested in a meet" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)["error"]).to eq("User already interested in this meet")
+      end
+
+      it "Meet are completed" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, date_time: Time.now - 1.day)
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:bad_request)
+        meet = Meet.find(meet.id)
+        expect(meet.status).to eq("completed")
+        expect(JSON.parse(response.body)["error"]).to eq("You cannot express interest in a completed meet")
+      end
+
+      it "Meet are cancelled" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "cancelled")
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)["error"]).to eq("You cannot express interest in a cancelled meet")
+      end
     end
 
-    it "Already interested in a meet" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      post "/meets/#{meet.id}/interest",
-        headers: { "Authorization" => "Bearer #{token}" }
-      post "/meets/#{meet.id}/interest",
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq("User already interested in this meet")
-    end
-
-    it "Successfully uninterested in a meet" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      post "/meets/#{meet.id}/interest",
-        headers: { "Authorization" => "Bearer #{token}" }
-      delete "/meets/#{meet.id}/interest",
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Interest removed successfully")
-      meet = Meet.find(meet.id)
-      expect(meet.users.size).to eq(0)
-      expect(meet.count_interesteds).to eq(0)
+    context "DELETE" do
+      it "Successfully uninterested in a meet" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+        post "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        delete "/meets/#{meet.id}/interest",
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq("Interest removed successfully")
+        meet = Meet.find(meet.id)
+        expect(meet.users.size).to eq(0)
+        expect(meet.count_interesteds).to eq(0)
+      end
     end
 
     it "Meet not found" do
