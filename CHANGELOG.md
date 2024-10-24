@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-258]](https://www.notion.so/Talle-M-Notificar-a-los-interesados-de-una-reuni-n-cuando-es-cancelada-e3975f2eb3cd4bb08a233bad485734f7?pvs=4)
++ Now it sends mail notification when a meet is cancelled by it's tutor 
++ Added function in meet service
++ Added function in user mailer
++ modified function in meet controller
+
 + [[Backend-338]](https://www.notion.so/Talle-S-Agregar-campos-solicitados-a-ver-detalle-de-reunion-e0a0d3e4d6164e56acc5477abdd2463d?pvs=4)
 + Added requested fields to both /available_meets and /available_meets/id.
 
