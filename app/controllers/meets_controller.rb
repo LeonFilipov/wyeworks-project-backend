@@ -79,11 +79,11 @@ class MeetsController < ApplicationController
             id: meet.availability_tutor.topic.id,
             name: meet.availability_tutor.topic.name,
             image_url: meet.availability_tutor.topic.image_url,
-            description: meet.availability_tutor.topic.description,
+            description: meet.availability_tutor.topic.description
           },
           availability_tutor: {
             availability: meet.availability_tutor.availability,
-            description: meet.availability_tutor.description,
+            description: meet.availability_tutor.description
           },
           meeting_date: meet.date_time,
           meet_status: meet.status,
@@ -128,16 +128,16 @@ class MeetsController < ApplicationController
           id: @meet.availability_tutor.topic.id,
           name: @meet.availability_tutor.topic.name,
           image_url: @meet.availability_tutor.topic.image_url,
-          description: @meet.availability_tutor.topic.description,
+          description: @meet.availability_tutor.topic.description
         },
         availability_tutor: {
           availability: @meet.availability_tutor.availability,
-          description: @meet.availability_tutor.description,
+          description: @meet.availability_tutor.description
         },
         tutor: {
           id: @meet.availability_tutor.user.id,
           name: @meet.availability_tutor.user.name,
-          image_url: @meet.availability_tutor.user.image_url,
+          image_url: @meet.availability_tutor.user.image_url
         },
         subject: {
           id: subject.id,
