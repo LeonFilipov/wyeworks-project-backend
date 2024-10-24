@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - In Progress
 
+### Added
+
++ [[Backend-248]](https://www.notion.so/Talle-M-Endpoint-para-ver-detalles-de-la-reuni-n-12224a6692a48048b1bbd3561ee1abeb?pvs=4)
++ Added interested users to /available_meets and new /available_meets/id endpoint.
+
 + [[Backend-212]](https://www.notion.so/Talle-S-Deshabilitar-la-opci-n-de-aceptar-nuevos-interesados-12024a6692a4807598ddc01449c1fb4e)
 + An user cannot interest in a cancelled or completed meet.
 
