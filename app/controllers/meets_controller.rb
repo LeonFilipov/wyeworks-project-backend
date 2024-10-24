@@ -27,6 +27,8 @@ class MeetsController < ApplicationController
 
     # GET /available_meets
     def available_meets
+      # Return all available meetings
+
       meets = Meet.includes(:availability_tutor, :users)
                   .joins(:availability_tutor)
 
@@ -129,44 +131,45 @@ class MeetsController < ApplicationController
       render json: meet_data, status: :ok
     end
 
-    # POST /meets/:id/interest
-    def express_interest
+    # POST/DELETE /meets/:id/interest
+    def interest
+
       meet = Meet.find(params[:id])
       availability_tutor = meet.availability_tutor
       debug_messages = []
 
-      existing_interest = Interested.find_by(user: @current_user.first, availability_tutor: availability_tutor)
-      debug_messages << "User has existing interest in availability tutor: #{existing_interest.present?}"
+      case request.method
+      when "POST"
+        existing_interest = Interested.find_by(user: @current_user.first, availability_tutor: availability_tutor)
+        debug_messages << "User has existing interest in availability tutor: #{existing_interest.present?}"
 
-      unless existing_interest
-        Interested.create!(user: @current_user.first, availability_tutor: availability_tutor)
-        debug_messages << "User's interest added to availability tutor."
-      end
+        unless existing_interest
+          Interested.create!(user: @current_user.first, availability_tutor: availability_tutor)
+          debug_messages << "User's interest added to availability tutor."
+        end
 
-      if meet.users.include?(@current_user.first)
-        render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
-      else
-        meet.users << @current_user.first
-        meet.count_interesteds += 1
-        meet.save
-        debug_messages << "User's interest added to meet."
-        render json: { message: "Interest expressed successfully", debug: debug_messages }, status: :ok
-      end
-    rescue ActiveRecord::RecordNotFound
-      render json: { error: "Meet not found" }, status: :not_found
-    end
+        if meet.status == "cancelled" || meet.status == "completed"
+          render json: { error: "You cannot express interest in a #{meet.status} meet", debug: debug_messages }, status: :bad_request
+          return
+        end
 
-    # DELETE /meets/:id/uninterest
-    def remove_interest
-      meet = Meet.find(params[:id])
+        if meet.users.include?(@current_user.first)
+          render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
+        else
+          meet.users << @current_user.first
+          meet.increment!(:count_interesteds)  # Incrementa el contador de interesados
+          debug_messages << "User's interest added to meet."
+          render json: { message: "Interest expressed successfully", debug: debug_messages }, status: :ok
+        end
 
-      if meet.users.include?(@current_user.first)
-        meet.users.delete(@current_user.first)
-        meet.count_interesteds -= 1
-        meet.save
-        render json: { message: "Interest removed successfully" }, status: :ok
-      else
-        render json: { error: "User is not interested in this meet" }, status: :bad_request
+      when "DELETE"
+        if meet.users.include?(@current_user.first)
+          meet.users.delete(@current_user.first)
+          meet.decrement!(:count_interesteds)  # Decrementa el contador de interesados
+          render json: { message: "Interest removed successfully" }, status: :ok
+        else
+          render json: { error: "User is not interested in this meet" }, status: :bad_request
+        end
       end
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Meet not found" }, status: :not_found
@@ -183,14 +186,29 @@ class MeetsController < ApplicationController
                  end
       render json: response, status: :ok
     end
-    # GET /profile/meets/:id
+    # GET/PATCH /profile/meets/:id
     def my_meet
       meet = Meet.find_by(id: params[:id])
+
       if meet.nil? || meet.availability_tutor.user_id != @current_user.first.id # Verifica si la reunión pertenece al usuario
-        render json: { error: "Meet not found" }, status: :not_found # 404
+        render json: { error: "Meet not found or you are not the tutor" }, status: :not_found # 404
         return
       end
-      render json: format_meet(meet), status: :ok
+
+      case request.method
+      when "GET"
+        render json: format_meet(meet), status: :ok
+      when "PATCH"
+        if meet.status == "cancelled" || meet.status == "completed"
+          render json: { error: "Meet is already #{meet.status}, cannot cancel" }, status: :unprocessable_entity
+        elsif meet.update(status: "cancelled")
+          render json: { message: "Meet cancelled successfully" }, status: :ok
+        else
+          render json: { error: "Failed to cancel meet" }, status: :unprocessable_entity
+        end
+      end
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: "Meet not found" }, status: :not_found
     end
 
 
@@ -255,7 +273,7 @@ class MeetsController < ApplicationController
       when 2
           "completed"
       when 3
-          "canceled"
+          "cancelled"
       else
           nil
       end
