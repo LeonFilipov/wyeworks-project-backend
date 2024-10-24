@@ -9,6 +9,12 @@ RSpec.describe "Meets", type: :request do
   let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
 
   describe "GET /available_meets (get all meets for a availability)" do
+    before do
+      Participant.delete_all
+      Meet.delete_all       
+    end
+    
+
     it "Return no meets" do
       get "/available_meets",
         params: { id_availability_tutor: availability_tutor.id },
@@ -26,10 +32,15 @@ RSpec.describe "Meets", type: :request do
         expect(response).to have_http_status(:ok)
         parsed_response = JSON.parse(response.body)
         expect(parsed_response.size).to eq(1)
-        expect(parsed_response[0].keys).to eq([ "id", "topic_name", "meeting_date", "meet_status", "tutor", "subject", "interested", "count_interesteds" ])
+        expect(parsed_response[0].keys).to eq([ "id", "topic_name", "meeting_date", "meet_status", "tutor", "subject", "interested", "count_interesteds", "interested_users" ])
+        
         tutor = parsed_response[0]["tutor"]
         expect(tutor["id"]).to eq(user_tutor.id)
         expect(tutor["name"]).to eq(user_tutor.name)
+
+        interested_users = parsed_response[0]["interested_users"]
+        expect(interested_users).to be_an(Array)
+        expect(interested_users.size).to eq(0)
       end
 
       it "Return meets with params" do
@@ -80,6 +91,10 @@ RSpec.describe "Meets", type: :request do
       expect(parsed_response["tutor"]["name"]).to eq(user_tutor.name)
       expect(parsed_response["subject"]["id"]).to eq(subject.id)
       expect(parsed_response["subject"]["name"]).to eq(subject.name)
+
+      interested_users = parsed_response["interested_users"]
+      expect(interested_users).to be_an(Array)
+      expect(interested_users.size).to eq(0)
     end
 
     it "returns not found for an invalid meet id" do
@@ -116,7 +131,7 @@ RSpec.describe "Meets", type: :request do
       expect(JSON.parse(response.body)["error"]).to eq("Meet already confirmed")
     end
 
-    it "Meet dont exist" do
+    it "Meet don't exist" do
       post "/meet/0",
         params: { meet: { date: "2021-12-12 12:00:00", description: "Description" } },
         headers: { "Authorization" => "Bearer #{token}" }
@@ -151,7 +166,7 @@ RSpec.describe "Meets", type: :request do
   end
 
   describe "POST /meets/:id/interest (add interest to a meet)" do
-    it "Successfully intrested in a meet" do
+    it "Successfully interested in a meet" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
       post "/meets/#{meet.id}/interest",
         headers: { "Authorization" => "Bearer #{token}" }
@@ -160,6 +175,14 @@ RSpec.describe "Meets", type: :request do
       meet = Meet.find(meet.id)
       expect(meet.users.size).to eq(1)
       expect(meet.count_interesteds).to eq(1)
+
+      get "/available_meets/#{meet.id}",
+        headers: { "Authorization" => "Bearer #{token}" }
+      parsed_response = JSON.parse(response.body)
+      interested_users = parsed_response["interested_users"]
+      expect(interested_users.size).to eq(1)
+      expect(interested_users[0]["id"]).to eq(user_tutor.id)
+      expect(interested_users[0]["name"]).to eq(user_tutor.name)
     end
 
     it "Already interested in a meet" do
@@ -192,6 +215,12 @@ RSpec.describe "Meets", type: :request do
       meet = Meet.find(meet.id)
       expect(meet.users.size).to eq(0)
       expect(meet.count_interesteds).to eq(0)
+
+      get "/available_meets/#{meet.id}",
+        headers: { "Authorization" => "Bearer #{token}" }
+      parsed_response = JSON.parse(response.body)
+      interested_users = parsed_response["interested_users"]
+      expect(interested_users.size).to eq(0)
     end
 
     it "Not interested in a meet" do

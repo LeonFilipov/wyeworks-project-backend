@@ -60,6 +60,17 @@ class MeetsController < ApplicationController
       meets_data = meets.map do |meet|
         subject = meet.availability_tutor.topic.subject
 
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
           topic_name: meet.availability_tutor.topic.name,
@@ -74,7 +85,8 @@ class MeetsController < ApplicationController
             name: subject.name
           },
           interested: meet.users.include?(@current_user.first),
-          count_interesteds: meet.users.size
+          count_interesteds: meet.users.size,
+          interested_users: interested_users_data
         }
       end
 
@@ -84,6 +96,17 @@ class MeetsController < ApplicationController
     # GET /available_meets/:id
     def show_available_meet
       subject = @meet.availability_tutor.topic.subject
+
+      interested_users_data = @meet.users.map do |user|
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          uid: user.uid,
+          description: user.description,
+          image_url: user.image_url
+        }
+      end
 
       meet_data = {
         id: @meet.id,
@@ -99,7 +122,8 @@ class MeetsController < ApplicationController
           name: subject.name
         },
         interested: @meet.users.include?(@current_user.first),
-        count_interesteds: @meet.users.size
+        count_interesteds: @meet.users.size,
+        interested_users: interested_users_data
       }
 
       render json: meet_data, status: :ok
@@ -175,12 +199,24 @@ class MeetsController < ApplicationController
         availability = meet.availability_tutor
         topic = availability.topic
         subject = topic.subject
+
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
           date: meet.date_time,
           status: meet.status,
           description: meet.description,
-          interesteds: meet.count_interesteds,
+          interesteds: meet.users.size,
           topic: {
             id: topic.id,
             name: topic.name,
@@ -192,7 +228,8 @@ class MeetsController < ApplicationController
           },
           tutor: {
             name: @current_user.first.name
-          }
+          },
+          interested_users: interested_users_data
         }
       end
 
