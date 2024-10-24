@@ -11,10 +11,10 @@ RSpec.describe "Meets", type: :request do
   describe "GET /available_meets (get all meets for a availability)" do
     before do
       Participant.delete_all
-      Meet.delete_all       
+      Meet.delete_all
     end
-    
-    
+
+
     it "Return no meets" do
       get "/available_meets",
         params: { id_availability_tutor: availability_tutor.id },
@@ -74,7 +74,7 @@ RSpec.describe "Meets", type: :request do
       end
     end
   end
-  
+
   describe "GET /available_meets/:id (show details for a specific meet)" do
     let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
 
@@ -212,7 +212,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.users.size).to eq(1)
         expect(meet.count_interesteds).to eq(1)
-        
+
          get "/available_meets/#{meet.id}",
         headers: { "Authorization" => "Bearer #{token}" }
       parsed_response = JSON.parse(response.body)
@@ -263,7 +263,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.users.size).to eq(0)
         expect(meet.count_interesteds).to eq(0)
-        
+
         get "/available_meets/#{meet.id}",
         headers: { "Authorization" => "Bearer #{token}" }
       parsed_response = JSON.parse(response.body)

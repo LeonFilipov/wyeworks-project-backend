@@ -133,7 +133,6 @@ class MeetsController < ApplicationController
 
     # POST/DELETE /meets/:id/interest
     def interest
-
       meet = Meet.find(params[:id])
       availability_tutor = meet.availability_tutor
       debug_messages = []
