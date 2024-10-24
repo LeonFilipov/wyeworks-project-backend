@@ -1,6 +1,6 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :confirm_pending_meet ]
+    before_action :set_meet, only: [ :confirm_pending_meet, :show_available_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
@@ -62,6 +62,17 @@ class MeetsController < ApplicationController
       meets_data = meets.map do |meet|
         subject = meet.availability_tutor.topic.subject
 
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
           topic_name: meet.availability_tutor.topic.name,
@@ -76,11 +87,48 @@ class MeetsController < ApplicationController
             name: subject.name
           },
           interested: meet.users.include?(@current_user.first),
-          count_interesteds: meet.users.size
+          count_interesteds: meet.users.size,
+          interested_users: interested_users_data
         }
       end
 
       render json: meets_data, status: :ok
+    end
+
+    # GET /available_meets/:id
+    def show_available_meet
+      subject = @meet.availability_tutor.topic.subject
+
+      interested_users_data = @meet.users.map do |user|
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          uid: user.uid,
+          description: user.description,
+          image_url: user.image_url
+        }
+      end
+
+      meet_data = {
+        id: @meet.id,
+        topic_name: @meet.availability_tutor.topic.name,
+        meeting_date: @meet.date_time,
+        meet_status: @meet.status,
+        tutor: {
+          id: @meet.availability_tutor.user.id,
+          name: @meet.availability_tutor.user.name
+        },
+        subject: {
+          id: subject.id,
+          name: subject.name
+        },
+        interested: @meet.users.include?(@current_user.first),
+        count_interesteds: @meet.users.size,
+        interested_users: interested_users_data
+      }
+
+      render json: meet_data, status: :ok
     end
 
     # POST/DELETE /meets/:id/interest
@@ -168,12 +216,24 @@ class MeetsController < ApplicationController
         availability = meet.availability_tutor
         topic = availability.topic
         subject = topic.subject
+
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
           date: meet.date_time,
           status: meet.status,
           description: meet.description,
-          interesteds: meet.count_interesteds,
+          interesteds: meet.users.size,
           topic: {
             id: topic.id,
             name: topic.name,
@@ -185,7 +245,8 @@ class MeetsController < ApplicationController
           },
           tutor: {
             name: @current_user.first.name
-          }
+          },
+          interested_users: interested_users_data
         }
       end
 
@@ -197,7 +258,7 @@ class MeetsController < ApplicationController
     end
 
     def set_meet
-      @meet = Meet.find(params[:idReunion])
+      @meet = Meet.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Meet not found" }, status: :not_found
     end
