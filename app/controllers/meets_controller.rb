@@ -75,12 +75,22 @@ class MeetsController < ApplicationController
 
         {
           id: meet.id,
-          topic_name: meet.availability_tutor.topic.name,
+          topic: {
+            id: meet.availability_tutor.topic.id,
+            name: meet.availability_tutor.topic.name,
+            image_url: meet.availability_tutor.topic.image_url,
+            description: meet.availability_tutor.topic.description
+          },
+          availability_tutor: {
+            availability: meet.availability_tutor.availability,
+            description: meet.availability_tutor.description
+          },
           meeting_date: meet.date_time,
           meet_status: meet.status,
           tutor: {
             id: meet.availability_tutor.user.id,
-            name: meet.availability_tutor.user.name
+            name: meet.availability_tutor.user.name,
+            image_url: meet.availability_tutor.user.image_url
           },
           subject: {
             id: subject.id,
@@ -112,12 +122,22 @@ class MeetsController < ApplicationController
 
       meet_data = {
         id: @meet.id,
-        topic_name: @meet.availability_tutor.topic.name,
         meeting_date: @meet.date_time,
         meet_status: @meet.status,
+        topic: {
+          id: @meet.availability_tutor.topic.id,
+          name: @meet.availability_tutor.topic.name,
+          image_url: @meet.availability_tutor.topic.image_url,
+          description: @meet.availability_tutor.topic.description
+        },
+        availability_tutor: {
+          availability: @meet.availability_tutor.availability,
+          description: @meet.availability_tutor.description
+        },
         tutor: {
           id: @meet.availability_tutor.user.id,
-          name: @meet.availability_tutor.user.name
+          name: @meet.availability_tutor.user.name,
+          image_url: @meet.availability_tutor.user.image_url
         },
         subject: {
           id: subject.id,

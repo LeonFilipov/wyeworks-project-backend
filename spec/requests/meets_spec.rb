@@ -32,7 +32,7 @@ RSpec.describe "Meets", type: :request do
         expect(response).to have_http_status(:ok)
         parsed_response = JSON.parse(response.body)
         expect(parsed_response.size).to eq(1)
-        expect(parsed_response[0].keys).to eq([ "id", "topic_name", "meeting_date", "meet_status", "tutor", "subject", "interested", "count_interesteds", "interested_users" ])
+        expect(parsed_response[0].keys).to eq([ "id", "topic", "availability_tutor", "meeting_date", "meet_status", "tutor", "subject", "interested", "count_interesteds", "interested_users" ])
         tutor = parsed_response[0]["tutor"]
         expect(tutor["id"]).to eq(user_tutor.id)
         expect(tutor["name"]).to eq(user_tutor.name)
@@ -84,7 +84,7 @@ RSpec.describe "Meets", type: :request do
       expect(response).to have_http_status(:ok)
       parsed_response = JSON.parse(response.body)
       expect(parsed_response["id"]).to eq(meet.id)
-      expect(parsed_response["topic_name"]).to eq(meet.availability_tutor.topic.name)
+      expect(parsed_response["topic"]["name"]).to eq(meet.availability_tutor.topic.name)
       expect(parsed_response["tutor"]["id"]).to eq(user_tutor.id)
       expect(parsed_response["tutor"]["name"]).to eq(user_tutor.name)
       expect(parsed_response["subject"]["id"]).to eq(subject.id)

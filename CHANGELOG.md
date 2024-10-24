@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-338]](https://www.notion.so/Talle-S-Agregar-campos-solicitados-a-ver-detalle-de-reunion-e0a0d3e4d6164e56acc5477abdd2463d?pvs=4)
++ Added requested fields to both /available_meets and /available_meets/id.
+
 + [[Backend-248]](https://www.notion.so/Talle-M-Endpoint-para-ver-detalles-de-la-reuni-n-12224a6692a48048b1bbd3561ee1abeb?pvs=4)
 + Added interested users to /available_meets and new /available_meets/id endpoint.
 

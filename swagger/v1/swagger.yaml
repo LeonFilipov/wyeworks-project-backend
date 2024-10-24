@@ -1000,12 +1000,30 @@ paths:
                     id:
                       type: integer
                       description: The unique ID of the meeting
-                    topic_name:
-                      type: string
-                      description: The name of the topic for the meeting
-                    tutor_name:
-                      type: string
-                      description: The name of the tutor hosting the meeting
+                    topic:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the topic
+                        name:
+                          type: string
+                          description: The name of the topic
+                        image_url:
+                          type: string
+                          description: The image of the topic
+                        description:
+                          type: string
+                          description: The description of the topic
+                    availability_tutor:
+                      type: object
+                      properties:
+                        availability:
+                          type: string
+                          description: The described availability
+                        description:
+                          type: string
+                          description: The availability's description
                     meeting_date:
                       type: string
                       format: date-time
@@ -1013,6 +1031,19 @@ paths:
                     meet_status:
                       type: string
                       description: The status of the meeting
+                    tutor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The unique ID of the tutor
+                        name:
+                          type: string
+                          description: Tutor's name
+                        image_url:
+                          type: string
+                          description: Tutor's image url
                     subject:
                       type: object
                       properties:
@@ -1061,9 +1092,6 @@ paths:
                   id:
                     type: integer
                     description: The unique ID of the meeting
-                  topic_name:
-                    type: string
-                    description: The name of the topic for the meeting
                   meeting_date:
                     type: string
                     format: date-time
@@ -1071,6 +1099,30 @@ paths:
                   meet_status:
                     type: string
                     description: The status of the meeting
+                  topic:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the topic
+                        name:
+                          type: string
+                          description: The name of the topic
+                        image_url:
+                          type: string
+                          description: The image of the topic
+                        description:
+                          type: string
+                          description: The description of the topic
+                  availability_tutor:
+                    type: object
+                    properties:
+                      availability:
+                        type: string
+                        description: The described availability
+                      description:
+                        type: string
+                        description: The availability's description
                   tutor:
                     type: object
                     properties:
@@ -1081,6 +1133,9 @@ paths:
                       name:
                         type: string
                         description: The name of the tutor
+                      image_url:
+                        type: string
+                        description: Tutor's image url
                   subject:
                     type: object
                     properties:
