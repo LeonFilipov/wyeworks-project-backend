@@ -1,5 +1,4 @@
 class MeetsService
-
     def initialize(meet)
         @meet = meet
     end
@@ -8,7 +7,7 @@ class MeetsService
         Meet.mark_finished_meets
     end
 
-    def self.get_participants_and_topic()
+    def get_participants_and_topic
         query=Meet.joins("INNER JOIN availability_tutors ON availability_tutors.id = meets.availability_tutor_id")
         .joins("INNER JOIN topics ON availability_tutors.topic_id = topics.id")
         .joins("INNER JOIN participants ON meets.id = participants.meet_id")

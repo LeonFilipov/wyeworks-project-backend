@@ -25,5 +25,4 @@ class UserMailer < ApplicationMailer
             subject: "Reunión cancelada"
         )
     end
-
 end

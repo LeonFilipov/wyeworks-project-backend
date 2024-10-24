@@ -223,8 +223,8 @@ class MeetsController < ApplicationController
         elsif meet.update(status: "cancelled")
           service = MeetsService.new(meet)
           participants = service.get_participants_and_topic()
-          participants.each do |participant|  
-            UserMailer.meet_cancelada_email(@current_user, participant).deliver_now   
+          participants.each do |participant|
+            UserMailer.meet_cancelada_email(@current_user, participant).deliver_now
           end
           render json: { message: "Meet cancelled successfully" }, status: :ok
         else

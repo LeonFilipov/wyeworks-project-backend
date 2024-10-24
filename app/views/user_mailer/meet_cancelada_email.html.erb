@@ -49,6 +49,10 @@
       border-radius: 5px;
       font-size: 16px;
     }
+    /* Centrado del botón */
+    .button-container {
+      text-align: center; /* Centrar el contenido */
+    }
     .footer {
       text-align: center;
       padding: 10px;
@@ -72,8 +76,10 @@
           <%= @participant.status == "confirmed" ? @participant.date_time : "Indefinida" %>
         </strong>
       </p>
-      <!-- Botón para explorar StudyCircle -->
-      <a href="https://wyeworks-project.web.app/">Explorar StudyCircle</a>
+      <!-- Contenedor centrado para el botón -->
+      <div class="button-container">
+        <a href="https://wyeworks-project.web.app/">Explorar StudyCircle</a>
+      </div>
     </div>
     <div class="footer">
       <p>&copy; 2024 StudyCircle. Todos los derechos reservados.</p>
