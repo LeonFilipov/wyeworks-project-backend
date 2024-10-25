@@ -154,8 +154,8 @@ GEM
     parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
-    pg (1.5.7)
-    pg (1.5.7-x64-mingw-ucrt)
+    pg (1.5.9)
+    pg (1.5.9-x64-mingw-ucrt)
     pgcrypto (0.4.1)
     psych (5.1.2)
       stringio
@@ -312,7 +312,7 @@ DEPENDENCIES
   jwt
   mail
   nokogiri (>= 1.8.5)
-  pg (~> 1.1)
+  pg (~> 1.5)
   pgcrypto
   puma (~> 6.4.2)
   pundit
