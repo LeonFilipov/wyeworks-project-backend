@@ -243,8 +243,10 @@ paths:
                 type: object
                 properties:
                   message:
-                    type: string
-                    example: "Interest added and meet created"
+                    type: array
+                    items:
+                      type: string
+                      example: "Participant added"
                   meet:
                     type: object
                     properties:
@@ -314,7 +316,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  error:
                     type: string
                     example: "You have already expressed interest in the current pending meet."
                   debug:

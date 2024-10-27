@@ -14,13 +14,13 @@ RSpec.describe "UsersControllers", type: :request do
     it "returns an error if the token is invalid" do
       get "/profile", headers: { "Authorization" => "invalid_token" }
       expect(response).to have_http_status(401)
-      expect(JSON.parse(response.body)).to eq({ "error" => "Invalid token" })
+      expect(JSON.parse(response.body)).to eq({ "error" => I18n.t("error.sessions.invalid_token") })
     end
 
     it "returns an error if the token is missing" do
       get "/profile"
       expect(response).to have_http_status(400)
-      expect(JSON.parse(response.body)).to eq({ "error" => "Authorization header is missing" })
+      expect(JSON.parse(response.body)).to eq({ "error" => I18n.t("error.sessions.missing_header") })
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe "UsersControllers", type: :request do
       },
       headers: { "Authorization" => token }
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)).to eq({ "message" => "User updated" })
+      expect(JSON.parse(response.body)).to eq({ "message" => I18n.t("success.users.updated") })
     end
   end
 end

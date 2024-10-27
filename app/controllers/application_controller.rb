@@ -12,10 +12,10 @@ class ApplicationController < ActionController::API
         decoded = JsonWebTokenService.decode(header)
         @current_user = User.where(id: decoded[:user_id])
       rescue JWT::DecodeError
-        render json: { error: "Invalid token" }, status: 401
+        render json: { error: I18n.t('error.sessions.invalid_token') }, status: 401
       end
     else
-      render json: { error: "Authorization header is missing" }, status: 400
+      render json: { error: I18n.t('error.sessions.missing_header') }, status: 400
     end
   end
 

@@ -28,4 +28,30 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  error:
+    users:
+      not_found: "User not found."
+      parameter_missing: "Required parameter %{param} is missing"
+      not_created: "Error creating user"
+    sessions:
+      invalid_token: "Invalid token"
+      missing_header: "Authorization header is missing"
+    availabilities:
+      not_found: "Availability not found"
+      already_interested: "You have already expressed interest in the current pending meet."
+    meets:
+      not_created: "Error creating meet"
+
+  success:
+    users:
+      created: "User created successfully"
+      updated: "User updated successfully"
+    topics:
+      created: "Topic created successfully"
+    availabilities:
+      created: "Availability created successfully"
+    meets:
+      created: "Meet created successfully"
+      updated: "Meet updated successfully"
+    participants:
+      created: "Participant added"
