@@ -71,7 +71,7 @@ class AvailabilityTutorsController < ApplicationController
       debug_messages << "User interested in current pending meet: #{pending_meet_interest}"
 
       if pending_meet_interest
-        render json: { error: I18n.t("error.availabilities.already_interested"), debug: debug_messages }, status: :unprocessable_entity
+        render json: { error: I18n.t("error.meets.already_interested"), debug: debug_messages }, status: :unprocessable_entity
         return
       end
     end

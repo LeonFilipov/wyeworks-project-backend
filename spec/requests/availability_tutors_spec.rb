@@ -191,7 +191,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
           headers: { 'Authorization': "Bearer #{token}" }
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.availabilities.already_interested"))
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_interested"))
       end
     end
 

@@ -83,13 +83,13 @@ RSpec.describe "Meets", type: :request do
         params: { meet: { date: "2021-12-12 12:00:00", description: "Description" } },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Meet confirmed successfully")
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.confirmed"))
 
       post "/meet/#{meet.id}",
         params: { meet: { date: "2021-12-12 12:00:01", description: "Description 2" } },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet already confirmed")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "confirmed"))
     end
 
     it "Meet dont exist" do
@@ -97,7 +97,7 @@ RSpec.describe "Meets", type: :request do
         params: { meet: { date: "2021-12-12 12:00:00", description: "Description" } },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
 
@@ -132,7 +132,7 @@ RSpec.describe "Meets", type: :request do
       patch "/profile/meets/#{meet.id}",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Meet cancelled successfully")
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.cancelled"))
       meet.reload
       expect(meet.status).to eq("cancelled")
     end
@@ -143,8 +143,8 @@ RSpec.describe "Meets", type: :request do
       meet = FactoryBot.create(:meet, availability_tutor: other_tutor, status: "pending")
       patch "/profile/meets/#{meet.id}",
         headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet not found or you are not the tutor")
+      expect(response).to have_http_status(:unauthorized)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
     end
 
     it "Fails to cancel an already cancelled meet" do
@@ -152,14 +152,14 @@ RSpec.describe "Meets", type: :request do
       patch "/profile/meets/#{meet.id}",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet is already cancelled, cannot cancel")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "cancelled"))
     end
 
     it "Meet not found" do
       patch "/profile/meets/0",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet not found or you are not the tutor")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
 
@@ -170,7 +170,7 @@ RSpec.describe "Meets", type: :request do
       post "/meets/#{meet.id}/interest",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Interest expressed successfully")
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.interested"))
       meet = Meet.find(meet.id)
       expect(meet.users.size).to eq(1)
       expect(meet.count_interesteds).to eq(1)
@@ -183,7 +183,7 @@ RSpec.describe "Meets", type: :request do
       post "/meets/#{meet.id}/interest",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq("User already interested in this meet")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_interested"))
     end
 
     it "Successfully uninterested in a meet" do
@@ -193,7 +193,7 @@ RSpec.describe "Meets", type: :request do
       delete "/meets/#{meet.id}/interest",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq("Interest removed successfully")
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.interest_removed"))
       meet = Meet.find(meet.id)
       expect(meet.users.size).to eq(0)
       expect(meet.count_interesteds).to eq(0)
@@ -203,7 +203,7 @@ RSpec.describe "Meets", type: :request do
       post "/meets/0/interest",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
 end

@@ -42,7 +42,7 @@ RSpec.describe "SessionsController", type: :request do
       it 'returns an error message' do
         get '/auth/google_oauth2/callback', params: { code: 'fake_code' }
         expect(response).to have_http_status(:internal_server_error)
-        expect(JSON.parse(response.body)["error"]).to eq("Error creating user")
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_created"))
       end
     end
   end

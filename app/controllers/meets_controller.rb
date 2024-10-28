@@ -5,23 +5,23 @@ class MeetsController < ApplicationController
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
       # Return all meetings associated with a specific availability tutor
-      @meets = @availability_tutor.meets
-      render json: @meets, status: :ok
+      meets = @availability_tutor.meets
+      render json: meets, status: :ok
     end
 
     # POST /meets/:id
     def confirm_pending_meet
       @availability_tutor = AvailabilityTutor.find(@meet.availability_tutor_id)
       if @current_user.first.id != @availability_tutor.user_id
-        render json: { error: "User not allowed" }, status: :unauthorized
+        render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
       elsif @meet.status != "pending"
-        render json: { error: "Meet already confirmed" }, status: :bad_request
+        render json: { error: I18n.t("error.meets.already_status", status: "confirmed") }, status: :bad_request
       else
         @meet.status = "confirmed"
         @meet.date_time = params[:meet][:date]
         @meet.description = params[:meet][:description]
         @meet.save
-        render json: { message: "Meet confirmed successfully" }, status: :ok
+        render json: { message: I18n.t("success.meets.confirmed")}, status: :ok
       end
     end
 
@@ -100,25 +100,25 @@ class MeetsController < ApplicationController
         end
 
         if meet.users.include?(@current_user.first)
-          render json: { error: "User already interested in this meet", debug: debug_messages }, status: :bad_request
+          render json: { error: I18n.t("error.meets.already_interested"), debug: debug_messages }, status: :bad_request
         else
           meet.users << @current_user.first
           meet.increment!(:count_interesteds)  # Incrementa el contador de interesados
           debug_messages << "User's interest added to meet."
-          render json: { message: "Interest expressed successfully", debug: debug_messages }, status: :ok
+          render json: { message: I18n.t("success.meets.interested"), debug: debug_messages }, status: :ok
         end
 
       when "DELETE"
         if meet.users.include?(@current_user.first)
           meet.users.delete(@current_user.first)
           meet.decrement!(:count_interesteds)  # Decrementa el contador de interesados
-          render json: { message: "Interest removed successfully" }, status: :ok
+          render json: { message: I18n.t("success.meets.interest_removed")}, status: :ok
         else
-          render json: { error: "User is not interested in this meet" }, status: :bad_request
+          render json: { error: I18n.t("error.meets.not_interested") }, status: :bad_request
         end
       end
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Meet not found" }, status: :not_found
+      render json: { error: I18n.t("error.meets.not_found") }, status: :not_found
     end
 
     # GET /profile/meets
@@ -136,8 +136,11 @@ class MeetsController < ApplicationController
     def my_meet
       meet = Meet.find_by(id: params[:id])
 
-      if meet.nil? || meet.availability_tutor.user_id != @current_user.first.id # Verifica si la reunión pertenece al usuario
-        render json: { error: "Meet not found or you are not the tutor" }, status: :not_found # 404
+      if meet.nil? # Verifica si la reunión pertenece al usuario
+        render json: { error: I18n.t("error.meets.not_found") }, status: :not_found # 404
+        return
+      elsif meet.availability_tutor.user_id != @current_user.first.id
+        render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized # 401
         return
       end
 
@@ -146,15 +149,15 @@ class MeetsController < ApplicationController
         render json: format_meet(meet), status: :ok
       when "PATCH"
         if meet.status == "cancelled" || meet.status == "completed"
-          render json: { error: "Meet is already #{meet.status}, cannot cancel" }, status: :unprocessable_entity
+          render json: { error: I18n.t("error.meets.already_status", status: meet.status) }, status: :unprocessable_entity
         elsif meet.update(status: "cancelled")
-          render json: { message: "Meet cancelled successfully" }, status: :ok
+          render json: { message: I18n.t("success.meets.cancelled") }, status: :ok
         else
-          render json: { error: "Failed to cancel meet" }, status: :unprocessable_entity
+          render json: { error: I18n.t("error.meets.failed", action: "cancel") }, status: :unprocessable_entity
         end
       end
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Meet not found" }, status: :not_found
+      render json: { error: I18n.t("error.meets.not_found") }, status: :not_found
     end
 
 
@@ -188,13 +191,13 @@ class MeetsController < ApplicationController
     def set_availability_tutor
       @availability_tutor = AvailabilityTutor.find(params[:tutor_availability_id])
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Availability tutor not found" }, status: :not_found
+      render json: { error: I18n.t("error.availabilities.not_found") }, status: :not_found
     end
 
     def set_meet
       @meet = Meet.find(params[:idReunion])
     rescue ActiveRecord::RecordNotFound
-      render json: { error: "Meet not found" }, status: :not_found
+      render json: { error: I18n.t("error.meets.not_found") }, status: :not_found
     end
 
     def map_meeting_status(status_param)

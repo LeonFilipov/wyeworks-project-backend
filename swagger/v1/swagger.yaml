@@ -534,7 +534,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Meeting not found
+                    example: Meet not found
       tags:
       - Users
     patch:

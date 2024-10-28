@@ -45,14 +45,14 @@ class SubjectsController < ApplicationController
   def set_university
     @university = University.find(params[:university_id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: "University not found" }, status: :not_found
+    render json: { error: I18n.t("error.universities.not_found") }, status: :not_found
   end
 
   # Set the subject within the scope of the university
   def set_subject
     @subject = @university.subjects.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: "Subject not found" }, status: :not_found
+    render json: { error: I18n.t("error.subjects.not_found") }, status: :not_found
   end
 
   # Permit only the allowed parameters
