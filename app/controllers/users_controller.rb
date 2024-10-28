@@ -11,7 +11,7 @@ class UsersController < ApplicationController
         if user.present?
             render json: user, status: 200
         else
-            render json: { error: I18n.t('error.users.not_found') }, status: 404
+            render json: { error: I18n.t("error.users.not_found") }, status: 404
         end
     end
 

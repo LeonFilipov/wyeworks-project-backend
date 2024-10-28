@@ -67,7 +67,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
         expect(response).to have_http_status(:created)
         expect(AvailabilityTutor.last.user_id).to eq(user_tutor.id)
         expect(AvailabilityTutor.last.topic_id).to eq(Topic.last.id)
-        expect(JSON.parse(response.body)["message"]).to eq([I18n.t("success.topics.created"), I18n.t("success.availabilities.created")])
+        expect(JSON.parse(response.body)["message"]).to eq([ I18n.t("success.topics.created"), I18n.t("success.availabilities.created") ])
       end
     end
 
@@ -150,7 +150,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
          headers: { 'Authorization': "Bearer #{token}" }
 
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)["message"]).to eq([I18n.t("success.participants.created"), I18n.t("success.meets.created")])
+        expect(JSON.parse(response.body)["message"]).to eq([ I18n.t("success.participants.created"), I18n.t("success.meets.created") ])
         expect(JSON.parse(response.body)["meet"]["status"]).to eq("pending")
       end
     end
@@ -163,7 +163,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
          headers: { 'Authorization': "Bearer #{token}" }
 
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)["message"]).to eq([I18n.t("success.participants.created"), I18n.t("success.meets.created")])
+        expect(JSON.parse(response.body)["message"]).to eq([ I18n.t("success.participants.created"), I18n.t("success.meets.created") ])
         expect(availability_tutor.meets.last.status).to eq("pending")
       end
     end
@@ -177,7 +177,7 @@ RSpec.describe "AvailabilityTutors", type: :request do
           headers: { 'Authorization': "Bearer #{token}" }
 
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)["message"]).to eq([I18n.t("success.participants.created"), I18n.t("success.meets.updated")])  
+        expect(JSON.parse(response.body)["message"]).to eq([ I18n.t("success.participants.created"), I18n.t("success.meets.updated") ])
         expect(pending_meet.participants.find_by(user_id: user_student.id)).to be_present
       end
     end

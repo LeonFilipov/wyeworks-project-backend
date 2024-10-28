@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - In Progress
 
+### Added
+
++ [[Backend-355]](https://www.notion.so/Talle-M-Utilizaci-n-de-I18n-para-unificaci-n-de-mensajes-6ca23cc4d49846d1b9a5c04ca94eb1b0)
++ Added I18n for unification of messages
 
 + [[Backend-255]](https://www.notion.so/Talle-M-Actualizar-el-estado-de-las-reuniones-pasadas-a-finished-5753d477aa974851b6c11975ecb91d7e?pvs=4)
 + Verificacion del estado completed de las meets

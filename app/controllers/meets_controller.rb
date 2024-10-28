@@ -21,7 +21,7 @@ class MeetsController < ApplicationController
         @meet.date_time = params[:meet][:date]
         @meet.description = params[:meet][:description]
         @meet.save
-        render json: { message: I18n.t("success.meets.confirmed")}, status: :ok
+        render json: { message: I18n.t("success.meets.confirmed") }, status: :ok
       end
     end
 
@@ -112,7 +112,7 @@ class MeetsController < ApplicationController
         if meet.users.include?(@current_user.first)
           meet.users.delete(@current_user.first)
           meet.decrement!(:count_interesteds)  # Decrementa el contador de interesados
-          render json: { message: I18n.t("success.meets.interest_removed")}, status: :ok
+          render json: { message: I18n.t("success.meets.interest_removed") }, status: :ok
         else
           render json: { error: I18n.t("error.meets.not_interested") }, status: :bad_request
         end

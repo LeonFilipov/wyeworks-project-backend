@@ -49,7 +49,7 @@ class AvailabilityTutorsController < ApplicationController
     # Try to save availability
     if @availability.save
       render json: {
-        message: [I18n.t("success.topics.created"), I18n.t("success.availabilities.created")],
+        message: [ I18n.t("success.topics.created"), I18n.t("success.availabilities.created") ]
       }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
@@ -101,10 +101,10 @@ class AvailabilityTutorsController < ApplicationController
       if @meet.save
         Participant.create!(meet: @meet, user: @current_user.first)
         debug_messages << "New meet created successfully, and user added as participant."
-        render json: { message: [I18n.t("success.participants.created"), I18n.t("success.meets.created")], meet: @meet, debug: debug_messages }, status: :created
+        render json: { message: [ I18n.t("success.participants.created"), I18n.t("success.meets.created") ], meet: @meet, debug: debug_messages }, status: :created
       else
         debug_messages << "Failed to create meet: #{@meet.errors.full_messages.join(', ')}"
-        render json: { message: [I18n.t("success.participants.created"), I18n.t("errors.meets.not_created")], errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
+        render json: { message: [ I18n.t("success.participants.created"), I18n.t("errors.meets.not_created") ], errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
       end
     else
       pending_meet.increment!(:count_interesteds)
@@ -115,7 +115,7 @@ class AvailabilityTutorsController < ApplicationController
         debug_messages << "User added as participant to existing pending meet."
       end
 
-      render json: { message: [I18n.t("success.participants.created"), I18n.t("success.meets.updated")], meet: pending_meet, debug: debug_messages }, status: :ok
+      render json: { message: [ I18n.t("success.participants.created"), I18n.t("success.meets.updated") ], meet: pending_meet, debug: debug_messages }, status: :ok
     end
   end
 
