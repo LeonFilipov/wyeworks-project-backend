@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
++ Unit Tests for Students controller
+
 + [[Backend-258]](https://www.notion.so/Talle-M-Notificar-a-los-interesados-de-una-reuni-n-cuando-es-cancelada-e3975f2eb3cd4bb08a233bad485734f7?pvs=4)
 + Now it sends mail notification when a meet is cancelled by it's tutor 
 + Added function in meet service
