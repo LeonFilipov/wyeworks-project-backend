@@ -2,7 +2,7 @@ class StudentsController < UsersController
     before_action :set_topic, only: [ :request_topic ]
 
     def request_topic
-        @topic.users << @current_user
+        @topic.student_topics.create(user: @current_user.first)
         if @topic.save
             render json: { message: "Student successfully added to topic" }, status: :ok
         else
@@ -49,14 +49,8 @@ class StudentsController < UsersController
         rescue ActiveRecord::RecordNotFound
             @topic = Topic.new(topic_params)
             unless @topic.save
-                render json: { errors: @topic.errors.full_messages }, status: :unprocessable_entity
-            nil
+                render json: { errors: @topic.errors.full_messages }, status: :not_found
             end
-        end
-
-        # Permit only allowed parameters
-        def solicitar_params
-            params.require(:solicitar).permit(:topic_id)
         end
 
         def topic_params
