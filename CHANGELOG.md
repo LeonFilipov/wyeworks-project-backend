@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
++ Unit Tests for Students controller
+
 + [[Backend-355]](https://www.notion.so/Talle-M-Utilizaci-n-de-I18n-para-unificaci-n-de-mensajes-6ca23cc4d49846d1b9a5c04ca94eb1b0)
 + Added I18n for unification of messages
 

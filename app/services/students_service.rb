@@ -26,14 +26,14 @@ class StudentsService
 
     def get_my_interested_meetings
         query=Meet.joins("INNER JOIN availability_tutors ON availability_tutors.id = meets.availability_tutor_id")
-        .joins("INNER JOIN interesteds ON availability_tutors.id = interesteds.availability_tutor_id")
+        .joins("INNER JOIN participants ON participants.meet_id = meets.id")
         .joins("INNER JOIN users ON availability_tutors.user_id = users.id")
         .joins("INNER JOIN topics ON availability_tutors.topic_id = topics.id")
         .select("topics.name AS topic_name,
                users.name AS tutor_name,
                meets.status,
                meets.date_time AS date_time")
-        .where(interesteds: { user_id: @current_user.first.id })
+        .where(participants: { user_id: @current_user.first.id })
 
         result = query.map do |record|
           {
