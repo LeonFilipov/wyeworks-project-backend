@@ -23,7 +23,7 @@ class TopicsController < ApplicationController
   def show
     availability_tutor = AvailabilityTutor.find_by(id: params[:id])
     if availability_tutor.nil?
-      render json: { error: "Topic not found" }, status: :not_found
+      render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
     else
       topic_response = format_topic_response(availability_tutor)
       topic_response[:interested_users] = availability_tutor.interested_users.map do |interested|
@@ -47,13 +47,13 @@ class TopicsController < ApplicationController
   def destroy_proposed_topic
     availability = AvailabilityTutor.find_by(id: params[:availability_id])
     if availability.nil?
-      render json: { error: "Topic not found" }, status: :not_found
+      render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
     elsif availability.user_id != @current_user.first.id
-      render json: { error: "You do not have permission to delete this topic" }, status: :unauthorized
+      render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
     else
       topic = availability.topic
       topic.destroy
-      render json: { message: "Topic deleted successfully" }, status: :ok
+      render json: { message: I18n.t("success.topics.deleted") }, status: :ok
     end
   end
 

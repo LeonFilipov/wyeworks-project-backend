@@ -11,7 +11,7 @@ class UsersController < ApplicationController
         if user.present?
             render json: user, status: 200
         else
-            render json: { message: "User not found" }, status: 404
+            render json: { error: I18n.t("error.users.not_found") }, status: 404
         end
     end
 
@@ -22,9 +22,9 @@ class UsersController < ApplicationController
     def update
         begin
             @current_user.update(user_params)
-            render json: { message: "User updated" }, status: 200
+            render json: { message: I18n.t("success.users.updated") }, status: 200
         rescue ActionController::ParameterMissing => e
-            render json: { error: e.message }, status: :unprocessable_entity
+            render json: { error: I18n.t("error.users.parameter_missing", param: e.param) }, status: :unprocessable_entity
         end
     end
 
