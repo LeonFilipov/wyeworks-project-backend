@@ -1,6 +1,6 @@
 class MeetsController < ApplicationController
     before_action :set_availability_tutor, only: [ :index ]
-    before_action :set_meet, only: [ :confirm_pending_meet ]
+    before_action :set_meet, only: [ :confirm_pending_meet, :show_available_meet ]
 
     # GET /availability_tutors/:availability_tutor_id/meets
     def index
@@ -62,25 +62,93 @@ class MeetsController < ApplicationController
       meets_data = meets.map do |meet|
         subject = meet.availability_tutor.topic.subject
 
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
-          topic_name: meet.availability_tutor.topic.name,
+          topic: {
+            id: meet.availability_tutor.topic.id,
+            name: meet.availability_tutor.topic.name,
+            image_url: meet.availability_tutor.topic.image_url,
+            description: meet.availability_tutor.topic.description
+          },
+          availability_tutor: {
+            availability: meet.availability_tutor.availability,
+            description: meet.availability_tutor.description
+          },
           meeting_date: meet.date_time,
           meet_status: meet.status,
           tutor: {
             id: meet.availability_tutor.user.id,
-            name: meet.availability_tutor.user.name
+            name: meet.availability_tutor.user.name,
+            image_url: meet.availability_tutor.user.image_url
           },
           subject: {
             id: subject.id,
             name: subject.name
           },
           interested: meet.users.include?(@current_user.first),
-          count_interesteds: meet.users.size
+          count_interesteds: meet.users.size,
+          interested_users: interested_users_data
         }
       end
 
       render json: meets_data, status: :ok
+    end
+
+    # GET /available_meets/:id
+    def show_available_meet
+      subject = @meet.availability_tutor.topic.subject
+
+      interested_users_data = @meet.users.map do |user|
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          uid: user.uid,
+          description: user.description,
+          image_url: user.image_url
+        }
+      end
+
+      meet_data = {
+        id: @meet.id,
+        meeting_date: @meet.date_time,
+        meet_status: @meet.status,
+        topic: {
+          id: @meet.availability_tutor.topic.id,
+          name: @meet.availability_tutor.topic.name,
+          image_url: @meet.availability_tutor.topic.image_url,
+          description: @meet.availability_tutor.topic.description
+        },
+        availability_tutor: {
+          availability: @meet.availability_tutor.availability,
+          description: @meet.availability_tutor.description
+        },
+        tutor: {
+          id: @meet.availability_tutor.user.id,
+          name: @meet.availability_tutor.user.name,
+          image_url: @meet.availability_tutor.user.image_url
+        },
+        subject: {
+          id: subject.id,
+          name: subject.name
+        },
+        interested: @meet.users.include?(@current_user.first),
+        count_interesteds: @meet.users.size,
+        interested_users: interested_users_data
+      }
+
+      render json: meet_data, status: :ok
     end
 
     # POST/DELETE /meets/:id/interest
@@ -97,6 +165,11 @@ class MeetsController < ApplicationController
         unless existing_interest
           Interested.create!(user: @current_user.first, availability_tutor: availability_tutor)
           debug_messages << "User's interest added to availability tutor."
+        end
+
+        if meet.status == "cancelled" || meet.status == "completed"
+          render json: { error: "You cannot express interest in a #{meet.status} meet", debug: debug_messages }, status: :bad_request
+          return
         end
 
         if meet.users.include?(@current_user.first)
@@ -151,6 +224,11 @@ class MeetsController < ApplicationController
         if meet.status == "cancelled" || meet.status == "completed"
           render json: { error: I18n.t("error.meets.already_status", status: meet.status) }, status: :unprocessable_entity
         elsif meet.update(status: "cancelled")
+          service = MeetsService.new(meet)
+          participants = service.get_participants_and_topic()
+          participants.each do |participant|
+            UserMailer.meet_cancelada_email(@current_user, participant).deliver_now
+          end
           render json: { message: I18n.t("success.meets.cancelled") }, status: :ok
         else
           render json: { error: I18n.t("error.meets.failed", action: "cancel") }, status: :unprocessable_entity
@@ -166,12 +244,24 @@ class MeetsController < ApplicationController
         availability = meet.availability_tutor
         topic = availability.topic
         subject = topic.subject
+
+        interested_users_data = meet.users.map do |user|
+          {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            uid: user.uid,
+            description: user.description,
+            image_url: user.image_url
+          }
+        end
+
         {
           id: meet.id,
           date: meet.date_time,
           status: meet.status,
           description: meet.description,
-          interesteds: meet.count_interesteds,
+          interesteds: meet.users.size,
           topic: {
             id: topic.id,
             name: topic.name,
@@ -183,7 +273,8 @@ class MeetsController < ApplicationController
           },
           tutor: {
             name: @current_user.first.name
-          }
+          },
+          interested_users: interested_users_data
         }
       end
 
@@ -195,7 +286,7 @@ class MeetsController < ApplicationController
     end
 
     def set_meet
-      @meet = Meet.find(params[:idReunion])
+      @meet = Meet.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render json: { error: I18n.t("error.meets.not_found") }, status: :not_found
     end

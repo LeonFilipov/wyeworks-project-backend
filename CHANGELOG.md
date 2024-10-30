@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + [[Backend-355]](https://www.notion.so/Talle-M-Utilizaci-n-de-I18n-para-unificaci-n-de-mensajes-6ca23cc4d49846d1b9a5c04ca94eb1b0)
 + Added I18n for unification of messages
 
++ [[Backend-258]](https://www.notion.so/Talle-M-Notificar-a-los-interesados-de-una-reuni-n-cuando-es-cancelada-e3975f2eb3cd4bb08a233bad485734f7?pvs=4)
++ Now it sends mail notification when a meet is cancelled by it's tutor 
++ Added function in meet service
++ Added function in user mailer
++ modified function in meet controller
+
++ [[Backend-338]](https://www.notion.so/Talle-S-Agregar-campos-solicitados-a-ver-detalle-de-reunion-e0a0d3e4d6164e56acc5477abdd2463d?pvs=4)
++ Added requested fields to both /available_meets and /available_meets/id.
+
++ [[Backend-248]](https://www.notion.so/Talle-M-Endpoint-para-ver-detalles-de-la-reuni-n-12224a6692a48048b1bbd3561ee1abeb?pvs=4)
++ Added interested users to /available_meets and new /available_meets/id endpoint.
+
++ [[Backend-212]](https://www.notion.so/Talle-S-Deshabilitar-la-opci-n-de-aceptar-nuevos-interesados-12024a6692a4807598ddc01449c1fb4e)
++ An user cannot interest in a cancelled or completed meet.
+
 + [[Backend-255]](https://www.notion.so/Talle-M-Actualizar-el-estado-de-las-reuniones-pasadas-a-finished-5753d477aa974851b6c11975ecb91d7e?pvs=4)
 + Verificacion del estado completed de las meets
 
@@ -37,9 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-+ [[Backend-223]](https://www.notion.so/Talle-M-Unit-testing-of-Topics-Controller-a66bd212d0c34d70af6fd12012e617d5?pvs=4)
-+ Unit Testing para Topics Controller
-+ 
 + [[Backend-317]](https://www.notion.so/Seguimiento-de-incidencias-581e3acc7b124c229e12c0664c00b05e?p=b8b8e463edba4a9e8dc896db1e72d343&pm=s)
 + Added field `tutor` in GET /available_meet response with fields `id` and `name`.
 
@@ -85,10 +97,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [[Backend-180]](https://www.notion.so/Talle-M-Endpoint-reuniones-existentes-b4a7d3d80788448b98962ebb95a6f221?pvs=4)
 + New list available meetings endpoint
-
-- [[Backend-140]](https://www.notion.so/Talle-S-Crear-modificar-endpoint-para-listar-los-temas-11624a6692a480b1bf51dc0fdc43925c)
-+ Updated endpoint `/topics` with new field `intrested`.
-+ Added new user. This user is interested in two topics.
 
 - [[Backend-143]](https://www.notion.so/Talle-M-Crear-modificar-endpoint-para-listar-las-meetings-en-las-que-el-usuario-est-anotado-11624a6692a480aa830dc9120393c6b3?pvs=4)
 + Added new enpoint to list my interested meetings as a student
