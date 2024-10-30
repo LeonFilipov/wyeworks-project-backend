@@ -28,7 +28,7 @@ class UniversitiesController < ApplicationController
   def set_university
     @university = University.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: "University not found" }, status: :not_found
+    render json: { error: I18n.t("error.universities.not_found") }, status: :not_found
   end
 
   def university_params

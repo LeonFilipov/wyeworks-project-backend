@@ -14,11 +14,7 @@ class SessionsController < ApplicationController
             end
             render json: { token: token }, status: 200
         else
-            render json: { error: "Error creating user" }, status: 500
+            render json: { error: I18n.t("error.users.not_created") }, status: 500
         end
-    end
-
-    def authorization_needed
-        render json: { message: "You are authorized #{@current_user}" }, status: 200
     end
 end

@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
-  get "authorization" => "sessions#authorization_needed"
 
   # resources :users, only: [ :index, :show ]
   # get "profile" => "users#profile"
