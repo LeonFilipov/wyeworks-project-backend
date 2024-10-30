@@ -99,7 +99,7 @@ RSpec.describe "Meets", type: :request do
       get "/available_meets/0",
           headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq("Meet not found")
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
 
