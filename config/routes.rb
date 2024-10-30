@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  post "meet/:idReunion" => "meets#confirm_pending_meet"
+  post "meet/:id" => "meets#confirm_pending_meet"
 
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   delete "proposed_topics/:availability_id", to: "topics#destroy_proposed_topic"
 
   get "available_meets", to: "meets#available_meets"
+  get "available_meets/:id", to: "meets#show_available_meet"
+
 
   resources :topics, only: [ :index, :show ]
   get "fake_user" => "users#fake_user"

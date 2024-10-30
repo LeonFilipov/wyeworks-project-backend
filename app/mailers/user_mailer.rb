@@ -16,4 +16,13 @@ class UserMailer < ApplicationMailer
             subject: "Bienvenido a StudyCircle"
         )
     end
+
+    def meet_cancelada_email(user, participant)
+        @participant = participant
+        @current_user = user
+        mail(
+            to: email_address_with_name(@participant.participant_email, @participant.participant_name),
+            subject: "Reunión cancelada"
+        )
+    end
 end
