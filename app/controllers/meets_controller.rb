@@ -16,6 +16,10 @@ class MeetsController < ApplicationController
         meets = meets.joins(:participants).where(participants: { user_id: params[:participant_id] })
       end
 
+      if params[:tutor_id].present?
+        meets = meets.joins(availability_tutor: :user)
+                     .where(users: { id: params[:tutor_id] })
+      end
       render json: meets.select(:id, :date_time, :status, :description, :link, :count_interesteds), status: :ok
     end
 

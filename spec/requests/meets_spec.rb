@@ -57,6 +57,14 @@ RSpec.describe "Meets", type: :request do
         expect(JSON.parse(response.body).size).to eq(2)
       end
 
+      it "valid tutor_id" do
+        get "/meets",
+          params: { tutor_id: user_tutor.id },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(2)
+      end
+
       it "valid participant_id" do
         get "/meets",
           params: { participant_id: user_tutor.id },
@@ -65,28 +73,28 @@ RSpec.describe "Meets", type: :request do
         expect(JSON.parse(response.body).size).to eq(0)
       end
 
-      it "valid participant_id and status" do
+      it "valid tutor_id and status" do
         get "/meets",
-          params: { participant_id: user_tutor.id, status: "cancelled" },
+          params: { tutor_id: user_tutor.id, status: "cancelled" },
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(0)
+        expect(JSON.parse(response.body).size).to eq(1)
       end
 
-      it "valid participant_id and topic_id" do
+      it "valid tutor_id and topic_id" do
         get "/meets",
-          params: { participant_id: user_tutor.id, topic_id: topic1.id },
+          params: { tutor_id: user_tutor.id, topic_id: topic.id },
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(0)
+        expect(JSON.parse(response.body).size).to eq(2)
       end
 
-      it "valid participant_id, topic_id and status" do
+      it "valid tutor_id, topic_id and status" do
         get "/meets",
-          params: { participant_id: user_tutor.id, topic_id: topic1.id, status: "cancelled" },
+          params: { tutor_id: user_tutor.id, topic_id: topic.id, status: "cancelled" },
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(0)
+        expect(JSON.parse(response.body).size).to eq(1)
       end
 
       it "invalid topic_id" do
@@ -100,6 +108,14 @@ RSpec.describe "Meets", type: :request do
       it "invalid participant_id" do
         get "/meets",
           params: { participant_id: 0 },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body).size).to eq(0)
+      end
+
+      it "invalid tutor_id" do
+        get "/meets",
+          params: { tutor_id: 0 },
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).size).to eq(0)
