@@ -830,6 +830,47 @@ paths:
       tags:
       - Topics
     delete:
+      summary: Delete a topic
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the topic to delete
+      responses:
+        '200':
+          description: Topic deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Topic deleted successfully"
+        '404':
+          description: Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Topic not found"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not allowed"
+      tags:
+      - Topics
       
 
   /tutor_availability:
