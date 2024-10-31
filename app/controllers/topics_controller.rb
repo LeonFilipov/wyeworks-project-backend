@@ -16,7 +16,7 @@ class TopicsController < ApplicationController
 
   # GET /topics/:id
   def show
-    render json: { message: "to do"}, status: :ok
+    render json: { message: "to do" }, status: :ok
   end
 
   # POST /topics
@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
     begin
       topic = Topic.create!(topic_params)
       AvailabilityTutor.create!(user_id: @current_user.first.id, topic_id: topic.id)
-      render json: { message: I18n.t("success.topics.created")}, status: :created
+      render json: { message: I18n.t("success.topics.created") }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { error: e.message }, status: :unprocessable_entity
     end

@@ -737,7 +737,7 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
         - Meets
-    post:
+    put:
       summary: Confirm a pending meet (Work in progress)
       description: |
         This endpoint is a work in progress.

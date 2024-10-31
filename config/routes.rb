@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
 
-  resource :meets, only: [ :index, :show, :confirm]
+  resources :meets, only: [ :index, :show, :update ]
   resources :topics, only: [ :index, :show, :create, :delete ]
 
   get "interested_meetings", to: "students#interested_meetings"
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     # match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
-  resources :universities, only: [ :index, :show, :create] do
+  resources :universities, only: [ :index, :show, :create ] do
     resources :subjects, only: [ :index, :show, :create ]
   end
 

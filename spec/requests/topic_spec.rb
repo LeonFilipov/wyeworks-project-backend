@@ -14,9 +14,9 @@ RSpec.describe "Topics", type: :request do
         get "/topics",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body).size).to eq(1) 
+        expect(JSON.parse(response.body).size).to eq(1)
       end
-      
+
       it "returns empty array" do
         Topic.destroy_all
         get "/topics",
@@ -184,7 +184,7 @@ RSpec.describe "Topics", type: :request do
       headers: { 'Authorization': "Bearer #{token}" }
       expect(response).to have_http_status(:created)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.topics.created"))
-      expect(Topic.find_by(name: "raaaaaa").show_email).to eq(true) 
+      expect(Topic.find_by(name: "raaaaaa").show_email).to eq(true)
     end
 
     it "show_email nil" do
