@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe "Topics", type: :request do
-  describe "GET /topics" do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:university) { FactoryBot.create(:university) }
-    let!(:subject) { FactoryBot.create(:subject, university: university) }
-    let!(:topic) { FactoryBot.create(:topic, subject: subject) }
-    let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
-    let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:university) { FactoryBot.create(:university) }
+  let!(:subject) { FactoryBot.create(:subject, university: university) }
+  let!(:topic) { FactoryBot.create(:topic, subject: subject) }
+  let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
 
+  describe "GET /topics" do
+    let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
     context "Without params" do
       it "returns http success" do
         get "/topics",
@@ -50,14 +50,38 @@ RSpec.describe "Topics", type: :request do
     end
   end
 
+  describe "GET /topics/:id" do
+    let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
+    it "returns http not found" do
+      get "/topics/1",
+      headers: { 'Authorization': "Bearer #{token}" }
+      expect(response.body).to include("Topic not found")
+    end
+
+    it "returns http success without interesteds" do
+      get "/topics/#{availability_tutor.id}",
+      headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      parsed = JSON.parse(response.body)
+      expect(parsed["availability_id"]).to eq(availability_tutor.id)
+      expect(parsed["interested_users"]).to eq([])
+    end
+
+    it "returns http success with interesteds" do
+      user_interested = FactoryBot.create(:user)
+      FactoryBot.create(:interested, user: user_interested, availability_tutor: availability_tutor)
+      get "/topics/#{availability_tutor.id}",
+      headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      parsed = JSON.parse(response.body)
+      expect(parsed["availability_id"]).to eq(availability_tutor.id)
+      expect(parsed["interesteds"]).to eq(1)
+      expect(parsed["interested_users"].first["id"]).to eq(user_interested.id)
+    end
+  end
+
   describe "GET /proposed_topics" do
     context "Without proposed topics" do
-      let!(:user) { FactoryBot.create(:user) }
-      let!(:university) { FactoryBot.create(:university) }
-      let!(:subject) { FactoryBot.create(:subject, university: university) }
-      let!(:topic) { FactoryBot.create(:topic, subject: subject) }
-      let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
-
       it "returns http success" do
         get "/proposed_topics",
         headers: { 'Authorization': "Bearer #{token}" }
@@ -67,13 +91,6 @@ RSpec.describe "Topics", type: :request do
     end
 
     context "With proposed topics" do
-      let!(:user) { FactoryBot.create(:user) }
-      let!(:university) { FactoryBot.create(:university) }
-      let!(:subject) { FactoryBot.create(:subject, university: university) }
-      let!(:topic) { FactoryBot.create(:topic, subject: subject) }
-      let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
-      let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
-
       it "returns http success" do
         get "/proposed_topics",
         headers: { 'Authorization': "Bearer #{token}" }
@@ -83,39 +100,8 @@ RSpec.describe "Topics", type: :request do
     end
   end
 
-  describe "GET /proposed_topic/:availability_id" do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:university) { FactoryBot.create(:university) }
-    let!(:subject) { FactoryBot.create(:subject, university: university) }
-    let!(:topic) { FactoryBot.create(:topic, subject: subject) }
-    let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
-
-    context "availability_id not found" do
-      it "returns http Topic not found" do
-        get "/proposed_topics/0",
-        headers: { 'Authorization': "Bearer #{token}" }
-        expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)).to include("error" => "Topic not found")
-     end
-    end
-
-    context "availability_id found" do
-      let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
-      it "returns http success" do
-        get "/proposed_topics/#{availability_tutor.id}",
-        headers: { 'Authorization': "Bearer #{token}" }
-        expect(response).to have_http_status(:success)
-      end
-    end
-  end
-
   describe "DELETE /proposed_topics/:availability_id" do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:university) { FactoryBot.create(:university) }
-    let!(:subject) { FactoryBot.create(:subject, university: university) }
-    let!(:topic) { FactoryBot.create(:topic, subject: subject) }
     let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
-    let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
 
     context "Without meets created" do
       it "returns http success without interesteds" do

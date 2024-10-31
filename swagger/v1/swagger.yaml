@@ -115,6 +115,9 @@ paths:
                         name:
                           type: string
                           description: Name of the tutor
+                        image_url:
+                          type: string
+                          description: Image URL of the tutor
         '422':
           description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
@@ -190,6 +193,9 @@ paths:
                       name:
                         type: string
                         description: Name of the tutor
+                      image_url:
+                        type: string
+                        description: Image URL of the tutor
         '422':
           description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
@@ -205,43 +211,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
-    delete:
-      summary: Delete a proposed topic
-      tags:
-        - Users
-      description: Delete a proposed topic by the logged user.
-      parameters:
-        - in: path
-          name: topic_id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Proposed topic deleted successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Topic deleted successfully"
-        '404':
-          description: Proposed topic not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Topic not found"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '400':
-          $ref: '#/components/responses/AuthHeaderMissingError'
-
+          
   /tutor_availability/{id}/interesteds:
     post:
       summary: Add interest to a tutor's availability
@@ -273,8 +243,10 @@ paths:
                 type: object
                 properties:
                   message:
-                    type: string
-                    example: "Interest added and meet created"
+                    type: array
+                    items:
+                      type: string
+                      example: "Participant added"
                   meet:
                     type: object
                     properties:
@@ -344,7 +316,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  error:
                     type: string
                     example: "You have already expressed interest in the current pending meet."
                   debug:
@@ -387,7 +359,7 @@ paths:
                         - type: string
                           example: "Indefinida"
       tags:
-        - Meetings
+        - Meets
 
   /meet/{idReunion}:
     post:
@@ -452,7 +424,7 @@ paths:
                     type: string
                     example: "User not allowed"
       tags:
-        - Meetings
+        - Meets
 
   /profile:
     get:
@@ -533,12 +505,12 @@ paths:
       tags:
       - Users
 
-  /profile/meets/{idReunion}:
+  /profile/meets/{id}:
     get:
       summary: Get the tutor's meeting by ID
       parameters:
         - in: path
-          name: idReunion
+          name: id
           required: true
           schema:
             type: integer
@@ -562,9 +534,52 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Meeting not found
+                    example: Meet not found
       tags:
       - Users
+    patch:
+      summary: Cancel a meeting
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meeting to cancel
+      responses:
+        '200':
+          description: Meeting cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet cancelled successfully"
+        '422':
+          description: Meet is already cancelled or completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet is already cancelled, cannot cancel"
+        '404':
+          description: Meet not found or user is not the tutor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found or you are not the tutor"
+
   
   /meets/{id}/interest:
     post:
@@ -619,9 +634,9 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
-  /meets/{id}/uninterest:
+  
     delete:
-      summary: Remove interest from a meet
+      summary: Remove interest in a meet
       tags:
         - Meets
       parameters:
@@ -643,7 +658,7 @@ paths:
                     type: string
                     example: "Interest removed successfully"
         '400':
-          description: User not interested or bad request
+          description: User is not interested in this meet
           content:
             application/json:
               schema:
@@ -662,6 +677,8 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
+
+
 
   /auth/google_oauth2/callback:
     get:
@@ -797,6 +814,9 @@ paths:
                         name:
                           type: string
                           description: The name of the tutor
+                        image_url:
+                          type: string
+                          description: The URL of the tutor's image
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
@@ -804,6 +824,106 @@ paths:
       tags:
       - Topics
 
+  /topics/{topic_id}:
+    get:
+      summary: Get a specific topic by ID
+      parameters:
+        - in: path
+          name: topic_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the topic
+      responses:
+        '200':
+          description: A list of tutor availabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    availability_id:
+                      type: string
+                      format: uuid
+                      description: The availability ID
+                    topic_name:
+                      type: string
+                      description: The name of the topic
+                    topic_image:
+                      type: string
+                      description: The URL of the topic image
+                    topic_description:
+                      type: string
+                      description: Description of the topic
+                    availability:
+                      type: string
+                      description: Tutor's availability times for the topic
+                    availability_description:
+                      type: string
+                      description: Description of the tutor's availability
+                    interesteds:
+                      type: integer
+                      description: Number of interested students for the tutor's availability
+                    intrested:
+                      type: boolean
+                      description: Indicates if the user is interested in the availability
+                    subject:
+                      type: object
+                      description: Information about the subject
+                      properties:
+                        id:
+                          type: integer
+                          description: The subject ID
+                        name:
+                          type: string
+                          description: The name of the subject
+                    tutor:
+                      type: object
+                      description: Information about the tutor
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The tutor ID
+                        name:
+                          type: string
+                          description: The name of the tutor
+                        image_url:
+                          type: string
+                          description: The URL of the tutor's image
+                    interested_users:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                            description: The user ID
+                          name:
+                            type: string
+                            description: The name of the user
+                          image_url:
+                            type: string
+                            description: The URL of the user's image
+        '404':
+          description: Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Topic not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Topics
 
   /tutor_availability:
     post:
@@ -882,9 +1002,30 @@ paths:
                     id:
                       type: integer
                       description: The unique ID of the meeting
-                    topic_name:
-                      type: string
-                      description: The name of the topic for the meeting
+                    topic:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the topic
+                        name:
+                          type: string
+                          description: The name of the topic
+                        image_url:
+                          type: string
+                          description: The image of the topic
+                        description:
+                          type: string
+                          description: The description of the topic
+                    availability_tutor:
+                      type: object
+                      properties:
+                        availability:
+                          type: string
+                          description: The described availability
+                        description:
+                          type: string
+                          description: The availability's description
                     meeting_date:
                       type: string
                       format: date-time
@@ -901,7 +1042,10 @@ paths:
                           description: The unique ID of the tutor
                         name:
                           type: string
-                          description: The name of the tutor
+                          description: Tutor's name
+                        image_url:
+                          type: string
+                          description: Tutor's image url
                     subject:
                       type: object
                       properties:
@@ -917,12 +1061,136 @@ paths:
                     count_interesteds:
                       type: integer
                       description: The number of users interested in the meeting
+                    interested_users:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/InterestedUser'
         '400':
           description: Invalid parameters provided
         '500':
           description: Internal server error
       tags:
       - Meetings
+      
+  /available_meets/{id}:
+    get:
+      summary: Get details of a specific meeting
+      description: Retrieve details for a specific meeting, including interested users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the meeting
+      responses:
+        '200':
+          description: Meeting details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The unique ID of the meeting
+                  meeting_date:
+                    type: string
+                    format: date-time
+                    description: The date and time of the meeting
+                  meet_status:
+                    type: string
+                    description: The status of the meeting
+                  topic:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the topic
+                        name:
+                          type: string
+                          description: The name of the topic
+                        image_url:
+                          type: string
+                          description: The image of the topic
+                        description:
+                          type: string
+                          description: The description of the topic
+                  availability_tutor:
+                    type: object
+                    properties:
+                      availability:
+                        type: string
+                        description: The described availability
+                      description:
+                        type: string
+                        description: The availability's description
+                  tutor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The unique ID of the tutor
+                      name:
+                        type: string
+                        description: The name of the tutor
+                      image_url:
+                        type: string
+                        description: Tutor's image url
+                  subject:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: The unique ID of the subject
+                      name:
+                        type: string
+                        description: The name of the subject
+                  interested:
+                    type: boolean
+                    description: Whether the current user is interested in the meeting
+                  count_interesteds:
+                    type: integer
+                    description: The number of users interested in the meeting
+                  interested_users:
+                    type: array
+                    description: List of users interested in the meeting
+                    items:
+                      $ref: '#/components/schemas/InterestedUser'
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Bad request"
+      tags:
+        - Meetings
+
                   
   # /tutor_availability/{availability_tutor_id}/meets:
   #   get:
@@ -1231,6 +1499,25 @@ components:
           enum:
             - pending
             - confirmed
+    
+    InterestedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        uid:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+          format: uri
 
     TutorMeet:
       type: object

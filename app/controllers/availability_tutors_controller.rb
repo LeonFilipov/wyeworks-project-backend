@@ -22,10 +22,14 @@ class AvailabilityTutorsController < ApplicationController
   def show
     @availability = AvailabilityTutor.find(params[:id])
 
+    if @availability
     render json: @availability.as_json(
       only: [ :id, :description, :link, :availability ],
       include: { topic: { only: [ :id, :name, :subject_id ] } }
-    )
+    ), status: :ok
+    end
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: I18n.t("error.availabilities.not_found") }, status: :not_found
   end
 
   # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
@@ -45,7 +49,7 @@ class AvailabilityTutorsController < ApplicationController
     # Try to save availability
     if @availability.save
       render json: {
-        message: "Topic and availability created successfully"
+        message: [ I18n.t("success.topics.created"), I18n.t("success.availabilities.created") ]
       }, status: :created
     else
       render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
@@ -67,7 +71,7 @@ class AvailabilityTutorsController < ApplicationController
       debug_messages << "User interested in current pending meet: #{pending_meet_interest}"
 
       if pending_meet_interest
-        render json: { message: "You have already expressed interest in the current pending meet.", debug: debug_messages }, status: :unprocessable_entity
+        render json: { error: I18n.t("error.meets.already_interested"), debug: debug_messages }, status: :unprocessable_entity
         return
       end
     end
@@ -97,10 +101,10 @@ class AvailabilityTutorsController < ApplicationController
       if @meet.save
         Participant.create!(meet: @meet, user: @current_user.first)
         debug_messages << "New meet created successfully, and user added as participant."
-        render json: { message: "Interest added and meet created", meet: @meet, debug: debug_messages }, status: :created
+        render json: { message: [ I18n.t("success.participants.created"), I18n.t("success.meets.created") ], meet: @meet, debug: debug_messages }, status: :created
       else
         debug_messages << "Failed to create meet: #{@meet.errors.full_messages.join(', ')}"
-        render json: { message: "Interest added but failed to create meet", errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
+        render json: { message: [ I18n.t("success.participants.created"), I18n.t("errors.meets.not_created") ], errors: @meet.errors.full_messages, debug: debug_messages }, status: :unprocessable_entity
       end
     else
       pending_meet.increment!(:count_interesteds)
@@ -111,7 +115,7 @@ class AvailabilityTutorsController < ApplicationController
         debug_messages << "User added as participant to existing pending meet."
       end
 
-      render json: { message: "Interest added, and meet updated", meet: pending_meet, debug: debug_messages }, status: :ok
+      render json: { message: [ I18n.t("success.participants.created"), I18n.t("success.meets.updated") ], meet: pending_meet, debug: debug_messages }, status: :ok
     end
   end
 
@@ -120,7 +124,7 @@ def update_meet
   @meet = Meet.find(params[:id])
 
   if @meet.update(date_time: params[:date_time])
-    render json: { message: "Meet updated successfully", meet: @meet }, status: :ok
+    render json: { message: I18n.t("success.meets.updated"), meet: @meet }, status: :ok
   else
     render json: { errors: @meet.errors.full_messages }, status: :unprocessable_entity
   end

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   # protect_from_forgery with: :null_session
   before_action :authenticate_request
+  before_action :check_meets
 
   private
 
@@ -11,10 +12,19 @@ class ApplicationController < ActionController::API
         decoded = JsonWebTokenService.decode(header)
         @current_user = User.where(id: decoded[:user_id])
       rescue JWT::DecodeError
-        render json: { error: "Invalid token" }, status: 401
+        render json: { error: I18n.t("error.sessions.invalid_token") }, status: 401
       end
     else
-      render json: { error: "Authorization header is missing" }, status: 400
+      render json: { error: I18n.t("error.sessions.missing_header") }, status: 400
     end
+  end
+
+  def current_user
+    @current_user
+  end
+
+  # Check if all the meeting been in the past are finished
+  def check_meets
+    MeetsService.date_check()
   end
 end

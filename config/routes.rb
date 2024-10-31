@@ -5,24 +5,25 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
-  get "authorization" => "sessions#authorization_needed"
 
   # resources :users, only: [ :index, :show ]
   # get "profile" => "users#profile"
   # put "profile" => "users#update"
   # patch "profile" => "users#update"
 
-  post "meet/:idReunion" => "meets#confirm_pending_meet"
+  post "meet/:id" => "meets#confirm_pending_meet"
 
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
-  get "proposed_topics/:availability_id", to: "topics#proposed_topic"
+  get "proposed_topics/:availability_id", to: "topics#show"
   delete "proposed_topics/:availability_id", to: "topics#destroy_proposed_topic"
 
   get "available_meets", to: "meets#available_meets"
+  get "available_meets/:id", to: "meets#show_available_meet"
 
-  get "topics" => "topics#index"
+
+  resources :topics, only: [ :index, :show ]
   get "fake_user" => "users#fake_user"
 
   scope :profile do
@@ -30,7 +31,7 @@ Rails.application.routes.draw do
     put "/", to: "users#update"
     patch "/", to: "users#update"
     get "meets", to: "meets#my_meets"
-    get "meets/:id", to: "meets#my_meet"
+    match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
   resources :universities, only: [ :index, :show, :create ] do
@@ -62,8 +63,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
 
-  post "meets/:id/interest", to: "meets#express_interest", as: "express_interest_meet"
-  delete "meets/:id/uninterest", to: "meets#remove_interest", as: "remove_interest_meet"
+  match "meets/:id/interest", to: "meets#interest", via: [ :post, :delete ], as: "interest_meet"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
