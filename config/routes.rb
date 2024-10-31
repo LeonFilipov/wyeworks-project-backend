@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
 
-  resources :meets, only: [ :index, :show, :update ]
+  ## meets
+  resources :meets, only: [:index, :show, :update]
+  post "meets/:id/interesteds", to: "meets#add_interest"
+  delete "meets/:id/interesteds", to: "meets#remove_interest"
+
   resources :topics, only: [ :index, :show, :create, :delete ]
 
   get "interested_meetings", to: "students#interested_meetings"
@@ -35,10 +39,6 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
-
-  # match "meets/:id/interest", to: "meets#interest", via: [ :post, :delete ], as: "interest_meet"
-
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

@@ -774,6 +774,69 @@ paths:
       tags:
         - Meets
 
+  /meets/:id/interesteds:
+    post:
+      summary: Sign up for a meeting  
+      description: |
+        This endpoint allow a user to register in a confirmed or pending meet.
+      responses:
+        '200':
+          description: User interested successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interested successfully"
+        '400':
+          $ref: '#/components/responses/UnauthorizedError'
+        '401':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+      tags:
+        - Interesteds
+    delete:
+      summary: Remove interest in a meet
+      description: |
+        This endpoint allow a user to remove interest in a confirmed or pending meet.
+      responses:
+        '200':
+          description: Interest removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest removed successfully"
+        '400':
+          $ref: '#/components/responses/UnauthorizedError'
+        '401':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+      tags:
+        - Interesteds
   /tutor_availability:
     post:
       deprecated: true

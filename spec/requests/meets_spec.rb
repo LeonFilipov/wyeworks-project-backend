@@ -190,4 +190,149 @@ RSpec.describe "Meets", type: :request do
       expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
+
+  describe "POST /meets/:id/interesteds (add interested to a meet)" do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:user1) { FactoryBot.create(:user) }
+    let!(:user2) { FactoryBot.create(:user) }
+    it "tutor can't be interested in his own meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.tutor_interested"))
+    end
+
+    it "Meet already cancelled or completed" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "cancelled")
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "cancelled"))
+      meet.status = "completed"
+      meet.save
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "completed"))
+    end
+
+    it "Add interested to a meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.interested"))
+      meet = Meet.find_by(id: meet.id)
+      expect(meet.count_interesteds).to eq(1)
+      expect(meet.participants.size).to eq(1)
+      expect(meet.participants[0].user_id).to eq(user.id)
+      expect(Interested.find_by(user_id: user.id, availability_tutor_id: availability_tutor.id)).not_to be_nil
+    end
+
+    it "Add interested to a meet two times" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_interested"))
+    end
+
+    it "Add interested to a meet with two users" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user2.id)}" }
+      expect(response).to have_http_status(:ok)
+      meet = Meet.find(meet.id)
+      expect(meet.count_interesteds).to eq(2)
+      expect(meet.participants.size).to eq(2)
+    end
+  end
+
+  describe "DELETE /meets/:id/interesteds (remove interested from a meet)" do
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:user1) { FactoryBot.create(:user) }
+    let!(:user2) { FactoryBot.create(:user) }
+    it "Meet already cancelled or completed" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "cancelled")
+      participant = FactoryBot.create(:participant, meet: meet, user: user)
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "cancelled"))
+      meet.status = "completed"
+      meet.save
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "completed"))
+    end
+
+    it "Remove interested from a meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:ok)
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.not_interested"))
+      meet = Meet.find(meet.id)
+      expect(meet.count_interesteds).to eq(0)
+      expect(meet.participants.size).to eq(0)
+      expect(Participant.find_by(user_id: user.id, meet_id: meet.id)).to be_nil
+      expect(Interested.find_by(user_id: user.id, availability_tutor_id: availability_tutor.id)).to be_nil
+    end
+      
+    it "Remove interested from a meet two times" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:ok)
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:ok)
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.participants.not_found"))
+    end
+
+    it "Remove interested from a meet with two users" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      post "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user2.id)}" }
+      expect(response).to have_http_status(:ok)
+      delete "/meets/#{meet.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      meet = Meet.find(meet.id)
+      expect(meet.count_interesteds).to eq(1)
+      expect(meet.participants.size).to eq(1)
+    end
+
+    it "Remove interest from two different meets" do
+      meet1 = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      meet2 = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+      post "/meets/#{meet1.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      post "/meets/#{meet2.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      delete "/meets/#{meet1.id}/interesteds",
+        headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user1.id)}" }
+      expect(response).to have_http_status(:ok)
+      expect(Interested.find_by(user_id: user1.id, availability_tutor_id: availability_tutor.id)).not_to be_nil
+    end
+  end
 end

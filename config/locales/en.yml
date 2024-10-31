@@ -44,14 +44,18 @@ en:
       not_interested: "User is not interested in this meet"
       not_found: "Meet not found"
       failed: "Failed to %{action} meet"
-      already_status: "Meet already %{status}"
+      already_status: "Meet are %{status}"
       already_interested: "User already interested in this meet"
+      tutor_interested: "Tutor can't be interested in his own meet"
     universities:
       not_found: "University not found"
     subjects:
       not_found: "Subject not found"
     topics:
       not_found: "Topic not found"
+    participants:
+      not_found: "Participant not found"
+      already_participant: "User already participant in this meet"
 
   success:
     users:
@@ -64,7 +68,7 @@ en:
       updated: "Meet updated successfully"
       confirmed: "Meet confirmed successfully"
       cancelled: "Meet cancelled successfully"
-      interested: "Interest expressed successfully"
+      interested: "Interested successfully"
       interest_removed: "Interest removed successfully"
     topics:
       created: "Topic created successfully"
