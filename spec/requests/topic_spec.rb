@@ -184,11 +184,7 @@ RSpec.describe "Topics", type: :request do
       headers: { 'Authorization': "Bearer #{token}" }
       expect(response).to have_http_status(:created)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.topics.created"))
-<<<<<<< HEAD
       expect(Topic.find_by(name: "raaaaaa").show_email).to eq(true)
-=======
-      expect(Topic.find_by(name: "raaaaaa").show_email).to eq(true) 
->>>>>>> 6f94051 (Updated testing for /topics endpoints)
     end
 
     it "show_email nil" do

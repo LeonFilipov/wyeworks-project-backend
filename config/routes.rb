@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     # match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
-  resources :universities, only: [ :index, :show, :create] do
+  resources :universities, only: [ :index, :show, :create ] do
     resources :subjects, only: [ :index, :show, :create ]
   end
 
