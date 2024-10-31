@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
++ Fixed logic to interest and uninterest in a meet.
++ New endpoint POST /meets/:id/interesteds to interest in a meet.
++ New endpoint DELETE /meets/:id/interesteds to uninterest in a meet.
+
 + [[Backend-383]](https://www.notion.so/Talle-M-Rework-to-availabilities-y-topics-520f0e9aa0af44d49bde6a5d4a09433f)
 + Availability now has only topic_id and user_id and is only for relations.
 + Availability_tutors now has one to one relation with topics.

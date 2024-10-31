@@ -58,7 +58,7 @@ class MeetsController < ApplicationController
           return
         end
         participant = Participant.new(user_id: @current_user.first.id, meet_id: @meet.id)
-        begin 
+        begin
           if participant.save!
             @meet.count_interesteds += 1
             @meet.save!

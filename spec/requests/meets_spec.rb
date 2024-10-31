@@ -289,7 +289,7 @@ RSpec.describe "Meets", type: :request do
       expect(Participant.find_by(user_id: user.id, meet_id: meet.id)).to be_nil
       expect(Interested.find_by(user_id: user.id, availability_tutor_id: availability_tutor.id)).to be_nil
     end
-      
+
     it "Remove interested from a meet two times" do
       meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
       post "/meets/#{meet.id}/interesteds",

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
 
   ## meets
-  resources :meets, only: [:index, :show, :update]
+  resources :meets, only: [ :index, :show, :update ]
   post "meets/:id/interesteds", to: "meets#add_interest"
   delete "meets/:id/interesteds", to: "meets#remove_interest"
 
