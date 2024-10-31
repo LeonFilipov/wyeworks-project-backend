@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "availability_tutors/index"
-  get "availability_tutors/show"
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -12,13 +10,12 @@ Rails.application.routes.draw do
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#show"
-  delete "proposed_topics/:availability_id", to: "topics#destroy_proposed_topic"
 
   get "available_meets", to: "meets#available_meets"
   get "available_meets/:id", to: "meets#show_available_meet"
 
 
-  resources :topics, only: [ :index, :show ]
+  resources :topics, only: [ :index, :show, :create, :delete ]
   get "fake_user" => "users#fake_user"
 
   scope :profile do
@@ -29,7 +26,7 @@ Rails.application.routes.draw do
     match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
-  resources :universities, only: [ :index, :show, :create ] do
+  resources :universities, only: [ :index, :show, :create] do
     resources :subjects, only: [ :index, :show, :create ]
   end
 
@@ -37,17 +34,6 @@ Rails.application.routes.draw do
 
   get "students/my_requested_topics" => "students#my_requested_topics"
   get "students/requested_topics" => "students#requested_topics"
-  post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
-
-  # Routes for availability_tutors, including adding interest
-  resources :tutor_availability, only: [ :show ], controller: "availability_tutors" do
-    member do
-      post "interesteds", to: "availability_tutors#add_interest"
-    end
-    resources :meets, only: [ :index, :show ] # Nested meet routes under availability_tutors
-    resources :interesteds, only: [ :index, :show ] # Nested interested routes under availability_tutors
-  end
-  post "tutor_availability/:id/intersteds", to: "availability_tutors#add_interest"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

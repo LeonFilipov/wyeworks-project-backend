@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - In Progress
+## [1.0.0]
+
+### Added
+
++ [[Backend-383]](https://www.notion.so/Talle-M-Rework-to-availabilities-y-topics-520f0e9aa0af44d49bde6a5d4a09433f)
++ Availability now has only topic_id and user_id and is only for relations.
++ Availability_tutors now has one to one relation with topics.
++ New POST /topics endpoint to create a topic.
+
+## [0.3.0] - Oct 31, 2024
 
 ### Added
 

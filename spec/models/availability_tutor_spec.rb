@@ -11,56 +11,41 @@ RSpec.describe AvailabilityTutor, type: :model do
         it 'is valid with valid attributes' do
           expect(availability_tutor).to be_valid
         end
+    end
 
-        it 'is not valid without a description' do
-          availability_tutor.description = nil
-          expect(availability_tutor).to_not be_valid
-        end
-
-        it 'is not valid without an availability' do
-          availability_tutor.availability = nil
-          expect(availability_tutor).to_not be_valid
-        end
-
-        it 'is not valid without a link' do
-          availability_tutor.link = nil
-          expect(availability_tutor).to_not be_valid
-        end
+    describe 'Associations' do
+      it 'belongs to a user' do
+        expect(availability_tutor.user).to eq(user)
       end
 
-      describe 'Associations' do
-        it 'belongs to a user' do
-          expect(availability_tutor.user).to eq(user)
-        end
-
-        it 'belongs to a topic' do
-          expect(availability_tutor.topic).to eq(topic)
-        end
-
-        it 'has many interesteds' do
-          expect(availability_tutor).to respond_to(:interesteds)
-          expect(availability_tutor.interesteds).to be_an(ActiveRecord::Associations::CollectionProxy)
-        end
-
-        it 'has many interested_users through interesteds' do
-          expect(AvailabilityTutor.reflect_on_association(:interested_users).macro).to eq(:has_many)
-          expect(AvailabilityTutor.reflect_on_association(:interested_users).options[:through]).to eq(:interesteds)
-        end
-
-        it 'has many meets' do
-          expect(AvailabilityTutor.reflect_on_association(:meets).macro).to eq(:has_many)
-        end
+      it 'belongs to a topic' do
+        expect(availability_tutor.topic).to eq(topic)
       end
 
-      describe 'Dependent Destroy' do
-        it 'destroys associated interesteds when availability_tutor is destroyed' do
-          interested = FactoryBot.create(:interested, availability_tutor: availability_tutor)
-          expect { availability_tutor.destroy }.to change { Interested.count }.by(-1)
-        end
-
-        it 'destroys associated meets when availability_tutor is destroyed' do
-          meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-          expect { availability_tutor.destroy }.to change { Meet.count }.by(-1)
-        end
+      it 'has many interesteds' do
+        expect(availability_tutor).to respond_to(:interesteds)
+        expect(availability_tutor.interesteds).to be_an(ActiveRecord::Associations::CollectionProxy)
       end
+
+      it 'has many interested_users through interesteds' do
+        expect(AvailabilityTutor.reflect_on_association(:interested_users).macro).to eq(:has_many)
+        expect(AvailabilityTutor.reflect_on_association(:interested_users).options[:through]).to eq(:interesteds)
+      end
+
+      it 'has many meets' do
+        expect(AvailabilityTutor.reflect_on_association(:meets).macro).to eq(:has_many)
+      end
+    end
+
+    describe 'Dependent Destroy' do
+      it 'destroys associated interesteds when availability_tutor is destroyed' do
+        interested = FactoryBot.create(:interested, availability_tutor: availability_tutor)
+        expect { availability_tutor.destroy }.to change { Interested.count }.by(-1)
+      end
+
+      it 'destroys associated meets when availability_tutor is destroyed' do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
+        expect { availability_tutor.destroy }.to change { Meet.count }.by(-1)
+      end
+    end
 end
