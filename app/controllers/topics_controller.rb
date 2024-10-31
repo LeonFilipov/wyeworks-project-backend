@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  before_action :
+
   # GET /topics
   def index
     # Filtro inicial
@@ -37,6 +39,17 @@ class TopicsController < ApplicationController
     end
   end
 
+  # POST /topics
+  def create
+    begin 
+      topic = Topic.create(topic_params)
+      availability_tutor = AvailabilityTutor.create(user_id: @current_user.first.id, topic_id: topic.id)
+      render json: { message: I18n.t("success.topics.created")}, status: :created
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
+  end
+
   # GET /proposed_topics
   def proposed_topics
     tutor_availability = AvailabilityTutor.where(user_id: @current_user.first.id)
@@ -58,6 +71,10 @@ class TopicsController < ApplicationController
   end
 
   private
+    def topic_params
+      params.require(:topic).permit(:name, :description, :link, :show_email, :subject_id)
+    end
+
     def format_index_response(availability_tutors)
       availability_tutors.map do |availability_tutor|
         format_topic_response(availability_tutor)

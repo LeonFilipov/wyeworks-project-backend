@@ -32,30 +32,6 @@ class AvailabilityTutorsController < ApplicationController
       render json: { error: I18n.t("error.availabilities.not_found") }, status: :not_found
   end
 
-  # POST /universities/:university_id/subjects/:subject_id/topics/:topic_id/tutor_availability
-  # POST /tutor_availability
-  def create
-    @topic = Topic.new(topic_params)
-    begin
-      @topic.save!
-    rescue ActiveRecord::RecordInvalid => e
-      render json: { errors: @topic.errors.full_messages }, status: :unprocessable_entity
-      return
-    end
-    # Create availability
-    @availability = @topic.availability_tutors.new(availability_tutor_params)
-    # Get the current user
-    @availability.user = @current_user.first
-    # Try to save availability
-    if @availability.save
-      render json: {
-        message: [ I18n.t("success.topics.created"), I18n.t("success.availabilities.created") ]
-      }, status: :created
-    else
-      render json: { errors: @availability.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
   # POST tutor_availability/:id/intersteds
   def add_interest
     @availability = AvailabilityTutor.find(params[:id])

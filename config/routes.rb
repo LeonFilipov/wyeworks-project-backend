@@ -6,11 +6,6 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
 
-  # resources :users, only: [ :index, :show ]
-  # get "profile" => "users#profile"
-  # put "profile" => "users#update"
-  # patch "profile" => "users#update"
-
   post "meet/:id" => "meets#confirm_pending_meet"
 
   get "interested_meetings", to: "students#interested_meetings"
@@ -44,12 +39,8 @@ Rails.application.routes.draw do
   get "students/requested_topics" => "students#requested_topics"
   post "topics/:topic_id/tutor_availability" => "availability_tutors#create"
 
-  # resources :tutor_availability, only: [ :index, :show, :create ], controller: "availability_tutors" do
-  #   resources :interesteds, only: [ :index, :show, :create, :destroy]
-  # end
-
   # Routes for availability_tutors, including adding interest
-  resources :tutor_availability, only: [ :show, :create ], controller: "availability_tutors" do
+  resources :tutor_availability, only: [ :show ], controller: "availability_tutors" do
     member do
       post "interesteds", to: "availability_tutors#add_interest"
     end
