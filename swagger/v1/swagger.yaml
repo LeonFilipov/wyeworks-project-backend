@@ -67,7 +67,7 @@ paths:
       description: Retrieve a list of topics proposed by the logged user with his availability.
       responses:
         '200':
-          description: A list of proposed topics
+          descroption: A list of proposed topics
           content:
             application/json:
               schema:
@@ -75,49 +75,12 @@ paths:
                 items:
                   type: object
                   properties:
-                    availability_id:
+                    id:
                       type: integer
-                      description: ID of the availability
-                    topic_name:
+                      description: ID of the proposed topic
+                    name:
                       type: string
-                      description: Name of the topic
-                    topic_image:
-                      type: string
-                      nullable: true
-                      description: Image URL of the topic
-                    topic_description:
-                      type: string
-                      description: Description of the topic
-                    availability:
-                      type: string
-                      description: Time availability for tutoring
-                    availability_description:
-                      type: string
-                      description: Description of the tutor's availability
-                    interesteds:
-                      type: integer
-                      description: Number of interested students
-                    subject:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          description: ID of the subject
-                        name:
-                          type: string
-                          description: Name of the subject
-                    tutor:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: ID of the tutor
-                        name:
-                          type: string
-                          description: Name of the tutor
-                        image_url:
-                          type: string
-                          description: Image URL of the tutor
+                      description: Name of the proposed topic
         '422':
           description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
           content:
@@ -220,6 +183,7 @@ paths:
   
   /interested_meetings:
     get:
+      deprecated: true
       summary: Gets meeting that im interested.
       description: |
         This endpoint allows a user as a studento to show interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
@@ -249,71 +213,6 @@ paths:
                           example: "2024-11-11T22:13:39.937+00:00"
                         - type: string
                           example: "Indefinida"
-      tags:
-        - Meets
-
-  /meet/{idReunion}:
-    post:
-      summary: Confirm pending meeting.
-      description: |
-        This endpoint allows a user as a tutor to update the meeting state to confirmed, set the date in timestamp and set the link. Its only possible to confirm a pending meeting by the user that created it.
-      parameters:
-        - name: idReunion
-          in: path
-          required: true
-          description: ID of the meeting
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                meet:
-                  type: object
-                  properties:
-                    date:
-                      type: string
-                      format: date-time
-                      description: "Date of the meeting"
-                      example: "2024-11-11 13:39:37"
-                    description:
-                      type: string
-                      description: "Description of the meeting, can be the link"
-                      example: "www.meet-link.com"
-        required: true
-      responses:
-        '200':
-          description: Meet confirmed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Meet confirmed successfully"
-        '400':
-          description: Meet already confirmed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Meet already confirmed"
-        '401':
-          description: User not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "User not allowed"
       tags:
         - Meets
 
@@ -379,6 +278,7 @@ paths:
 
   /profile/meets:
     get:
+      deprecated: true
       summary: Get the tutors's meetings
       responses:
         '200':
@@ -398,6 +298,7 @@ paths:
 
   /profile/meets/{id}:
     get:
+      deprecated: true
       summary: Get the tutor's meeting by ID
       parameters:
         - in: path
@@ -429,9 +330,10 @@ paths:
       tags:
       - Users
     patch:
+      deprecated: true
       summary: Cancel a meeting
       tags:
-        - Meets
+        - Users
       parameters:
         - in: path
           name: id
@@ -474,6 +376,7 @@ paths:
   
   /meets/{id}/interest:
     post:
+      deprecated: true
       summary: Express interest in a meet
       tags:
         - Meets
@@ -525,8 +428,8 @@ paths:
                   error:
                     type: string
                     example: "Meet not found"
-  
     delete:
+      deprecated: true
       summary: Remove interest in a meet
       tags:
         - Meets
@@ -608,10 +511,9 @@ paths:
 
   /topics:
     get:
-      summary: Get a list of tutor availabilities filtered by user and/or subject
+      summary: Get a list of topics filtered by user (tutor) and/or subject
       description: |
-        This endpoint retrieves a list of tutor availabilities. You can filter the availabilities by `user_id` and/or `subject_id`. 
-        The response includes details such as the availability ID, topic name, image, availability times, number of interested students, subject name, and tutor name.
+        Retrieve a list of topics, filtered by user (tutor) and/or subject. If no filters are provided, all topics are returned.
       parameters:
         - in: query
           name: user_id
@@ -628,7 +530,7 @@ paths:
           description: Filter availabilities by the subject ID.
       responses:
         '200':
-          description: A list of tutor availabilities
+          description: A list of topics
           content:
             application/json:
               schema:
@@ -636,55 +538,12 @@ paths:
                 items:
                   type: object
                   properties:
-                    availability_id:
-                      type: string
-                      format: uuid
-                      description: The availability ID
-                    topic_name:
+                    id:
+                      type: integer
+                      description: The topic ID
+                    name:
                       type: string
                       description: The name of the topic
-                    topic_image:
-                      type: string
-                      description: The URL of the topic image
-                    topic_description:
-                      type: string
-                      description: Description of the topic
-                    availability:
-                      type: string
-                      description: Tutor's availability times for the topic
-                    availability_description:
-                      type: string
-                      description: Description of the tutor's availability
-                    interesteds:
-                      type: integer
-                      description: Number of interested students for the tutor's availability
-                    intrested:
-                      type: boolean
-                      description: Indicates if the user is interested in the availability
-                    subject:
-                      type: object
-                      description: Information about the subject
-                      properties:
-                        id:
-                          type: integer
-                          description: The subject ID
-                        name:
-                          type: string
-                          description: The name of the subject
-                    tutor:
-                      type: object
-                      description: Information about the tutor
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                          description: The tutor ID
-                        name:
-                          type: string
-                          description: The name of the tutor
-                        image_url:
-                          type: string
-                          description: The URL of the tutor's image
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
@@ -731,7 +590,7 @@ paths:
 
   /topics/{topic_id}:
     get:
-      summary: Get a specific topic by ID
+      summary: Get details of a specific topic by ID (work in progress)
       parameters:
         - in: path
           name: topic_id
@@ -741,78 +600,7 @@ paths:
           description: The ID of the topic
       responses:
         '200':
-          description: A list of tutor availabilities
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    availability_id:
-                      type: string
-                      format: uuid
-                      description: The availability ID
-                    topic_name:
-                      type: string
-                      description: The name of the topic
-                    topic_image:
-                      type: string
-                      description: The URL of the topic image
-                    topic_description:
-                      type: string
-                      description: Description of the topic
-                    availability:
-                      type: string
-                      description: Tutor's availability times for the topic
-                    availability_description:
-                      type: string
-                      description: Description of the tutor's availability
-                    interesteds:
-                      type: integer
-                      description: Number of interested students for the tutor's availability
-                    intrested:
-                      type: boolean
-                      description: Indicates if the user is interested in the availability
-                    subject:
-                      type: object
-                      description: Information about the subject
-                      properties:
-                        id:
-                          type: integer
-                          description: The subject ID
-                        name:
-                          type: string
-                          description: The name of the subject
-                    tutor:
-                      type: object
-                      description: Information about the tutor
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                          description: The tutor ID
-                        name:
-                          type: string
-                          description: The name of the tutor
-                        image_url:
-                          type: string
-                          description: The URL of the tutor's image
-                    interested_users:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            format: uuid
-                            description: The user ID
-                          name:
-                            type: string
-                            description: The name of the user
-                          image_url:
-                            type: string
-                            description: The URL of the user's image
+          description: Topic details (work in progress)
         '404':
           description: Topic not found
           content:
@@ -872,6 +660,112 @@ paths:
       tags:
       - Topics
       
+  /meets:
+    get:
+      summary: Get a list of meetings
+      description: Retrieve a list of meetings, filtered by various parameters.
+      parameters:
+        - name: topic_id
+          in: query
+          description: Filter by the topic ID
+          required: false
+          schema:
+            type: integer
+        - name: participant_id
+          in: query
+          description: Returns all meetings where the user is a participant
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          description: Filter by the meeting status
+          required: false
+          schema:
+            type: string
+            enum: [pending, confirmed, completed, cancelled]
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags: 
+        - Meets
+
+  /meets/:id:
+    get:
+      summary: Get a specific meeting by ID (Work in progress)
+      description: Retrieve details for a specific meeting, including interested users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the meeting
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meet'
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Meet not found
+        '401': 
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+        - Meets
+    post:
+      summary: Confirm a pending meet (Work in progress)
+      description: |
+        This endpoint is a work in progress.
+      responses:
+        '200':
+          description: Meet confirmed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet confirmed successfully"
+        '401':
+          description: User not allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not allowed"
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+        - Meets
 
   /tutor_availability:
     post:
@@ -881,125 +775,14 @@ paths:
       
   /available_meets:
     get:
-      summary: Get a list of available meetings
-      description: Retrieve a list of upcoming meetings, filtered by various parameters.
-      parameters:
-        - name: id_availability_tutor
-          in: query
-          description: Filter by the availability tutor ID
-          required: false
-          schema:
-            type: integer
-        - name: topic_id
-          in: query
-          description: Filter by the topic ID
-          required: false
-          schema:
-            type: integer
-        - name: subject_id
-          in: query
-          description: Filter by the subject ID
-          required: false
-          schema:
-            type: integer
-        - name: interested
-          in: query
-          description: Filter by user's interest status (`true` or `false`)
-          required: false
-          schema:
-            type: boolean
-        - name: meet_state
-          in: query
-          description: Filter by meeting state.
-          required: false
-          schema:
-            type: integer
-            enum: [0, 1, 2, 3]
-      responses:
-        '200':
-          description: A list of meetings
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: The unique ID of the meeting
-                    topic:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          description: The unique ID of the topic
-                        name:
-                          type: string
-                          description: The name of the topic
-                        image_url:
-                          type: string
-                          description: The image of the topic
-                        description:
-                          type: string
-                          description: The description of the topic
-                    availability_tutor:
-                      type: object
-                      properties:
-                        availability:
-                          type: string
-                          description: The described availability
-                        description:
-                          type: string
-                          description: The availability's description
-                    meeting_date:
-                      type: string
-                      format: date-time
-                      description: The date and time of the meeting
-                    meet_status:
-                      type: string
-                      description: The status of the meeting
-                    tutor:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                          description: The unique ID of the tutor
-                        name:
-                          type: string
-                          description: Tutor's name
-                        image_url:
-                          type: string
-                          description: Tutor's image url
-                    subject:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          description: The unique ID of the subject
-                        name:
-                          type: string
-                          description: The name of the subject
-                    interested:
-                      type: boolean
-                      description: Whether the current user is interested in the meeting
-                    count_interesteds:
-                      type: integer
-                      description: The number of users interested in the meeting
-                    interested_users:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/InterestedUser'
-        '400':
-          description: Invalid parameters provided
-        '500':
-          description: Internal server error
+      deprecated: true
+      summary: Get all available meets
       tags:
       - Meetings
       
   /available_meets/{id}:
     get:
+      deprecated: true
       summary: Get details of a specific meeting
       description: Retrieve details for a specific meeting, including interested users.
       parameters:
@@ -1185,13 +968,15 @@ components:
           type: string
         link:
           type: string
-        mode:
-          type: string
         status:
           type: string
           enum:
             - pending
             - confirmed
+            - completed
+            - cancelled
+        count_interesteds:
+          type: integer
     
     InterestedUser:
       type: object

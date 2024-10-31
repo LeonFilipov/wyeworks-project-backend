@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + Availability now has only topic_id and user_id and is only for relations.
 + Availability_tutors now has one to one relation with topics.
 + New POST /topics endpoint to create a topic.
++ New DELETE /topics endponit to delete a topic.
++ Deleted /available_meets, /profile/meets, /meets/:id/interested, /interested_meetings endpoints
++ Deleted /tutor_availability, /tutor_availability/:id/interesteds, /topics/:id/tutor_availability endpoints
+
++ [[Backend-382]](https://www.notion.so/Talle-XS-Listar-tema-e920f080dfc244b19349d0ebc8c7f8f6)
++ New endpoint to list topics with filters GET /topics
+
 
 ## [0.3.0] - Oct 31, 2024
 

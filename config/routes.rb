@@ -4,26 +4,23 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
 
-  post "meet/:id" => "meets#confirm_pending_meet"
+  resource :meets, only: [ :index, :show, :confirm]
+  resources :topics, only: [ :index, :show, :create, :delete ]
 
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
   get "proposed_topics/:availability_id", to: "topics#show"
 
-  get "available_meets", to: "meets#available_meets"
-  get "available_meets/:id", to: "meets#show_available_meet"
 
-
-  resources :topics, only: [ :index, :show, :create, :delete ]
   get "fake_user" => "users#fake_user"
 
   scope :profile do
     get "/", to: "users#profile", as: :profile
     put "/", to: "users#update"
     patch "/", to: "users#update"
-    get "meets", to: "meets#my_meets"
-    match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
+    # get "meets", to: "meets#my_meets"
+    # match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
   end
 
   resources :universities, only: [ :index, :show, :create] do
@@ -40,7 +37,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
 
-  match "meets/:id/interest", to: "meets#interest", via: [ :post, :delete ], as: "interest_meet"
+  # match "meets/:id/interest", to: "meets#interest", via: [ :post, :delete ], as: "interest_meet"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
