@@ -24,15 +24,20 @@ Rails.application.routes.draw do
 
   get "universities/:id/careers", to: "universities#careers"
 
-  resources :topics, only: [ :index, :show ]
-  get "fake_user" => "users#fake_user"
+  # resources :topics, only: [ :index, :show ]
+  # get "fake_user" => "users#fake_user"
 
   scope :profile do
     get "/", to: "users#profile", as: :profile
-    put "/", to: "users#update"
-    patch "/", to: "users#update"
-    get "meets", to: "meets#my_meets"
-    match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
+    get "/teach", to: "users#profile_teach"
+    get "/learn", to: "users#profile_learn"
+  end
+
+  resources :users, only: [:index, :show] do
+    member do
+      get "teach", to: "users#teach"
+      get "learn", to: "users#learn"
+    end
   end
 
   resources :universities, only: [ :index, :show, :create ] do

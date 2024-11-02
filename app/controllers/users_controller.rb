@@ -1,41 +1,57 @@
 class UsersController < ApplicationController
-    skip_before_action :authenticate_request, only: [ :fake_user ]
-
-    def index
-        users = User.all.select(:id, :name, :email, :description, :image_url)
-        render json: users, status: 200
+    before_action :set_user, only: [:show, :teach, :learn]
+  
+    # GET /profile/teach
+    def profile_teach
+      render json: teach_response(current_user), status: :ok
     end
-
-    def show
-        user = User.where(id: params[:id]).select(:id, :name, :email, :description, :image_url)
-        if user.present?
-            render json: user, status: 200
-        else
-            render json: { error: I18n.t("error.users.not_found") }, status: 404
-        end
+  
+    # GET /users/:id/teach
+    def teach
+      render json: teach_response(@user), status: :ok
     end
-
-    def profile
-        render json: @current_user.as_json(only: [ :id, :name, :email, :description, :image_url ]), status: 200
+  
+    # GET /profile/learn
+    def profile_learn
+      render json: learn_response(current_user), status: :ok
     end
-
-    def update
-        begin
-            @current_user.update(user_params)
-            render json: { message: I18n.t("success.users.updated") }, status: 200
-        rescue ActionController::ParameterMissing => e
-            render json: { error: I18n.t("error.users.parameter_missing", param: e.param) }, status: :unprocessable_entity
-        end
+  
+    # GET /users/:id/learn
+    def learn
+      render json: learn_response(@user), status: :ok
     end
-
-    def fake_user
-        user = User.where(name: "Juan Pablo").last
-        token = JsonWebTokenService.encode(user_id: user.id)
-        render json: { user_token: token }, status: 200
-    end
-
+  
     private
-        def user_params
-            params.require(:user).permit(:name, :description)
-        end
-end
+  
+    def teach_response(user)
+      {
+        meets_confirmed: meets_schema(MeetsService.user_confirmed_meets(user)),
+        meets_pending: meets_schema(MeetsService.user_pending_meets(user)),
+        meets_finished: meets_schema(MeetsService.user_finished_meets(user)),
+        topics: user.topics.map { |topic| { id: topic.id, name: topic.name } }
+      }
+    end
+  
+    def learn_response(user)
+      {
+        meets_confirmed: meets_schema(MeetsService.user_confirmed_meets(user)),
+        meets_pending: meets_schema(MeetsService.user_pending_meets(user)),
+        meets_finished: meets_schema(MeetsService.user_finished_meets(user)),
+        topics: user.interested_topics.map { |topic| { id: topic.id, name: topic.name } }
+      }
+    end
+  
+    def meets_schema(meets)
+      meets.map do |meet|
+        {
+          id: meet.id,
+          status: meet.status,
+          date: meet.date,
+          topic: {
+            id: meet.topic.id,
+            name: meet.topic.name
+          }
+        }
+      end
+    end
+  end
