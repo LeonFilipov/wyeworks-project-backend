@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
+- Unit Tests for Career not working
+
 + [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
 + Unit Tests for Students controller
 
