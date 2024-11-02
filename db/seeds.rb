@@ -532,7 +532,7 @@ Topic.find_or_create_by!([
 ])
 
 # Creation of Availabilities for two topics of subject_1 for the user created
-topics = Topic.where(subject_id: programacion1_id).limit(3)
+topics = Topic.where(subject_id: programacion1_id)
 topics.each do |topic|
   AvailabilityTutor.find_or_create_by!({
     user_id: user_1.id,
@@ -540,19 +540,10 @@ topics.each do |topic|
 })
 end
 
-AvailabilityTutor.find_or_create_by!({
-  user_id: user_1.id,
-  topic_id: Topic.find_by(name: "Tautologías y Contradicciones").id
-})
-
-topics = Topic.where(subject_id: logica_id).limit(2)
+topics = Topic.where(subject_id: logica_id)
 topics.each do |topic|
   availability = AvailabilityTutor.find_or_create_by!({
     user_id: user_2.id,
     topic_id: topic.id
-  })
-  Interested.find_or_create_by!({
-    user_id: user_3.id,
-    availability_tutor_id: availability.id
   })
 end
