@@ -140,14 +140,14 @@ RSpec.describe "Meets", type: :request do
 
   describe "GET /meets/:id (show details for a specific meet)" do
     let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
-  
+
     it "returns meet details" do
       get "/meets/#{meet.id}",
           headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["status"]).to eq(meet.status)
     end
-  
+
     it "returns not found for non-existent meet" do
       get "/meets/0",
           headers: { "Authorization" => "Bearer #{token}" }
@@ -155,7 +155,7 @@ RSpec.describe "Meets", type: :request do
       expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
     end
   end
-  
+
 
   describe "PATCH/PUT /meets/:id (confirm a meet)" do
     it "No authorization" do
