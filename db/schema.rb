@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_30_213226) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_01_000513) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -22,6 +22,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_213226) do
     t.datetime "updated_at", null: false
     t.index ["topic_id"], name: "index_availability_tutors_on_topic_id"
     t.index ["user_id"], name: "index_availability_tutors_on_user_id"
+  end
+
+  create_table "careers", force: :cascade do |t|
+    t.string "name"
+    t.bigint "university_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["university_id"], name: "index_careers_on_university_id"
   end
 
   create_table "interesteds", force: :cascade do |t|
@@ -68,8 +76,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_213226) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "university_id", null: false
-    t.index ["university_id"], name: "index_subjects_on_university_id"
+    t.bigint "career_id"
+    t.index ["career_id"], name: "index_subjects_on_career_id"
   end
 
   create_table "topics", force: :cascade do |t|
@@ -121,6 +129,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_213226) do
 
   add_foreign_key "availability_tutors", "topics"
   add_foreign_key "availability_tutors", "users"
+  add_foreign_key "careers", "universities"
   add_foreign_key "interesteds", "availability_tutors"
   add_foreign_key "interesteds", "users"
   add_foreign_key "meets", "availability_tutors"
@@ -128,7 +137,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_30_213226) do
   add_foreign_key "participants", "users"
   add_foreign_key "student_topics", "topics"
   add_foreign_key "student_topics", "users"
-  add_foreign_key "subjects", "universities"
+  add_foreign_key "subjects", "careers"
   add_foreign_key "topics", "subjects"
   add_foreign_key "tutors", "users"
 end
