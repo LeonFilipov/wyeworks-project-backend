@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
+
 + [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
 + Fixed logic to interest and uninterest in a meet.
 + New endpoint POST /meets/:id/interesteds to interest in a meet.
@@ -28,10 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - Oct 31, 2024
 
 ### Added
-
-+ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
-+ Added Career entity and an endpoint
-- Unit Tests for Career not working
 
 + [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
 + Unit Tests for Students controller
