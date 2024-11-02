@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
++ Added Test too
+
 + [[Backend-374]](https://www.notion.so/Talle-M-Ver-detalle-de-una-reuni-n-172ff13786bd405fade53cf161a723ee?pvs=4)
 + Removed description and mode from Meet model.
 + Adjusted /meets/:id response payload
