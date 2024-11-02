@@ -20,7 +20,7 @@ class MeetsController < ApplicationController
         meets = meets.joins(availability_tutor: :user)
                      .where(users: { id: params[:tutor_id] })
       end
-      render json: meets.select(:id, :date_time, :status, :description, :link, :count_interesteds), status: :ok
+      render json: meets.select(:id, :date_time, :status, :link, :count_interesteds), status: :ok
     end
 
     # GET /meets/:id
@@ -62,7 +62,6 @@ class MeetsController < ApplicationController
       else
         @meet.status = "confirmed"
         @meet.date_time = params[:meet][:date]
-        @meet.description = params[:meet][:description]
         @meet.save
         render json: { message: I18n.t("success.meets.confirmed") }, status: :ok
       end
