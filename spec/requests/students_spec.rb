@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe "StudentsController", type: :request do
   let!(:user) { FactoryBot.create(:user) }
   let!(:university) { FactoryBot.create(:university) }
-  let!(:subject) { FactoryBot.create(:subject, university: university) }
+let!(:career) { FactoryBot.create(:career, university: university) }
+  let!(:subject) { FactoryBot.create(:subject, career: career) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
 

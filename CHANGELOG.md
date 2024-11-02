@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 + [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
 + Added Career entity and an endpoint
++ Added Test too
 
 + [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
 + Fixed logic to interest and uninterest in a meet.
