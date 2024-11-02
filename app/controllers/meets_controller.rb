@@ -20,13 +20,37 @@ class MeetsController < ApplicationController
         meets = meets.joins(availability_tutor: :user)
                      .where(users: { id: params[:tutor_id] })
       end
-      render json: meets.select(:id, :date_time, :status, :description, :link, :count_interesteds), status: :ok
+      render json: meets.select(:id, :date_time, :status, :link, :count_interesteds), status: :ok
     end
 
     # GET /meets/:id
     def show
-      render json: @meet.as_json(only: [ :id, :date_time, :status, :description, :link, :count_interesteds ]), status: :ok
+      render json: {
+        name: @meet.availability_tutor.topic.name,
+        date: @meet.date_time,
+        status: @meet.status,
+        link: @meet.link,
+        participant: @meet.participants.exists?(user_id: @current_user.first.id),
+        topic: {
+          name: @meet.availability_tutor.topic.name,
+          proposed: @meet.availability_tutor.user.id == @current_user.first.id
+        },
+        tutor: {
+          id: @meet.availability_tutor.user.id,
+          name: @meet.availability_tutor.user.name,
+          email: @meet.availability_tutor.user.email.presence
+        },
+        participants: @meet.participants.map do |participant|
+          {
+            id: participant.user.id,
+            name: participant.user.name
+          }.tap do |participant_data|
+            participant_data[:email] = participant.user.email if @meet.availability_tutor.topic.show_email
+          end
+        end
+      }, status: :ok
     end
+
 
     # PATCH/PUT /meets/:id
     def update # confirm a meet
@@ -38,7 +62,6 @@ class MeetsController < ApplicationController
       else
         @meet.status = "confirmed"
         @meet.date_time = params[:meet][:date]
-        @meet.description = params[:meet][:description]
         @meet.save
         render json: { message: I18n.t("success.meets.confirmed") }, status: :ok
       end

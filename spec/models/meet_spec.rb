@@ -13,18 +13,12 @@ RSpec.describe Meet, type: :model do
     expect(meet).to be_valid
   end
 
-  it "is not valid without a description or link" do
-    meet.description = nil
-    expect(meet).to_not be_valid
-    meet.description = "Description"
+  it "is not valid without a link" do
     meet.link = nil
     expect(meet).to_not be_valid
   end
 
-  it "is not valid with an invalid mode or status" do
-    meet.mode = "invalid_mode"
-    expect(meet).to_not be_valid
-    meet.mode = "virtual"
+  it "is not valid with an invalid status" do
     meet.status = "invalid_status"
     expect(meet).to_not be_valid
   end

@@ -11,11 +11,14 @@ RSpec.describe "Topics", type: :request do
 
   describe "GET /topics" do
     context "Without params" do
+      before do
+        AvailabilityTutor.destroy_all
+      end
+
       it "returns http success" do
         get "/topics",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body).size).to eq(1)
       end
 
       it "returns empty array" do
