@@ -1,5 +1,5 @@
 class UniversitiesController < ApplicationController
-  before_action :set_university, only: [ :show ]
+  before_action :set_university, only: [ :show, :careers ]
 
   # GET /universities
   def index
@@ -12,7 +12,8 @@ class UniversitiesController < ApplicationController
     render json: @university, status: :ok
   end
 
-  # POST /universities
+# POST /universities
+=begin
   def create
     @university = University.new(university_params)
     if @university.save
@@ -20,6 +21,13 @@ class UniversitiesController < ApplicationController
     else
       render json: @university.errors, status: :unprocessable_entity
     end
+  end
+=end
+
+  # GET /universities/:id/careers
+  def careers
+    @careers = @university.careers.select(:id, :name)
+    render json: @careers, status: :ok
   end
 
   private

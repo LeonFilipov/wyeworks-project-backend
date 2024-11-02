@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get "available_meets", to: "meets#available_meets"
   get "available_meets/:id", to: "meets#show_available_meet"
 
+  get "universities/:id/careers", to: "universities#careers"
 
   resources :topics, only: [ :index, :show ]
   get "fake_user" => "users#fake_user"
