@@ -100,7 +100,7 @@ RSpec.describe "Topics", type: :request do
 
   describe "GET /topics/:id" do
     let!(:user2) { FactoryBot.create(:user) }
-    let!(:subject2) { FactoryBot.create(:subject, university: university) }
+    let!(:subject2) { FactoryBot.create(:subject, career: career) }
     let!(:topic2) { FactoryBot.create(:topic, subject: subject2) }
     let!(:availability_tutor2) { FactoryBot.create(:availability_tutor, user: user2, topic: topic2) }
 
