@@ -513,6 +513,7 @@ programacion1_id = Subject.find_by(name: "Programación 1").id
 logica_id = Subject.find_by(name: "Lógica").id
 # Topics Creation
 # Programación 1 - subject_id = 1
+begin
 Topic.find_or_create_by!([
   { name: "Introducción a la Programación", description: "Conceptos básicos de programación.", subject_id: programacion1_id },
   { name: "Estructuras de Control", description: "Condicionales y bucles.", subject_id: programacion1_id },
@@ -520,6 +521,8 @@ Topic.find_or_create_by!([
   { name: "Manejo de Errores", description: "Técnicas para el manejo de errores en programación.", subject_id: programacion1_id },
   { name: "Programación Orientada a Objetos", description: "Fundamentos de POO.", subject_id: programacion1_id }
 ])
+rescue
+end
 
 # Lógica - subject_id = 5
 Topic.find_or_create_by!([
@@ -531,36 +534,18 @@ Topic.find_or_create_by!([
 ])
 
 # Creation of Availabilities for two topics of subject_1 for the user created
-topics = Topic.where(subject_id: programacion1_id).limit(3)
+topics = Topic.where(subject_id: programacion1_id)
 topics.each do |topic|
   AvailabilityTutor.find_or_create_by!({
     user_id: user_1.id,
-    topic_id: topic.id,
-    description: "Disponible para tutorías en #{topic.name}",
-    link: "https://meet.example.com/#{user_1.uid}",
-    availability: "Lunes a Viernes de 9am a 5pm"
+    topic_id: topic.id
 })
 end
 
-AvailabilityTutor.find_or_create_by!({
-  user_id: user_1.id,
-  topic_id: Topic.find_by(name: "Tautologías y Contradicciones").id,
-  description: "Disponible para tutorías en Tautologías y Contradicciones",
-  link: "https://meet.example.com/#{user_1.uid}",
-  availability: "Lunes a Viernes de 9am a 5pm"
-})
-
-topics = Topic.where(subject_id: logica_id).limit(2)
+topics = Topic.where(subject_id: logica_id)
 topics.each do |topic|
   availability = AvailabilityTutor.find_or_create_by!({
     user_id: user_2.id,
-    topic_id: topic.id,
-    description: "Disponible para tutorías en #{topic.name}",
-    link: "https://meet.example.com/#{user_2.uid}",
-    availability: "Lunes a Viernes de 1pm a 3pm"
-  })
-  Interested.find_or_create_by!({
-    user_id: user_3.id,
-    availability_tutor_id: availability.id
+    topic_id: topic.id
   })
 end

@@ -18,11 +18,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_022210) do
   create_table "availability_tutors", force: :cascade do |t|
     t.uuid "user_id", null: false
     t.bigint "topic_id", null: false
-    t.string "description"
-    t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "availability"
     t.index ["topic_id"], name: "index_availability_tutors_on_topic_id"
     t.index ["user_id"], name: "index_availability_tutors_on_user_id"
   end
@@ -46,9 +43,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_022210) do
 
   create_table "meets", force: :cascade do |t|
     t.datetime "date_time"
-    t.string "description"
     t.string "link"
-    t.string "mode"
     t.string "status"
     t.bigint "availability_tutor_id", null: false
     t.datetime "created_at", null: false
@@ -90,6 +85,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_022210) do
     t.datetime "updated_at", null: false
     t.bigint "subject_id", null: false
     t.string "image_url"
+    t.string "link"
+    t.boolean "show_email", default: false
     t.index ["subject_id"], name: "index_topics_on_subject_id"
   end
 

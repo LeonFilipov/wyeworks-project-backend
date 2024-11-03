@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :subject do
     name { Faker::Educator.subject }
-    association :university
+    association :career
   end
 end

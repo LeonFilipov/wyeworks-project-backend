@@ -4,6 +4,4 @@ class AvailabilityTutor < ApplicationRecord
   has_many :interesteds, dependent: :destroy
   has_many :interested_users, through: :interesteds, source: :user
   has_many :meets, dependent: :destroy
-
-  validates :description, :availability, :link, presence: true
 end

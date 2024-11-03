@@ -4,7 +4,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - In Progress
+## [1.0.0]
+
+### Added
+
+
++ [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
++ Changed topics#show route from proposed_topics/:availability_id to topics/:id
++ Added the logig to topics#show
++ Added a service for topics
++ Unit Tests for topic 
+ 
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
++ Added Test too
+
++ [[Backend-374]](https://www.notion.so/Talle-M-Ver-detalle-de-una-reuni-n-172ff13786bd405fade53cf161a723ee?pvs=4)
++ Removed description and mode from Meet model.
++ Adjusted /meets/:id response payload
+
++ [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
++ Fixed logic to interest and uninterest in a meet.
++ New endpoint POST /meets/:id/interesteds to interest in a meet.
++ New endpoint DELETE /meets/:id/interesteds to uninterest in a meet.
+
++ [[Backend-383]](https://www.notion.so/Talle-M-Rework-to-availabilities-y-topics-520f0e9aa0af44d49bde6a5d4a09433f)
++ Availability now has only topic_id and user_id and is only for relations.
++ Availability_tutors now has one to one relation with topics.
++ New POST /topics endpoint to create a topic.
++ New DELETE /topics endponit to delete a topic.
++ Deleted /available_meets, /profile/meets, /meets/:id/interested, /interested_meetings endpoints
++ Deleted /tutor_availability, /tutor_availability/:id/interesteds, /topics/:id/tutor_availability endpoints
+
++ [[Backend-382]](https://www.notion.so/Talle-XS-Listar-tema-e920f080dfc244b19349d0ebc8c7f8f6)
++ New endpoint to list topics with filters GET /topics
+
+
+## [0.3.0] - Oct 31, 2024
 
 ### Added
 

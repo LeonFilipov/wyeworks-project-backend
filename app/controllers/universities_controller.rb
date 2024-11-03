@@ -12,18 +12,6 @@ class UniversitiesController < ApplicationController
     render json: @university, status: :ok
   end
 
-# POST /universities
-=begin
-  def create
-    @university = University.new(university_params)
-    if @university.save
-      render json: @university, status: :created
-    else
-      render json: @university.errors, status: :unprocessable_entity
-    end
-  end
-=end
-
   # GET /universities/:id/careers
   def careers
     @careers = @university.careers.select(:id, :name)
