@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => "/api-docs"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "auth/google_oauth2/callback" => "sessions#oauth2_callback"
+  get "authorization" => "sessions#authorization_needed"
 
   ## meets
   resources :meets, only: [ :index, :show, :update ]
@@ -14,7 +15,7 @@ Rails.application.routes.draw do
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
-  get "proposed_topics/:availability_id", to: "topics#show"
+  get "topics/:id", to: "topics#show"
 
   get "universities/:id/careers", to: "universities#careers"
 
