@@ -628,7 +628,7 @@ paths:
 
   /topics/{topic_id}:
     get:
-      summary: Get details of a specific topic by ID (work in progress)
+      summary: Get details of a specific topic by ID
       parameters:
         - in: path
           name: topic_id
@@ -639,6 +639,37 @@ paths:
       responses:
         '200':
           description: Topic details (work in progress)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Tautologías y Contradicciones"
+                  description:
+                    type: string 
+                    example: "En lógica, una tautología es una fórmula que es verdadera en cualquier interpretación,....."  
+                  proposed:
+                    type: boolean
+                    example: true
+                  meets: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 3
+                        status:
+                          type: string
+                          example: "pending"
+                        date:
+                          type: string
+                          format: date-time
+                          example: "2024-10-22T15:20:02.093"    
+
+
         '404':
           description: Topic not found
           content:
