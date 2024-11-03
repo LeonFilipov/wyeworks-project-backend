@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-373]](https://www.notion.so/Talle-S-Editar-un-tema-1e31bd9a08c746e8b80622dcc6564bb2?pvs=4)
++ Added topics update endpoint
++ Added unit tests for topics controller, update endpoint
 
 + [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
 + Changed topics#show route from proposed_topics/:availability_id to topics/:id

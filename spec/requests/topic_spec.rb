@@ -235,4 +235,51 @@ RSpec.describe "Topics", type: :request do
       expect(JSON.parse(response.body)["error"]).to eq("Validation failed: Show email is not included in the list")
     end
   end
+
+  describe "PATCH /topics/:id" do
+    context "when the topic does not exist" do
+      it "returns a not found error" do
+        patch "/topics/-1", params: { topic: { name: "Updated Topic", description: topic.description, link: topic.link, show_email: topic.show_email } },
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.topics.not_found"))
+      end
+    end
+
+    context "when the topic exists but does not have an owner" do
+      before do
+        allow(TopicsService).to receive(:get_topic_owner).with(topic.id.to_s).and_return(nil)
+      end
+
+      it "returns a not found error" do
+        patch "/topics/#{topic.id}", params: { topic: { name: "Updated Topic", description: topic.description, link: topic.link, show_email: topic.show_email }  },
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.topics.not_found"))
+      end
+    end
+
+    context "when the current user is not the owner of the topic" do
+      let!(:user2) { FactoryBot.create(:user) }
+      let!(:token2) { JsonWebTokenService.encode(user_id: user2.id) }
+
+      it "returns an unauthorized error" do
+        patch "/topics/#{topic.id}", params: { topic: { name: "Updated Topic", description: topic.description, link: topic.link, show_email: topic.show_email }  },
+        headers: { 'Authorization': "Bearer #{token2}" }
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
+      end
+    end
+
+    context "when the current user is the owner of the topic" do
+      it "updates the topic and returns a success message" do
+        patch "/topics/#{topic.id}", params: { topic: { name: "Updated Topic", description: "Updated description", link: topic.link, show_email: topic.show_email }  },
+        headers: { 'Authorization': "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.topics.updated"))
+        expect(topic.reload.name).to eq("Updated Topic")
+        expect(topic.reload.description).to eq("Updated description")
+      end
+    end
+  end
 end

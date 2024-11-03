@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  before_action :topic_params_edit, only: [ :update ]
+
   # GET /topics
   def index
     # Filtro inicial
@@ -57,9 +59,29 @@ class TopicsController < ApplicationController
     render json: topic_response(topics), status: :ok
   end
 
+   # PATCH /topics/:id
+   def update
+    topic = Topic.find_by(id: params[:id])
+    owner = TopicsService.get_topic_owner(params[:id])
+    if topic.nil?
+      render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
+    elsif owner.nil?
+      render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
+    elsif owner.first != @current_user.first.id
+      render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
+    else
+      topic.update(topic_params_edit)
+      render json: { message: I18n.t("success.topics.updated") }, status: :ok
+    end
+  end
+
   private
     def topic_params
       params.require(:topic).permit(:name, :description, :link, :show_email, :subject_id)
+    end
+
+    def topic_params_edit
+      params.require(:topic).permit(:name, :description, :link, :show_email)
     end
 
     def topic_response(topics)
