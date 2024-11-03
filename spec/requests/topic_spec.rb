@@ -116,7 +116,6 @@ RSpec.describe "Topics", type: :request do
         expect(JSON.parse(response.body)[0]["name"]).to eq(topic2.name)
         expect(JSON.parse(response.body)[0]["proposed"]).to eq(false)
       end
-
     end
 
     context "when the topic does not exist" do
@@ -124,9 +123,8 @@ RSpec.describe "Topics", type: :request do
         get "/topics/-1",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
-      end  
+      end
     end
-
   end
 
   describe "POST /topics" do
