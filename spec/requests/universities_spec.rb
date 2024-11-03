@@ -4,6 +4,7 @@ RSpec.describe "UniversitiesController", type: :request do
   let!(:user_tutor) { FactoryBot.create(:user) }
   let!(:token) { JsonWebTokenService.encode(user_id: user_tutor.id) }
   let!(:university) { FactoryBot.create(:university) }
+let!(:career) { FactoryBot.create(:career, university: university) }
 
 
   # GET #index
@@ -27,25 +28,6 @@ RSpec.describe "UniversitiesController", type: :request do
       it "returns a not found response" do
         get "/universities/-1", headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
-
-  # POST #create with valid parameters
-  describe "POST #create" do
-    context "with valid parameters" do
-      it "creates a new university" do
-        expect {
-          post "/universities", params: { university: { name: "New University", location: "New Location" } }, headers: { "Authorization" => "Bearer #{token}" }
-        }.to change(University, :count).by(1)
-        expect(response).to have_http_status(:created)
-      end
-    end
-
-    context "with invalid parameters" do
-      it "returns an unprocessable entity response" do
-        post "/universities", params: { university: { name: "", location: "" } }, headers: { "Authorization" => "Bearer #{token}" }
-        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

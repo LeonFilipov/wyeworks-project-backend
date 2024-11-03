@@ -67,7 +67,7 @@ paths:
       description: Retrieve a list of topics proposed by the logged user with his availability.
       responses:
         '200':
-          descroption: A list of proposed topics
+          description: A list of proposed topics
           content:
             application/json:
               schema:
@@ -176,10 +176,23 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
           
   /tutor_availability/{id}/interesteds:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the tutor availability
     post:
       deprecated: true
       tags:
         - Tutor availability
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+
   
   /interested_meetings:
     get:
@@ -504,10 +517,23 @@ paths:
 
 
   /topics/{topic_id}/tutor_availability:
+    parameters:
+      - in: path
+        name: topic_id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the topic
     post:
       deprecated: true
       tags:
-      - Tutor availability
+        - Tutor availability
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Topic not found
+
 
   /topics:
     get:
@@ -739,10 +765,10 @@ paths:
       tags: 
         - Meets
 
-  /meets/:id:
+  /meets/{id}:
     get:
-      summary: Get a specific meeting by ID (Work in progress)
-      description: Retrieve details for a specific meeting, including interested users.
+      summary: Get details of a specific meeting by ID
+      description: Retrieve details for a specific meeting, including the topic, tutor, and participants.
       parameters:
         - in: path
           name: id
@@ -752,13 +778,67 @@ paths:
           description: The ID of the meeting
       responses:
         '200':
-          description: A list of meetings
+          description: Meeting details retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Meet'
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Mathematics Tutoring Session"
+                  date:
+                    type: string
+                    format: date-time
+                    example: "2024-10-31T14:30:00Z"
+                  status:
+                    type: string
+                    example: "confirmed"
+                  link:
+                    type: string
+                    example: "https://example.com/meet/12345"
+                  participant:
+                    type: boolean
+                    example: true
+                  topic:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Math Fundamentals"
+                      proposed:
+                        type: boolean
+                        example: true
+                  tutor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "c2eeb5e0-74ff-4a8a-9b76-33e5d6d8f708"
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        nullable: true
+                        example: "johndoe@example.com"
+                  participants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: "a7f5e1d2-8e4a-4c95-9313-456d0b6e582c"
+                        name:
+                          type: string
+                          example: "Jane Smith"
+                        email:
+                          type: string
+                          nullable: true
+                          example: "janesmith@example.com"
         '404':
           description: Meet not found
           content:
@@ -768,17 +848,25 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Meet not found
+                    example: "Meet not found"
         '401': 
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
         - Meets
+
     put:
       summary: Confirm a pending meet (Work in progress)
       description: |
         This endpoint is a work in progress.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the meet
       responses:
         '200':
           description: Meet confirmed successfully
@@ -868,18 +956,42 @@ paths:
                     example: "Meet not found"
       tags:
         - Interesteds
-  /tutor_availability:
+  /tutor_availability/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the tutor availability
     post:
       deprecated: true
       tags:
-      - Tutor availability
+        - Tutor availability
+      responses:
+        '200':
+          description: Tutor availability created successfully
+        '404':
+          description: Tutor availability not found
+
       
   /available_meets:
     get:
       deprecated: true
       summary: Get all available meets
       tags:
-      - Meetings
+        - Meetings
+      responses:
+        '200':
+          description: List of available meets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meet'
+        '404':
+          description: No available meets found
       
   /available_meets/{id}:
     get:
@@ -1000,6 +1112,39 @@ paths:
                     example: "Bad request"
       tags:
         - Meetings
+  /universities/:id/careers:
+    get:
+      summary: Get all careers from a university
+      description: Retrieve a list of careers from a specific university.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the university
+      responses:
+        '200':
+          description: A list of careers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The career ID
+                    name:
+                      type: string
+                      description: The name of the career
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Careers
 
 security:
   - bearerAuth: []

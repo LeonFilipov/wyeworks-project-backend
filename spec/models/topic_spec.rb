@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Topic, type: :model do
     let!(:university) { FactoryBot.create(:university) }
-    let!(:subject) { FactoryBot.create(:subject, university: university) }
+let!(:career) { FactoryBot.create(:career, university: university) }
+    let!(:subject) { FactoryBot.create(:subject, career: career) }
     let!(:topic) { FactoryBot.create(:topic, subject: subject) }
 
     ### 1. Validaciones

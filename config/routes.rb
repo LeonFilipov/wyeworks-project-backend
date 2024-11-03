@@ -17,8 +17,11 @@ Rails.application.routes.draw do
   get "proposed_topics", to: "topics#proposed_topics"
   get "topics/:id", to: "topics#show"
 
+  get "universities/:id/careers", to: "universities#careers"
 
   get "fake_user" => "users#fake_user"
+
+  resources :universities, only: [ :index, :show ]
 
   scope :profile do
     get "/", to: "users#profile", as: :profile
@@ -26,10 +29,6 @@ Rails.application.routes.draw do
     patch "/", to: "users#update"
     # get "meets", to: "meets#my_meets"
     # match "meets/:id", to: "meets#my_meet", via: [ :get, :patch ] # GET y PATCH para el mismo endpoint
-  end
-
-  resources :universities, only: [ :index, :show, :create ] do
-    resources :subjects, only: [ :index, :show, :create ]
   end
 
   post "students/topics/:topic_id/request_topic" => "students#request_topic"
