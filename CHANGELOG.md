@@ -8,12 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+
 + [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
 + Changed topics#show route from proposed_topics/:availability_id to topics/:id
 + Added the logig to topics#show
 + Added a service for topics
 + Unit Tests for topic 
  
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
++ Added Test too
+
++ [[Backend-374]](https://www.notion.so/Talle-M-Ver-detalle-de-una-reuni-n-172ff13786bd405fade53cf161a723ee?pvs=4)
++ Removed description and mode from Meet model.
++ Adjusted /meets/:id response payload
+
 + [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
 + Fixed logic to interest and uninterest in a meet.
 + New endpoint POST /meets/:id/interesteds to interest in a meet.

@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AvailabilityTutor, type: :model do
     let!(:university) { FactoryBot.create(:university) }
-    let!(:subject) { FactoryBot.create(:subject, university: university) }
+    let!(:career) { FactoryBot.create(:career, university: university) }
+    let!(:subject) { FactoryBot.create(:subject, career: career) }
     let!(:topic) { FactoryBot.create(:topic, subject: subject) }
     let!(:user) { FactoryBot.create(:user) }
     let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }

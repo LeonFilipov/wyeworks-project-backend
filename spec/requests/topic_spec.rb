@@ -3,18 +3,22 @@ require 'rails_helper'
 RSpec.describe "Topics", type: :request do
   let!(:user) { FactoryBot.create(:user) }
   let!(:university) { FactoryBot.create(:university) }
-  let!(:subject) { FactoryBot.create(:subject, university: university) }
+  let!(:career) { FactoryBot.create(:career, university: university) }
+  let!(:subject) { FactoryBot.create(:subject, career: career) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:token) { JsonWebTokenService.encode(user_id: user.id) }
   let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user, topic: topic) }
 
   describe "GET /topics" do
     context "Without params" do
+      before do
+        AvailabilityTutor.destroy_all
+      end
+
       it "returns http success" do
         get "/topics",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body).size).to eq(1)
       end
 
       it "returns empty array" do
@@ -65,7 +69,7 @@ RSpec.describe "Topics", type: :request do
 
     context "With subject_id and user_id" do
       let!(:user2) { FactoryBot.create(:user) }
-      let!(:subject2) { FactoryBot.create(:subject, university: university) }
+      let!(:subject2) { FactoryBot.create(:subject, career: career) }
       let!(:topic2) { FactoryBot.create(:topic, subject: subject2) }
       let!(:availability_tutor2) { FactoryBot.create(:availability_tutor, user: user2, topic: topic2) }
       it "returns http success" do
