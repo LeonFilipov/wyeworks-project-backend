@@ -6,5 +6,6 @@ FactoryBot.define do
     uid { Faker::Number.number(digits: 10) }
     description { Faker::Religion::Bible.quote }
     image_url { Faker::Internet.url }
+    association :career
   end
 end

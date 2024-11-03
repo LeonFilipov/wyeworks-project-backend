@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_02_180507) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -105,13 +105,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_180507) do
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "attended_lessons", default: 0
-    t.integer "attended_tutors", default: 0
-    t.integer "attended_topics", default: 0
     t.integer "ranking"
     t.integer "amount_given_lessons"
     t.integer "amount_given_topics"
     t.integer "amount_attended_students"
+    t.integer "attended_lessons", default: 0
+    t.integer "attended_tutors", default: 0
+    t.integer "attended_topics", default: 0
+    t.bigint "career_id"
+    t.index ["career_id"], name: "index_users_on_career_id"
   end
 
   add_foreign_key "availability_tutors", "topics"
@@ -126,4 +128,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_180507) do
   add_foreign_key "student_topics", "users"
   add_foreign_key "subjects", "careers"
   add_foreign_key "topics", "subjects"
+  add_foreign_key "users", "careers"
 end

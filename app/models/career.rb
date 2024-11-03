@@ -1,6 +1,7 @@
 class Career < ApplicationRecord
-    has_many :subjects, dependent: :destroy
     belongs_to :university
+    has_many :subjects, dependent: :destroy
+    has_many :users
 
     validates :name, presence: true, uniqueness: true
 end

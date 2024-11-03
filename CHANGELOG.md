@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 
++ [[Backend-370]](https://www.notion.so/Talle-M-Seleccionar-y-cambiar-carrera-de-usuario-editar-pefil-4a95c866da3c42deba0eeed8750c3614)
++ Modify profile endpoint to allow changing the user's career
++ Modify profile endpoint to show the user's career
++ Create associations between user and career
+
 + [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
 + Changed topics#show route from proposed_topics/:availability_id to topics/:id
 + Added the logig to topics#show

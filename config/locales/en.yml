@@ -58,6 +58,8 @@ en:
     participants:
       not_found: "Participant not found"
       already_participant: "User already participant in this meet"
+    careers:
+      not_found: "Career not found"
 
   success:
     users:
