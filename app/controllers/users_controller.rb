@@ -16,15 +16,20 @@ class UsersController < ApplicationController
     end
 
     def profile
-        render json: @current_user.as_json(only: [ :id, :name, :email, :description, :image_url ]), status: 200
+        render json: user_profile(@current_user.first), status: 200
     end
 
     def update
         begin
-            @current_user.update(user_params)
+            @current_user.first.update(user_params)
+            @current_user.first.save!
             render json: { message: I18n.t("success.users.updated") }, status: 200
         rescue ActionController::ParameterMissing => e
             render json: { error: I18n.t("error.users.parameter_missing", param: e.param) }, status: :unprocessable_entity
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ActiveRecord::RecordNotSaved => e
+            render json: { error: e.message }, status: :unprocessable_entity
+        rescue ActiveRecord::InvalidForeignKey => e
+            render json: { error: I18n.t("error.careers.not_found") }, status: :not_found
         end
     end
 
@@ -36,6 +41,21 @@ class UsersController < ApplicationController
 
     private
         def user_params
-            params.require(:user).permit(:name, :description)
+            params.require(:user).permit(:name, :description, :career_id)
+        end
+
+        def user_profile(user)
+            career = user.career
+            {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                description: user.description,
+                image_url: user.image_url,
+                career: career.nil? ? nil : {
+                    id: career.id,
+                    name: career.name
+                }
+            }
         end
 end

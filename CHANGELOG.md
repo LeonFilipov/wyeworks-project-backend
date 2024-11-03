@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-370]](https://www.notion.so/Talle-M-Seleccionar-y-cambiar-carrera-de-usuario-editar-pefil-4a95c866da3c42deba0eeed8750c3614)
++ Modify profile endpoint to allow changing the user's career
++ Modify profile endpoint to show the user's career
++ Create associations between user and career
+
 + [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
 + Added Career entity and an endpoint
 + Added Test too
