@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
   get "proposed_topics", to: "topics#proposed_topics"
-  get "proposed_topics/:availability_id", to: "topics#show"
+  get "topics/:id", to: "topics#show"
 
 
   get "fake_user" => "users#fake_user"

@@ -16,7 +16,14 @@ class TopicsController < ApplicationController
 
   # GET /topics/:id
   def show
-    render json: { message: "to do" }, status: :ok
+    service = TopicsService.new(@current_user)
+    topics = service.get_topics_by_id(params[:id])
+
+    if topics.empty?
+      render json: topics, status: :not_found
+    else
+      render json: topics, status: :ok
+    end
   end
 
   # POST /topics
