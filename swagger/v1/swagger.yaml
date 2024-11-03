@@ -714,6 +714,41 @@ paths:
                   error:
                     type: string
                     example: "User not allowed"
+
+    /topics/{topic_id}:
+    patch:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 14
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "Math Fundamentals"
+                    description:
+                      type: string
+                      example: "Learn the basics of mathematics"
+                    link:
+                      type: string
+                      format: uri
+                      example: "https://example.com/topic/14"
+                    show_email:
+                      type: boolean
+                      example: true
+ 
+
       tags:
       - Topics
       
