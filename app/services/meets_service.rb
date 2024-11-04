@@ -9,21 +9,17 @@ class MeetsService
       Meet.mark_finished_meets
     end
   
-    # Fetches meets for a user by status
-    def self.user_meets_by_status(user, status)
-      user.meets.where(status: status)
+    def self.student_meets_by_status(user, status)
+      Meet.joins(:participants)
+          .where(participants: { user_id: user.id })
+          .where(status: status)
     end
-  
-    def self.user_confirmed_meets(user)
-      user_meets_by_status(user, 'confirmed')
-    end
-  
-    def self.user_pending_meets(user)
-      user_meets_by_status(user, 'pending')
-    end
-  
-    def self.user_finished_meets(user)
-      user_meets_by_status(user, 'finished')
+
+    def self.tutor_meets_by_status(user, status)
+      meets_query = Meet.joins(:availability_tutor)
+                        .where(availability_tutors: { user_id: user.id })
+      meets_query = meets_query.where(status: status) if status
+      meets_query
     end
   
     # Retrieves participants and topic details for a specific meet

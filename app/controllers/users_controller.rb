@@ -3,27 +3,46 @@ class UsersController < ApplicationController
   
     # GET /profile/teach
     def profile_teach
-      render json: teach_response(current_user), status: :ok
+      render json: teach_response(@current_user.first), status: :ok
     end
   
     # GET /users/:id/teach
     def teach
-      render json: teach_response(@user), status: :ok
+      user = User.where(id: params[:id])
+      if user.present?
+          render json: teach_response(@current_user.first), status: :ok
+      else
+          render json: { error: I18n.t("error.users.not_found") }, status: 404
+      end
     end
   
     # GET /profile/learn
     def profile_learn
-      render json: learn_response(current_user), status: :ok
+      render json: learn_response(@current_user.first), status: :ok
     end
   
     # GET /users/:id/learn
     def learn
-      render json: learn_response(@user), status: :ok
+      user = User.where(id: params[:id])
+      if user.present?
+          render json: learn_response(@current_user.first), status: :ok
+      else
+          render json: { error: I18n.t("error.users.not_found") }, status: 404
+      end
     end
 
     # GET /profile
     def profile
       render json: user_profile(@current_user.first), status: 200
+    end
+
+    def show
+      user = User.where(id: params[:id])
+      if user.present?
+          render json: user_profile(@current_user.first), status: 200
+      else
+          render json: { error: I18n.t("error.users.not_found") }, status: 404
+      end
     end
 
     def update
@@ -41,6 +60,11 @@ class UsersController < ApplicationController
     end
   
     private
+
+    def set_user
+      @user = User.find_by(id: params[:id])
+      render json: { error: I18n.t("error.users.not_found") }, status: :not_found unless @user
+    end
   
     def user_params
       params.require(:user).permit(:name, :description, :career_id)
@@ -48,19 +72,19 @@ class UsersController < ApplicationController
 
     def teach_response(user)
       {
-        meets_confirmed: meets_schema(MeetsService.user_confirmed_meets(user)),
-        meets_pending: meets_schema(MeetsService.user_pending_meets(user)),
-        meets_finished: meets_schema(MeetsService.user_finished_meets(user)),
-        topics: user.topics.map { |topic| { id: topic.id, name: topic.name } }
+        meets_confirmed: meets_schema(MeetsService.tutor_meets_by_status(user, 'confirmed')),
+        meets_pending: meets_schema(MeetsService.tutor_meets_by_status(user, 'pending')),
+        meets_finished: meets_schema(MeetsService.tutor_meets_by_status(user, 'finished')),
+        topics: user.availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
   
     def learn_response(user)
       {
-        meets_confirmed: meets_schema(MeetsService.user_confirmed_meets(user)),
-        meets_pending: meets_schema(MeetsService.user_pending_meets(user)),
-        meets_finished: meets_schema(MeetsService.user_finished_meets(user)),
-        topics: user.interested_topics.map { |topic| { id: topic.id, name: topic.name } }
+        meets_confirmed: meets_schema(MeetsService.student_meets_by_status(user, 'confirmed')),
+        meets_pending: meets_schema(MeetsService.student_meets_by_status(user, 'pending')),
+        meets_finished: meets_schema(MeetsService.student_meets_by_status(user, 'finished')),
+        topics: user.interested_availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
 
@@ -84,10 +108,10 @@ class UsersController < ApplicationController
         {
           id: meet.id,
           status: meet.status,
-          date: meet.date,
+          date: meet.date_time,
           topic: {
-            id: meet.topic.id,
-            name: meet.topic.name
+            id: meet.availability_tutor.topic.id,
+            name: meet.availability_tutor.topic.name
           }
         }
       end
