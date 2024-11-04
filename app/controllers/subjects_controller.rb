@@ -3,8 +3,8 @@ class SubjectsController < ApplicationController
  # GET /subjects
   # Lists all subjects based on optional query parameters
   def index
-    if params[:self].present? && params[:self] == "true" && current_user.career.present?
-      @subjects = current_user.career.subjects
+    if params[:self].present? && params[:self] == "true" && @current_user.first.career.present?
+      @subjects = @current_user.first.career.subjects
     elsif params[:career_id].present?
       career = Career.find_by(id: params[:career_id])
       if career
