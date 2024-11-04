@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-376]](https://www.notion.so/Talle-M-Ver-Perfil-de-usuario-b065b109535e4611b54bdec3ecb4a136?pvs=4)
++ New /profile/teach, /profile/learn, /users/:id/teach and /users/:id/learn endpoints.
+
++ [[Backend-371]](https://www.notion.so/Talle-XS-Filtrado-de-materias-por-carrera-4e6933405e994d7b8d624d1b5ce22588?pvs=4)
++ New /subjects endpoint wit self and career_id filters.
 
 + [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
 + Changed topics#show route from proposed_topics/:availability_id to topics/:id
