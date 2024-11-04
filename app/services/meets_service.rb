@@ -4,6 +4,14 @@ class MeetsService
       @user = user
     end
 
+    def self.create_pending_meet(meet_params)
+      if Meet.find_by(availability_tutor_id: meet_params[:availability_tutor_id], status: "pending")
+        raise ActiveRecord::RecordInvalid, I18n.t("error.meets.pending_meet")
+      else
+        Meet.create!(meet_params)
+      end
+    end
+
     # Class method to mark finished meets based on date
     def self.date_check
       Meet.mark_finished_meets

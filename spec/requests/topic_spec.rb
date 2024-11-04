@@ -153,6 +153,10 @@ RSpec.describe "Topics", type: :request do
         expect(newTopic.link).to eq("New link")
         expect(newTopic.show_email).to eq(true)
         expect(newTopic.subject.id).to eq(subject.id)
+        meet = Meet.find_by(availability_tutor_id: newTopic.availability_tutor.id)
+        expect(meet.status).to eq("pending")
+        expect(meet.date_time).to be_nil
+        expect(meet.link).to eq(newTopic.link)
       end
     end
 

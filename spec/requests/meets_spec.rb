@@ -202,7 +202,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.tutor_interest"))
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.tutor_interested"))
     end
 
     it "Meet already cancelled or completed" do
