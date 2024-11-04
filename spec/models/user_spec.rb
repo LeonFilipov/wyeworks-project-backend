@@ -39,6 +39,11 @@ RSpec.describe User, type: :model do
     expect(user).to be_valid
   end
 
+  it "is valid if career is nil" do
+    user = FactoryBot.build(:user, career: nil)
+    expect(user).to be_valid
+  end
+
   # Validaciones de atributos numéricos
   it "is not valid if amount_given_lessons is not an integer" do
     user = FactoryBot.build(:user, amount_given_lessons: 3.5)

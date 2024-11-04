@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_02_180507) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -148,6 +148,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_180507) do
   add_foreign_key "subjects", "careers"
   add_foreign_key "tags", "topics"
   add_foreign_key "topics", "subjects"
-  add_foreign_key "tutors", "users"
   add_foreign_key "users", "careers"
 end
