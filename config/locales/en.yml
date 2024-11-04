@@ -46,9 +46,9 @@ en:
       failed: "Failed to %{action} meet"
       already_status: "Meet already %{status}"
       already_interested: "User already interested in this meet"
-      tutor_interest: "Tutor can't be interested in his own meet"
       invalid_status: "Meet already cancelled"
       tutor_interested: "Tutor can't be interested in his own meet"
+      pending_meet: "Pending meet already exists"
     universities:
       not_found: "University not found"
     subjects:

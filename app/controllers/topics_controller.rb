@@ -32,7 +32,8 @@ class TopicsController < ApplicationController
   def create
     begin
       topic = Topic.create!(topic_params)
-      AvailabilityTutor.create!(user_id: @current_user.first.id, topic_id: topic.id)
+      availability = AvailabilityTutor.create!(user_id: @current_user.first.id, topic_id: topic.id)
+      MeetsService.create_pending_meet({ availability_tutor_id: availability.id, link: topic.link, status: "pending" })
       render json: { message: I18n.t("success.topics.created") }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { error: e.message }, status: :unprocessable_entity

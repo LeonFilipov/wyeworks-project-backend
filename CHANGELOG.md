@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-403]](https://www.notion.so/Talle-S-L-gica-de-reuni-n-pediente-c524355484fd4804ba10e00f4894bbe2)
++ Logic for pending meetings. Now when a user create a topic, the system creates a pending meeting for that topic.
+
 + [[Backend-376]](https://www.notion.so/Talle-M-Ver-Perfil-de-usuario-b065b109535e4611b54bdec3ecb4a136?pvs=4)
 + New /profile/teach, /profile/learn, /users/:id/teach and /users/:id/learn endpoints.
 
