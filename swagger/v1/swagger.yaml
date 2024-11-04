@@ -320,6 +320,397 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
       - Users
+  /profile/teach:
+    get:
+      summary: "Get the topics and meets the user is tutoring"
+      description: "Returns a list of topics the user has proposed and meets for which they are a tutor."
+      tags:
+        - Users
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meets_confirmed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_pending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_finished:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+        401:
+          description: "Unauthorized"
+
+  /profile/learn:
+    get:
+      summary: "Get the topics and meets the user is learning"
+      description: "Returns a list of topics the user is interested in as a student and the meets they are participating in."
+      tags:
+        - Users
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meets_confirmed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_pending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_finished:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+        401:
+          description: "Unauthorized"
+
+  /users/{id}/teach:
+    get:
+      summary: "Get the topics and meets a specific user is tutoring"
+      description: "Returns a list of topics the specified user has proposed and meets for which they are a tutor."
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "ID of the user"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meets_confirmed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_pending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_finished:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+        401:
+          description: "Unauthorized"
+        404:
+          description: "User not found"
+
+  /users/{id}/learn:
+    get:
+      summary: "Get the topics and meets a specific user is learning"
+      description: "Returns a list of topics the specified user is interested in as a student and the meets they are participating in."
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "ID of the user"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meets_confirmed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_pending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  meets_finished:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        status:
+                          type: string
+                          enum: ["pending", "confirmed", "finished"]
+                        date:
+                          type: string
+                          format: date-time
+                        topic:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+        401:
+          description: "Unauthorized"
+        404:
+          description: "User not found"
 
   /profile/meets/{id}:
     get:
@@ -1163,13 +1554,6 @@ paths:
     get:
       summary: Get all careers from a university
       description: Retrieve a list of careers from a specific university.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: The ID of the university
       responses:
         '200':
           description: A list of careers
@@ -1220,6 +1604,15 @@ components:
         image_url:
           type: string
           format: uri
+        career:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
 
     AvailabilityTutor:
       type: object

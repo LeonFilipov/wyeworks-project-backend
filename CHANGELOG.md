@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-376]](https://www.notion.so/Talle-M-Ver-Perfil-de-usuario-b065b109535e4611b54bdec3ecb4a136?pvs=4)
++ New /profile/teach, /profile/learn, /users/:id/teach and /users/:id/learn endpoints.
+
++ [[Backend-371]](https://www.notion.so/Talle-XS-Filtrado-de-materias-por-carrera-4e6933405e994d7b8d624d1b5ce22588?pvs=4)
++ New /subjects endpoint wit self and career_id filters.
+
 + [[Backend-373]](https://www.notion.so/Talle-S-Editar-un-tema-1e31bd9a08c746e8b80622dcc6564bb2?pvs=4)
 + Added topics update endpoint
 + Added unit tests for topics controller, update endpoint
@@ -51,6 +57,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - Oct 31, 2024
 
 ### Added
+
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
+- Unit Tests for Career not working
 
 + [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
 + Unit Tests for Students controller
