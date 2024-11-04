@@ -15,8 +15,8 @@ class User < ApplicationRecord
     has_many :participants, dependent: :destroy
     has_many :meets, through: :participants
 
-    belongs_to :career, optional: true 
-    
+    belongs_to :career, optional: true
+
     def self.google_auth(user_info)
         where(email: user_info["email"]).first_or_initialize do |user|
             user.name = user_info["name"]

@@ -37,7 +37,7 @@ RSpec.describe "UsersController", type: :request do
       body = JSON.parse(response.body)
 
       # Check structure for teach response
-      expect(body.keys).to eq(["meets_confirmed", "meets_pending", "meets_finished", "topics"])
+      expect(body.keys).to eq([ "meets_confirmed", "meets_pending", "meets_finished", "topics" ])
       expect(body["meets_confirmed"].first["id"]).to eq(meet.id)
       expect(body["topics"].first["id"]).to eq(topic.id)
       expect(body["topics"].first["name"]).to eq(topic.name)
@@ -51,7 +51,7 @@ RSpec.describe "UsersController", type: :request do
       body = JSON.parse(response.body)
 
       # Check structure for learn response
-      expect(body.keys).to eq(["meets_confirmed", "meets_pending", "meets_finished", "topics"])
+      expect(body.keys).to eq([ "meets_confirmed", "meets_pending", "meets_finished", "topics" ])
       expect(body["meets_confirmed"].first["id"]).to eq(meet.id)
       expect(body["topics"].first["id"]).to eq(topic.id)
       expect(body["topics"].first["name"]).to eq(topic.name)
@@ -65,8 +65,8 @@ RSpec.describe "UsersController", type: :request do
         description: "new description",
         non_permitted_attribute: "non-editable",
         email: "non-editable"
-      }}, headers: { "Authorization" => token }
-      
+      } }, headers: { "Authorization" => token }
+
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)).to eq({ "message" => I18n.t("success.users.updated") })
     end
@@ -79,7 +79,7 @@ RSpec.describe "UsersController", type: :request do
       body = JSON.parse(response.body)
 
       # Check structure for teach response
-      expect(body.keys).to eq(["meets_confirmed", "meets_pending", "meets_finished", "topics"])
+      expect(body.keys).to eq([ "meets_confirmed", "meets_pending", "meets_finished", "topics" ])
       expect(body["meets_confirmed"].first["id"]).to eq(meet.id)
       expect(body["topics"].first["id"]).to eq(topic.id)
       expect(body["topics"].first["name"]).to eq(topic.name)
@@ -93,7 +93,7 @@ RSpec.describe "UsersController", type: :request do
       body = JSON.parse(response.body)
 
       # Check structure for learn response
-      expect(body.keys).to eq(["meets_confirmed", "meets_pending", "meets_finished", "topics"])
+      expect(body.keys).to eq([ "meets_confirmed", "meets_pending", "meets_finished", "topics" ])
       expect(body["meets_confirmed"].first["id"]).to eq(meet.id)
       expect(body["topics"].first["id"]).to eq(topic.id)
       expect(body["topics"].first["name"]).to eq(topic.name)

@@ -1,6 +1,5 @@
 class SubjectsController < ApplicationController
-
- # GET /subjects
+  # GET /subjects
   # Lists all subjects based on optional query parameters
   def index
     if params[:self].present? && params[:self] == "true" && @current_user.first.career.present?

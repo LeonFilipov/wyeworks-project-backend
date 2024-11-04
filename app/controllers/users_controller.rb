@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
-    before_action :set_user, only: [:teach, :learn]
-  
+    before_action :set_user, only: [ :teach, :learn ]
+
     # GET /profile/teach
     def profile_teach
       render json: teach_response(@current_user.first), status: :ok
     end
-  
+
     # GET /users/:id/teach
     def teach
       user = User.where(id: params[:id])
@@ -15,12 +15,12 @@ class UsersController < ApplicationController
           render json: { error: I18n.t("error.users.not_found") }, status: 404
       end
     end
-  
+
     # GET /profile/learn
     def profile_learn
       render json: learn_response(@current_user.first), status: :ok
     end
-  
+
     # GET /users/:id/learn
     def learn
       user = User.where(id: params[:id])
@@ -58,32 +58,32 @@ class UsersController < ApplicationController
             render json: { error: I18n.t("error.careers.not_found") }, status: :not_found
         end
     end
-  
+
     private
 
     def set_user
       @user = User.find_by(id: params[:id])
       render json: { error: I18n.t("error.users.not_found") }, status: :not_found unless @user
     end
-  
+
     def user_params
       params.require(:user).permit(:name, :description, :career_id)
     end
 
     def teach_response(user)
       {
-        meets_confirmed: meets_schema(MeetsService.tutor_meets_by_status(user, 'confirmed')),
-        meets_pending: meets_schema(MeetsService.tutor_meets_by_status(user, 'pending')),
-        meets_finished: meets_schema(MeetsService.tutor_meets_by_status(user, 'finished')),
+        meets_confirmed: meets_schema(MeetsService.tutor_meets_by_status(user, "confirmed")),
+        meets_pending: meets_schema(MeetsService.tutor_meets_by_status(user, "pending")),
+        meets_finished: meets_schema(MeetsService.tutor_meets_by_status(user, "finished")),
         topics: user.availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
-  
+
     def learn_response(user)
       {
-        meets_confirmed: meets_schema(MeetsService.student_meets_by_status(user, 'confirmed')),
-        meets_pending: meets_schema(MeetsService.student_meets_by_status(user, 'pending')),
-        meets_finished: meets_schema(MeetsService.student_meets_by_status(user, 'finished')),
+        meets_confirmed: meets_schema(MeetsService.student_meets_by_status(user, "confirmed")),
+        meets_pending: meets_schema(MeetsService.student_meets_by_status(user, "pending")),
+        meets_finished: meets_schema(MeetsService.student_meets_by_status(user, "finished")),
         topics: user.interested_availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
@@ -102,7 +102,7 @@ class UsersController < ApplicationController
           }
       }
     end
-  
+
     def meets_schema(meets)
       meets.map do |meet|
         {
@@ -116,4 +116,4 @@ class UsersController < ApplicationController
         }
       end
     end
-  end
+end

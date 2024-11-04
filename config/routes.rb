@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     get "/learn", to: "users#profile_learn"
   end
 
-  resources :users, only: [:index, :show] do
+  resources :users, only: [ :index, :show ] do
     member do
       get "teach", to: "users#teach"
       get "learn", to: "users#learn"

@@ -3,12 +3,12 @@ class MeetsService
       @meet = meet
       @user = user
     end
-  
+
     # Class method to mark finished meets based on date
     def self.date_check
       Meet.mark_finished_meets
     end
-  
+
     def self.student_meets_by_status(user, status)
       Meet.joins(:participants)
           .where(participants: { user_id: user.id })
@@ -21,7 +21,7 @@ class MeetsService
       meets_query = meets_query.where(status: status) if status
       meets_query
     end
-  
+
     # Retrieves participants and topic details for a specific meet
     def get_participants_and_topic
       query = Meet.joins("INNER JOIN availability_tutors ON availability_tutors.id = meets.availability_tutor_id")
@@ -39,4 +39,4 @@ class MeetsService
     rescue ActiveRecord::RecordNotFound
       { error: "Participants not found" }
     end
-  end
+end
