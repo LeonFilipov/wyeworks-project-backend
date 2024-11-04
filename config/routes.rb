@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post "meets/:id/interesteds", to: "meets#add_interest"
   delete "meets/:id/interesteds", to: "meets#remove_interest"
 
-  resources :topics, only: [ :index, :show, :create, :delete ]
+  resources :topics, only: [ :index, :show, :create, :delete, :update ]
 
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos

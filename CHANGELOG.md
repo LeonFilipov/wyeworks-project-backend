@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-373]](https://www.notion.so/Talle-S-Editar-un-tema-1e31bd9a08c746e8b80622dcc6564bb2?pvs=4)
++ Added topics update endpoint
++ Added unit tests for topics controller, update endpoint
 
 + [[Backend-370]](https://www.notion.so/Talle-M-Seleccionar-y-cambiar-carrera-de-usuario-editar-pefil-4a95c866da3c42deba0eeed8750c3614)
 + Modify profile endpoint to allow changing the user's career

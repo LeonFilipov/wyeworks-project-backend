@@ -78,6 +78,7 @@ en:
     topics:
       created: "Topic created successfully"
       deleted: "Topic deleted successfully"
+      updated: "Topic updated successfully"
     participants:
       created: "Participant added"
 
