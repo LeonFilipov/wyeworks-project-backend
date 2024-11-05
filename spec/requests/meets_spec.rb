@@ -158,39 +158,69 @@ let!(:career) { FactoryBot.create(:career, university: university) }
   end
 
   describe "PATCH/PUT /meets/:id (confirm a meet)" do
-    it "No authorization" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      non_authorized_user = FactoryBot.create(:user)
-      unauthorized_token = JsonWebTokenService.encode(user_id: non_authorized_user.id)
-      patch "/meets/#{meet.id}",
-      params: { meet: { date: "2021-12-12 12:00:00" } },
-      headers: { "Authorization" => "Bearer #{unauthorized_token}" }
-      expect(response).to have_http_status(:unauthorized)
+    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
+    let!(:non_authorized_user) { FactoryBot.create(:user) }
+    let!(:unauthorized_token) { JsonWebTokenService.encode(user_id: non_authorized_user.id) }
+
+    context "when user is not authorized" do
+      it "returns unauthorized status" do
+        patch "/meets/#{meet.id}",
+              params: { meet: { date: "2021-12-12 12:00:00" } },
+              headers: { "Authorization" => "Bearer #{unauthorized_token}" }
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
+      end
     end
 
-    it "Confirm a meet two times" do
-      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor)
-      patch "/meets/#{meet.id}",
-        params: { meet: { date: "2021-12-12 12:00:00" } },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.confirmed"))
+    context "when confirming a meet for the first time" do
+      it "confirms the meet successfully" do
+        patch "/meets/#{meet.id}",
+              params: { meet: { date: "2021-12-12 12:00:00" } },
+              headers: { "Authorization" => "Bearer #{token}" }
 
-      patch "/meets/#{meet.id}",
-        params: { meet: { date: "2021-12-12 12:00:01" } },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "confirmed"))
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+      end
     end
 
-    it "Meet doesn't exist" do
-      patch "/meets/0",
-        params: { meet: { date: "2021-12-12 12:00:00" } },
-        headers: { "Authorization" => "Bearer #{token}" }
-      expect(response).to have_http_status(:not_found)
-      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
+    context "when confirming a meet that is already confirmed" do
+      it "returns a bad request status" do
+        # First confirmation
+        patch "/meets/#{meet.id}",
+              params: { meet: { date: "2021-12-12 12:00:00" } },
+              headers: { "Authorization" => "Bearer #{token}" }
+
+        # Verifica la respuesta y el mensaje después de la primera confirmación
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+
+        # Intento de confirmar de nuevo
+        patch "/meets/#{meet.id}",
+              params: { meet: { date: "2021-12-12 12:00:01" } },
+              headers: { "Authorization" => "Bearer #{token}" }
+
+
+
+        # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "completed"))
+      end
+    end
+
+
+    context "when the meet does not exist" do
+      it "returns a not found status" do
+        patch "/meets/0",
+              params: { meet: { date: "2021-12-12 12:00:00" } },
+              headers: { "Authorization" => "Bearer #{token}" }
+
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
+      end
     end
   end
+
 
   describe "POST /meets/:id/interesteds (add interested to a meet)" do
     let!(:user) { FactoryBot.create(:user) }

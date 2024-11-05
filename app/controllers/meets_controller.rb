@@ -53,17 +53,30 @@ class MeetsController < ApplicationController
 
 
     # PATCH/PUT /meets/:id
-    def update # confirm a meet
+    def update
       @availability_tutor = AvailabilityTutor.find(@meet.availability_tutor_id)
-      if @current_user.first.id != @availability_tutor.user_id
-        render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
-      elsif @meet.status != "pending"
-        render json: { error: I18n.t("error.meets.already_status", status: "confirmed") }, status: :bad_request
-      else
-        @meet.status = "confirmed"
+
+      # Verificar que el usuario es el tutor del tema
+      unless @current_user.first.id == @availability_tutor.user_id
+        render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized and return
+      end
+
+      # Verificar el estado de la reunión
+      if @meet.status != "pending" && params[:meet][:date].present?
+        render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
+      end
+
+      # Actualizar la información de la reunión
+      if params[:meet][:date].present?
+        @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
         @meet.date_time = params[:meet][:date]
-        @meet.save
-        render json: { message: I18n.t("success.meets.confirmed") }, status: :ok
+      end
+
+      @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
+      if @meet.save
+        render json: { message: I18n.t("success.meets.updated") }, status: :ok
+      else
+        render json: { error: @meet.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
     end
 
@@ -121,5 +134,9 @@ class MeetsController < ApplicationController
         @meet = Meet.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: { error: I18n.t("error.meets.not_found") }, status: :not_found
+      end
+
+      def meet_params
+        params.require(:meet).permit(:date_time, :status, :link)
       end
 end

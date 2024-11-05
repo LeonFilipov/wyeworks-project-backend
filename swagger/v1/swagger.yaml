@@ -1294,10 +1294,10 @@ paths:
       tags:
         - Meets
 
-    put:
-      summary: Confirm a pending meet (Work in progress)
+    patch:
+      summary: Confirm a pending meet
       description: |
-        This endpoint is a work in progress.
+        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. If a new date is provided, the meeting status will be updated to confirmed. If the meeting is already confirmed or completed, an error is returned.
       parameters:
         - in: path
           name: id
@@ -1305,6 +1305,17 @@ paths:
           schema:
             type: integer
           description: The ID of the meet
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date-time
+                  description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
       responses:
         '200':
           description: Meet confirmed successfully
@@ -1327,9 +1338,28 @@ paths:
                     type: string
                     example: "User not allowed"
         '400':
-          $ref: '#/components/responses/AuthHeaderMissingError'
+          description: Invalid request due to meeting status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meeting already confirmed or completed"
+        '422':
+          description: Unprocessable entity due to validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error updating the meet"
       tags:
         - Meets
+
 
   /meets/:id/interesteds:
     post:
@@ -1588,31 +1618,6 @@ components:
       bearerFormat: JWT  # Indicates that this is a JWT token
 
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        description:
-          type: string
-        image_url:
-          type: string
-          format: uri
-        career:
-          type: object
-          nullable: true
-          properties:
-            id:
-              type: string
-              format: uuid
-            name:
-              type: string
 
     AvailabilityTutor:
       type: object
