@@ -270,8 +270,7 @@ GEM
       rubocop-rails
     ruby-progressbar (1.13.0)
     securerandom (0.3.1)
-    sidekiq (7.3.1)
-      concurrent-ruby (< 2)
+    sidekiq (7.3.5)
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
@@ -324,7 +323,7 @@ DEPENDENCIES
   rswag-ui
   rubocop
   rubocop-rails-omakase
-  sidekiq (~> 7.1, >= 7.1.2)
+  sidekiq (~> 7.3)
   spring
   tzinfo-data
 
