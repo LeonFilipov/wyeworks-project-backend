@@ -33,7 +33,7 @@ class UsersController < ApplicationController
 
     # GET /profile
     def profile
-      render json: [user_profile(@current_user.first)], status: 200
+      render json: [ user_profile(@current_user.first) ], status: 200
     end
 
     def show
