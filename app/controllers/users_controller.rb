@@ -33,13 +33,13 @@ class UsersController < ApplicationController
 
     # GET /profile
     def profile
-      render json: user_profile(@current_user.first), status: 200
+      render json: [user_profile(@current_user.first)], status: 200
     end
 
     def show
       user = User.where(id: params[:id])
       if user.present?
-          render json: user_profile(@current_user.first), status: 200
+          render json: user_profile(user), status: 200
       else
           render json: { error: I18n.t("error.users.not_found") }, status: 404
       end

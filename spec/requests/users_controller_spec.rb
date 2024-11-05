@@ -13,8 +13,8 @@ RSpec.describe "UsersControllers", type: :request do
     it "returns the current user with correct attributes" do
       get "/profile", headers: { 'Authorization': "Bearer #{token}" }
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).keys).to eq([ "id", "name", "email", "description", "image_url", "career" ])
-      expect(JSON.parse(response.body)["name"]).to eq(user.name)
+      expect(JSON.parse(response.body).first.keys).to eq([ "id", "name", "email", "description", "image_url", "career" ])
+      expect(JSON.parse(response.body).first["name"]).to eq(user.name)
     end
 
     it "returns an error if the token is invalid" do
@@ -31,7 +31,7 @@ RSpec.describe "UsersControllers", type: :request do
 
     it "the career is nil if the user does not have a career" do
       get "/profile", headers: { 'Authorization': "Bearer #{token}" }
-      expect(JSON.parse(response.body)["career"]).to be_nil
+      expect(JSON.parse(response.body).first["career"]).to be_nil
     end
   end
 
