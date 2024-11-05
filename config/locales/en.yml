@@ -30,28 +30,36 @@
 en:
   error:
     users:
-      not_found: "Error: User not found."
-      not_allowed: "Error: User not allowed"
-      not_created: "Error: User not created"
-      parameter_missing: "Error: Required parameter %{param} is missing"
+      not_found: "User not found."
+      not_allowed: "User not allowed"
+      not_created: "User not created"
+      parameter_missing: "Required parameter %{param} is missing"
     sessions:
-      invalid_token: "Error: Invalid token"
-      missing_header: "Error: Authorization header is missing"
+      invalid_token: "Invalid token"
+      missing_header: "Authorization header is missing"
     availabilities:
-      not_found: "Error: Availability not found"
+      not_found: "Availability not found"
     meets:
-      not_created: "Error: Meet not created"
-      not_interested: "Error: User is not interested in this meet"
-      not_found: "Error: Meet not found"
-      failed: "Error: Failed to %{action} meet"
-      already_status: "Error: Meet already %{status}"
-      already_interested: "Error: User already interested in this meet"
+      not_created: "Meet not created"
+      not_interested: "User is not interested in this meet"
+      not_found: "Meet not found"
+      failed: "Failed to %{action} meet"
+      already_status: "Meet already %{status}"
+      already_interested: "User already interested in this meet"
+      invalid_status: "Meet already cancelled"
+      tutor_interested: "Tutor can't be interested in his own meet"
+      pending_meet: "Pending meet already exists"
     universities:
-      not_found: "Error: University not found"
+      not_found: "University not found"
     subjects:
-      not_found: "Error: Subject not found"
+      not_found: "Subject not found"
     topics:
-      not_found: "Error: Topic not found"
+      not_found: "Topic not found"
+    participants:
+      not_found: "Participant not found"
+      already_participant: "User already participant in this meet"
+    careers:
+      not_found: "Career not found"
 
   success:
     users:
@@ -64,10 +72,15 @@ en:
       updated: "Meet updated successfully"
       confirmed: "Meet confirmed successfully"
       cancelled: "Meet cancelled successfully"
-      interested: "Interest expressed successfully"
+      interested: "Interested successfully"
       interest_removed: "Interest removed successfully"
+      add_interested: "Interested successfully"
     topics:
       created: "Topic created successfully"
       deleted: "Topic deleted successfully"
+      updated: "Topic updated successfully"
     participants:
       created: "Participant added"
+
+
+

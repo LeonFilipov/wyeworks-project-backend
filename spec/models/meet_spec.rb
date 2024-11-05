@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Meet, type: :model do
   let!(:university) { FactoryBot.create(:university) }
-  let!(:subject) { FactoryBot.create(:subject, university: university) }
+  let!(:career) { FactoryBot.create(:career, university: university) }
+  let!(:subject) { FactoryBot.create(:subject, career: career) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:user_tutor) { FactoryBot.create(:user) }
   let!(:availability_tutor) { FactoryBot.create(:availability_tutor, user: user_tutor, topic: topic) }
@@ -12,18 +13,12 @@ RSpec.describe Meet, type: :model do
     expect(meet).to be_valid
   end
 
-  it "is not valid without a description or link" do
-    meet.description = nil
-    expect(meet).to_not be_valid
-    meet.description = "Description"
+  it "is not valid without a link" do
     meet.link = nil
     expect(meet).to_not be_valid
   end
 
-  it "is not valid with an invalid mode or status" do
-    meet.mode = "invalid_mode"
-    expect(meet).to_not be_valid
-    meet.mode = "virtual"
+  it "is not valid with an invalid status" do
     meet.status = "invalid_status"
     expect(meet).to_not be_valid
   end

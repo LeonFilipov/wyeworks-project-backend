@@ -4,9 +4,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - In Progress
+## [1.0.0]
 
 ### Added
+
++ [[Backend-413]](https://www.notion.so/Talle-XS-Fix-GET-profile-4bf0069269044194b8977cc45cb960ed)
++ Fixed /profile endpoint 
+
++ [[Backend-378]](https://www.notion.so/Talle-S-Editar-y-confirmar-una-reuni-n-7b022f12d84948d88078f2d3b321a5de)
++ Logic for pending meetings. Now a user who is tutor of the meet can update the status from "pending" to "confirmed". 
+
++ [[Backend-403]](https://www.notion.so/Talle-S-L-gica-de-reuni-n-pediente-c524355484fd4804ba10e00f4894bbe2)
++ Logic for pending meetings. Now when a user create a topic, the system creates a pending meeting for that topic.
+
++ [[Backend-376]](https://www.notion.so/Talle-M-Ver-Perfil-de-usuario-b065b109535e4611b54bdec3ecb4a136?pvs=4)
++ New /profile/teach, /profile/learn, /users/:id/teach and /users/:id/learn endpoints.
+
++ [[Backend-371]](https://www.notion.so/Talle-XS-Filtrado-de-materias-por-carrera-4e6933405e994d7b8d624d1b5ce22588?pvs=4)
++ New /subjects endpoint wit self and career_id filters.
+
++ [[Backend-373]](https://www.notion.so/Talle-S-Editar-un-tema-1e31bd9a08c746e8b80622dcc6564bb2?pvs=4)
++ Added topics update endpoint
++ Added unit tests for topics controller, update endpoint
+
++ [[Backend-370]](https://www.notion.so/Talle-M-Seleccionar-y-cambiar-carrera-de-usuario-editar-pefil-4a95c866da3c42deba0eeed8750c3614)
++ Modify profile endpoint to allow changing the user's career
++ Modify profile endpoint to show the user's career
++ Create associations between user and career
+
++ [[Backend-375]](https://www.notion.so/Talle-M-Ver-detalle-de-un-tema-b6ebcc0ae5ee4ca4aae9accbd11e7078?pvs=4)
++ Changed topics#show route from proposed_topics/:availability_id to topics/:id
++ Added the logig to topics#show
++ Added a service for topics
++ Unit Tests for topic 
+ 
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
++ Added Test too
+
++ [[Backend-374]](https://www.notion.so/Talle-M-Ver-detalle-de-una-reuni-n-172ff13786bd405fade53cf161a723ee?pvs=4)
++ Removed description and mode from Meet model.
++ Adjusted /meets/:id response payload
+
++ [[Backend-354]](https://www.notion.so/Talle-S-Verificar-l-gica-de-interesarse-desinteresarse-en-una-meet-2b8bf228b0e84306abb8707ed5ce06dc)
++ Fixed logic to interest and uninterest in a meet.
++ New endpoint POST /meets/:id/interesteds to interest in a meet.
++ New endpoint DELETE /meets/:id/interesteds to uninterest in a meet.
+
++ [[Backend-383]](https://www.notion.so/Talle-M-Rework-to-availabilities-y-topics-520f0e9aa0af44d49bde6a5d4a09433f)
++ Availability now has only topic_id and user_id and is only for relations.
++ Availability_tutors now has one to one relation with topics.
++ New POST /topics endpoint to create a topic.
++ New DELETE /topics endponit to delete a topic.
++ Deleted /available_meets, /profile/meets, /meets/:id/interested, /interested_meetings endpoints
++ Deleted /tutor_availability, /tutor_availability/:id/interesteds, /topics/:id/tutor_availability endpoints
+
++ [[Backend-382]](https://www.notion.so/Talle-XS-Listar-tema-e920f080dfc244b19349d0ebc8c7f8f6)
++ New endpoint to list topics with filters GET /topics
+
+
+## [0.3.0] - Oct 31, 2024
+
+### Added
+
++ [[Backend-225]](https://www.notion.so/Talle-M-Integrar-Carreras-como-entidad-fb76c81bc5fc424ca77dc645d6b79b47?pvs=4)
++ Added Career entity and an endpoint
+- Unit Tests for Career not working
 
 + [[Backend-225]](https://www.notion.so/Talle-S-Unit-testing-of-Students-Controller-5fd405ae667b4f35ad61846339c544ca?pvs=4)
 + Unit Tests for Students controller
