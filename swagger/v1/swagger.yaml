@@ -238,7 +238,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '400':
@@ -1735,6 +1737,7 @@ components:
             name:
               type: string
               example: "John Doe"
+
     User:
       type: object
       properties:
