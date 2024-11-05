@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0]
 
 ### Added
++ [[Backend-378]](https://www.notion.so/Talle-S-Editar-y-confirmar-una-reuni-n-7b022f12d84948d88078f2d3b321a5de)
++ Logic for pending meetings. Now a user who is tutor of the meet can update the status from "pending" to "confirmed". 
 
 + [[Backend-403]](https://www.notion.so/Talle-S-L-gica-de-reuni-n-pediente-c524355484fd4804ba10e00f4894bbe2)
 + Logic for pending meetings. Now when a user create a topic, the system creates a pending meeting for that topic.
