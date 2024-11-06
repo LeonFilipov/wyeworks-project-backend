@@ -103,22 +103,22 @@ RSpec.describe "Topics", type: :request do
     let!(:subject2) { FactoryBot.create(:subject, career: career) }
     let!(:topic2) { FactoryBot.create(:topic, subject: subject2) }
     let!(:availability_tutor2) { FactoryBot.create(:availability_tutor, user: user2, topic: topic2) }
-
     context "when the topic exists" do
       it "returns http success and I proposed the topic" do
         get "/topics/#{topic.id}",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body)[0]["name"]).to eq(topic.name)
-        expect(JSON.parse(response.body)[0]["proposed"]).to eq(true)
+        expect(JSON.parse(response.body)["name"]).to eq(topic.name)
+        expect(JSON.parse(response.body)["proposed"]).to eq(true)
+        expect(JSON.parse(response.body).keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
       end
 
       it "returns http success and I did not proposed the topic" do
         get "/topics/#{topic2.id}",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body)[0]["name"]).to eq(topic2.name)
-        expect(JSON.parse(response.body)[0]["proposed"]).to eq(false)
+        expect(JSON.parse(response.body)["name"]).to eq(topic2.name)
+        expect(JSON.parse(response.body)["proposed"]).to eq(false)
       end
     end
 

@@ -91,15 +91,15 @@ class UsersController < ApplicationController
     def user_profile(user)
       career = user.career
       {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          description: user.description,
-          image_url: user.image_url,
-          career: career.nil? ? nil : {
-              id: career.id,
-              name: career.name
-          }
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        description: user.description,
+        image_url: user.image_url,
+        career: career.nil? ? nil : {
+            id: career.id,
+            name: career.name
+        }
       }
     end
 
