@@ -38,9 +38,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :universities, only: [ :index, :show ] do
-    resources :subjects, only: [ :index ]
-  end
+  resources :universities, only: [ :index, :show ]
 
   get "subjects" => "subjects#index"
 
