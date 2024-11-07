@@ -1046,6 +1046,16 @@ paths:
                   proposed:
                     type: boolean
                     example: true
+                  show_email:
+                    type: boolean
+                    example: true
+                  link:
+                    type: string
+                    format: uri
+                    example: "https://example.com/topic/14"
+                  subject_id:
+                    type: integer
+                    example: 1
                   meets: 
                     type: array
                     items:
