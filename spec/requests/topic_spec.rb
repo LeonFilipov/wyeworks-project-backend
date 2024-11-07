@@ -315,5 +315,26 @@ RSpec.describe "Topics", type: :request do
       expect(parsed["meets"].first["status"]).to eq(meet.status)
       expect(parsed["meets"].first["date_time"]).to eq(meet.date_time)
     end
+
+    it "Create a topic and delete it" do
+      post "/topics", params: {
+        topic: {
+          name: "New topic",
+          description: "New description",
+          link: "New link",
+          show_email: true,
+          subject_id: subject.id
+        }
+      },
+        headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:created)
+      topic_id = JSON.parse(response.body)["topic"]["id"]
+      # created
+      delete "/topics/#{topic_id}",
+        headers: { 'Authorization': "Bearer #{token}", 'Accept': 'application/json' }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.topics.deleted"))
+      expect(Topic.find_by(id: topic_id)).to be_nil
+    end
   end
 end

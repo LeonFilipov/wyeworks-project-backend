@@ -43,7 +43,7 @@ class TopicsController < ApplicationController
     topic = Topic.find_by(id: params[:id])
     if topic.nil?
       render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
-    elsif topic.user_id != @current_user.first.id
+    elsif topic.tutor.id != @current_user.first.id
       render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
     else
       topic.destroy
