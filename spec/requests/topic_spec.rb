@@ -108,9 +108,10 @@ RSpec.describe "Topics", type: :request do
         get "/topics/#{topic.id}",
         headers: { 'Authorization': "Bearer #{token}" }
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body)["name"]).to eq(topic.name)
-        expect(JSON.parse(response.body)["proposed"]).to eq(true)
-        expect(JSON.parse(response.body).keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
+        parsed = JSON.parse(response.body)
+        expect(parsed["name"]).to eq(topic.name)
+        expect(parsed["proposed"]).to eq(true)
+        expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
       end
 
       it "returns http success and I did not proposed the topic" do
@@ -147,7 +148,7 @@ RSpec.describe "Topics", type: :request do
         expect(response).to have_http_status(:created)
         parsed = JSON.parse(response.body)
         expect(parsed["message"]).to eq(I18n.t("success.topics.created"))
-        newTopic = Topic.find_by(name: "New topic")
+        newTopic = Topic.find_by(id: parsed["topic"]["id"])
         expect(newTopic).not_to be_nil
         expect(newTopic.description).to eq("New description")
         expect(newTopic.link).to eq("New link")
@@ -284,6 +285,35 @@ RSpec.describe "Topics", type: :request do
         expect(topic.reload.name).to eq("Updated Topic")
         expect(topic.reload.description).to eq("Updated description")
       end
+    end
+  end
+
+  describe "Integration tests" do
+    it "Create a topic and get it" do
+      post "/topics", params: {
+        topic: {
+          name: "New topic",
+          description: "New description",
+          link: "New link",
+          show_email: true,
+          subject_id: subject.id
+        }
+      },
+        headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:created)
+      topic_id = JSON.parse(response.body)["topic"]["id"]
+      # created
+      get "/topics/#{topic_id}",
+        headers: { 'Authorization': "Bearer #{token}" }
+      expect(response).to have_http_status(:success)
+      parsed = JSON.parse(response.body)
+      expect(parsed["name"]).to eq("New topic")
+      expect(parsed["proposed"]).to eq(true)
+      expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
+      meet = Meet.find_by(id: parsed["meets"].first["id"])
+      expect(parsed["meets"].first["id"]).to eq(meet.id)
+      expect(parsed["meets"].first["status"]).to eq(meet.status)
+      expect(parsed["meets"].first["date_time"]).to eq(meet.date_time)
     end
   end
 end
