@@ -26,12 +26,12 @@ class MeetsController < ApplicationController
     # GET /meets/:id
     def show
       render json: {
-        name: @meet.availability_tutor.topic.name,
         date: @meet.date_time,
         status: @meet.status,
         link: @meet.link,
         participant: @meet.participants.exists?(user_id: @current_user.first.id),
         topic: {
+          id: @meet.availability_tutor.topic.id,
           name: @meet.availability_tutor.topic.name,
           proposed: @meet.availability_tutor.user.id == @current_user.first.id
         },
