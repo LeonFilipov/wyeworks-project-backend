@@ -18,13 +18,11 @@ class TopicsController < ApplicationController
 
   # GET /topics/:id
   def show
-    service = TopicsService.new(@current_user)
-    topics = service.get_topics_by_id(params[:id])
-
-    if topics.empty?
-      render json: topics, status: :not_found
+    topic = Topic.find_by(id: params[:id])
+    if topic.nil?
+      render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
     else
-      render json: topics, status: :ok
+      render json: topic_details(topic), status: :ok
     end
   end
 
@@ -34,7 +32,7 @@ class TopicsController < ApplicationController
       topic = Topic.create!(topic_params)
       availability = AvailabilityTutor.create!(user_id: @current_user.first.id, topic_id: topic.id)
       MeetsService.create_pending_meet({ availability_tutor_id: availability.id, link: topic.link, status: "pending" })
-      render json: { message: I18n.t("success.topics.created") }, status: :created
+      render json: { message: I18n.t("success.topics.created"), topic: { id: topic.id } }, status: :created
     rescue ActiveRecord::RecordInvalid => e
       render json: { error: e.message }, status: :unprocessable_entity
     end
@@ -45,7 +43,7 @@ class TopicsController < ApplicationController
     topic = Topic.find_by(id: params[:id])
     if topic.nil?
       render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
-    elsif topic.user_id != @current_user.first.id
+    elsif topic.tutor.id != @current_user.first.id
       render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
     else
       topic.destroy
@@ -93,5 +91,25 @@ class TopicsController < ApplicationController
           name: topic.name
         }
       end
+    end
+
+    def topic_details(topic)
+      availability = topic.availability_tutor
+      meets = availability.meets
+      {
+        name: topic.name,
+        description: topic.description,
+        link: topic.link,
+        show_email: topic.show_email,
+        subject_id: topic.subject_id,
+        proposed: availability.user_id == @current_user.first.id,
+        meets: meets.map do |meet|
+          {
+            id: meet.id,
+            status: meet.status,
+            date: meet.date_time
+          }
+        end
+      }
     end
 end

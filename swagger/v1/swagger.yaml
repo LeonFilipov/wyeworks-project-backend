@@ -1004,6 +1004,12 @@ paths:
                   message:
                     type: string
                     example: "Topic created successfully"
+                  topic:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 14
         '422':
           description: Unprocessable entity
           content:
@@ -1046,6 +1052,16 @@ paths:
                   proposed:
                     type: boolean
                     example: true
+                  show_email:
+                    type: boolean
+                    example: true
+                  link:
+                    type: string
+                    format: uri
+                    example: "https://example.com/topic/14"
+                  subject_id:
+                    type: integer
+                    example: 1
                   meets: 
                     type: array
                     items:
@@ -1119,12 +1135,12 @@ paths:
                   error:
                     type: string
                     example: "User not allowed"
-
-    /topics/{topic_id}:
+      tags:
+      - Topics
     patch:
       parameters:
         - in: path
-          name: id
+          name: topic_id
           required: true
           schema:
             type: integer
@@ -1152,8 +1168,47 @@ paths:
                     show_email:
                       type: boolean
                       example: true
- 
-
+      responses:
+        '200':
+          description: Topic successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The topic has been updated successfully."
+        '404':
+          description: Topic not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "The topic was not found."
+        '401':
+          description: Unauthorized to update the topic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "You are not allowed to update this topic."
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Validation failed: Name can't be blank."
       tags:
       - Topics
       
@@ -1243,6 +1298,9 @@ paths:
                   topic:
                     type: object
                     properties:
+                      id:
+                        type: integer
+                        example: 1
                       name:
                         type: string
                         example: "Math Fundamentals"
@@ -1608,6 +1666,96 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
       - Careers
+  /universities:
+    get:
+      tags:
+        - Universities
+      summary: Get all universities
+      description: Retrieve a list of all universities.
+      responses:
+        '200':
+          description: A list of universities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: "Harvard University"
+                    location:
+                      type: string
+                      example: "Cambridge, MA"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Something went wrong."
+  /subjects:
+    get:
+      tags:
+        - Subjects
+      summary: Get all subjects
+      description: Retrieve a list of all subjects based on optional query parameters.
+      parameters:
+        - in: query
+          name: self
+          schema:
+            type: boolean
+          description: Filter subjects for the current user's career.
+          example: true
+        - in: query
+          name: career_id
+          schema:
+            type: integer
+          description: Filter subjects by career ID.
+          example: 3
+      responses:
+        '200':
+          description: A list of subjects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: "Mathematics"
+        '404':
+          description: Career not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Career not found."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Something went wrong."
 
 security:
   - bearerAuth: []

@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   post "meets/:id/interesteds", to: "meets#add_interest"
   delete "meets/:id/interesteds", to: "meets#remove_interest"
 
-  resources :topics, only: [ :index, :show, :create, :delete, :update ]
+  resources :topics, only: [ :index, :show, :create, :update ]
+
+  delete "topics/:id", to: "topics#delete"
 
   get "interested_meetings", to: "students#interested_meetings"
   # Temas propuestos
@@ -38,9 +40,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :universities, only: [ :index, :show ] do
-    resources :subjects, only: [ :index ]
-  end
+  resources :universities, only: [ :index, :show ]
 
   get "subjects" => "subjects#index"
 
