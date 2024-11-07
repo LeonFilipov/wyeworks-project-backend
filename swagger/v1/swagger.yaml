@@ -1004,6 +1004,12 @@ paths:
                   message:
                     type: string
                     example: "Topic created successfully"
+                  topic:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 14
         '422':
           description: Unprocessable entity
           content:
