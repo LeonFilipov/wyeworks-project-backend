@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
++ [[Backend-421]](https://www.notion.so/Talle-XS-Fix-DELETE-topics-id-7378756240dc41c9a39ca6c9f9a78786)
++ Fixed DELETE /topics/:id endpoint
+
++ [[Backend-420]](https://www.notion.so/Talle-XS-GET-meets-id-0ecb3664967048e19dc3f501b0a79acf)
++ Fixed /meets/:id endpoint
+
++ [[Backend-417]](https://www.notion.so/Talle-S-Agregar-campos-a-GET-topic-id-e9b06300fde0495ba0e53731349f8d8c)
++ Added missing fields to /topics/:id endpoint
+
 + [[Backend-416]](https://www.notion.so/Talle-XS-Documentar-en-swagger-endpoints-para-universities-0c8b23375fd9467da9ac24fceda7de6e?pvs=4)
 + Fixed swagger errors and added missing endpoints /universities and /subjects.
 
