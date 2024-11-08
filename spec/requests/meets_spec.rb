@@ -158,12 +158,12 @@ RSpec.describe "Meets", type: :request do
   end
 
   describe "PATCH/PUT /meets/:id (confirm a meet)" do
-    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
     let!(:non_authorized_user) { FactoryBot.create(:user) }
     let!(:unauthorized_token) { JsonWebTokenService.encode(user_id: non_authorized_user.id) }
 
     context "when user is not authorized" do
       it "returns unauthorized status" do
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
               params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{unauthorized_token}" }
@@ -184,6 +184,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.status).to eq("confirmed")
         expect(meet.date_time).to eq("2024-12-12 12:00:00")
+        expect(availability_tutor.meets.count).to eq(2)
       end
     end
 
@@ -243,9 +244,9 @@ RSpec.describe "Meets", type: :request do
     let!(:user) { FactoryBot.create(:user) }
     let!(:user1) { FactoryBot.create(:user) }
     let!(:user2) { FactoryBot.create(:user) }
-    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor) }
 
     it "tutor can't be interested in their own meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:bad_request)
@@ -253,6 +254,7 @@ RSpec.describe "Meets", type: :request do
     end
 
     it "Meet already cancelled or completed" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
       meet.update(status: "cancelled")
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
@@ -261,6 +263,7 @@ RSpec.describe "Meets", type: :request do
     end
 
     it "Add interested to a meet" do
+      meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
       expect(response).to have_http_status(:ok)

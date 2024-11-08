@@ -70,14 +70,15 @@ class MeetsController < ApplicationController
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
+      @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
       # Actualizar la información de la reunión
       if params[:meet][:date].present?
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
         @meet.date_time = params[:meet][:date]
       end
 
-      @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
-      if @meet.save
+      if @meet.save!
+        MeetsService.create_pending_meet({ availability_tutor_id: @availability_tutor.id, link: @availability_tutor.topic.link, status: "pending" })
         UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
         render json: { message: I18n.t("success.meets.updated") }, status: :ok
       else
