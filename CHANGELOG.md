@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
++ [[Backend-432]](https://www.notion.so/Talle-XS-Fix-no-se-crea-una-meet-pendiente-automaticamente-4241457cb4d7442f8f31d1b1cbe8cf46)
++ Fix for not creating a pending meet automatically
+
 + [[Backend-429]](https://www.notion.so/Talle-S-Fix-del-metodo-patch-en-meets-id-42120d9a647c41a5b80941080af5f357)
 + Se arregla bug para poder modificar campos de una meet confirmada
 
