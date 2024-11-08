@@ -165,7 +165,7 @@ RSpec.describe "Meets", type: :request do
     context "when user is not authorized" do
       it "returns unauthorized status" do
         patch "/meets/#{meet.id}",
-              params: { meet: { date_time: "2024-12-12 12:00:00" } },
+              params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{unauthorized_token}" }
 
         expect(response).to have_http_status(:unauthorized)
@@ -177,7 +177,7 @@ RSpec.describe "Meets", type: :request do
       it "confirms the meet successfully" do
         meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
-              params: { meet: { date_time: "2024-12-12 12:00:00" } },
+              params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
@@ -192,11 +192,11 @@ RSpec.describe "Meets", type: :request do
         meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         # First confirmation
         patch "/meets/#{meet.id}",
-              params: { meet: { date_time: "2024-12-12 12:00:00" } },
+              params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         patch "/meets/#{meet.id}",
-              params: { meet: { date_time: "2024-12-12 12:00:01" } },
+              params: { meet: { date: "2024-12-12 12:00:01" } },
               headers: { "Authorization" => "Bearer #{token}" }
         # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
         expect(response).to have_http_status(:bad_request)
@@ -210,7 +210,7 @@ RSpec.describe "Meets", type: :request do
     context "when the meet does not exist" do
       it "returns a not found status" do
         patch "/meets/0",
-              params: { meet: { date_time: "2024-12-12 12:00:00" } },
+              params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
@@ -221,7 +221,7 @@ RSpec.describe "Meets", type: :request do
       it "Edit link" do
         meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
-              params: { meet: { date_time: "2024-12-12 12:00:01" } },
+              params: { meet: { date: "2024-12-12 12:00:01" } },
               headers: { "Authorization" => "Bearer #{token}" }
         # confirmed
         expect(response).to have_http_status(:ok)
@@ -278,7 +278,7 @@ RSpec.describe "Meets", type: :request do
 
     it 'envía un correo a cada participante con la información correcta' do
       patch "/meets/#{meet.id}",
-        params: { meet: { date_time: "2024-12-12 12:00:00" } },
+        params: { meet: { date: "2024-12-12 12:00:00" } },
         headers: { "Authorization" => "Bearer #{token}" }
 
       expect(response).to have_http_status(:ok)
@@ -332,12 +332,14 @@ RSpec.describe "Meets", type: :request do
     it "create a topic and confirm a meet" do
       # create topic
       post "/topics",
-        params: { topic: { 
-          name: "Topic 1", 
-          description: "New description",
-          link: "https://link.com",
-          show_email: true,
-          subject_id: subject.id }
+        params: {
+          topic: {
+            name: "Topic 1",
+            description: "New description",
+            link: "https://link.com",
+            show_email: true,
+            subject_id: subject.id
+          }
         },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:created)
@@ -353,7 +355,7 @@ RSpec.describe "Meets", type: :request do
       expect(meet["status"]).to eq("pending")
       # Confirm meet
       patch "/meets/#{meet["id"]}",
-        params: { meet: { date_time: "2024-12-12 12:00:00" } },
+        params: { meet: { date: "2024-12-12 12:00:00" } },
         headers: { "Authorization" => "Bearer #{token}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))

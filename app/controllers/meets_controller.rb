@@ -66,14 +66,14 @@ class MeetsController < ApplicationController
       end
 
       # Verificar el estado de la reunión
-      if @meet.status == "confirmed" && params[:meet][:date_time].present?
+      if @meet.status == "confirmed" && params[:meet][:date].present?
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
       # Actualizar la información de la reunión
-      if params[:meet][:date_time].present?
+      if params[:meet][:date].present?
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
-        @meet.date_time = params[:meet][:date_time]
+        @meet.date_time = params[:meet][:date]
       end
 
       @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
@@ -170,6 +170,6 @@ class MeetsController < ApplicationController
       end
 
       def meet_params
-        params.require(:meet).permit(:date_time, :status, :link)
+        params.require(:meet).permit(:date_time, :link)
       end
 end
