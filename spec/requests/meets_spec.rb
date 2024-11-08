@@ -251,6 +251,7 @@ RSpec.describe "Meets", type: :request do
     end
   end
 
+
   describe '#meet_confirmada_email' do
     let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending") }
     let!(:participant1) { FactoryBot.create(:user) }
@@ -266,6 +267,47 @@ RSpec.describe "Meets", type: :request do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
       expect(meet.reload.status).to eq("confirmed")
+    end
+  end
+
+  describe "PATCH #cancel_meet" do
+    let!(:other_user) { FactoryBot.create(:user) }
+    let!(:token2) { JsonWebTokenService.encode(user_id: other_user.id) }
+    let(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "confirmed") }
+
+
+    context "when user is the meet tutor" do
+      context "and meet status is 'confirmed'" do
+        it "cancels the meets and returns success message" do
+          patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token}" }
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.cancelled"))
+          expect(meet.reload.status).to eq("cancelled")
+        end
+      end
+
+      context "and meet status is not 'confirmed'" do
+        before { meet.update(status: "pending") }
+
+        it "cant cancel and response is error" do
+          patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token}" }
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.cant_cancel", status: "pending"))
+          expect(meet.reload.status).to eq("pending")
+        end
+      end
+    end
+
+    context "when user is not meet tutor" do
+      it "response is unauthorized" do
+        patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token2}" }
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
+        expect(meet.reload.status).to eq("confirmed")
+      end
     end
   end
 end

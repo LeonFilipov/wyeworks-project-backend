@@ -49,6 +49,7 @@ en:
       invalid_status: "Meet already cancelled"
       tutor_interested: "Tutor can't be interested in his own meet"
       pending_meet: "Pending meet already exists"
+      cant_cancel: "Can't cancel meet, meet's status is %{status}"
     universities:
       not_found: "University not found"
     subjects:

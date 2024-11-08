@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :meets, only: [ :index, :show, :update ]
   post "meets/:id/interesteds", to: "meets#add_interest"
   delete "meets/:id/interesteds", to: "meets#remove_interest"
+  patch "cancel_meet/:id", to: "meets#cancel_meet"
 
   resources :topics, only: [ :index, :show, :create, :update ]
 
