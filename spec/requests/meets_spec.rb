@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Meets", type: :request do
   let!(:university) { FactoryBot.create(:university) }
-let!(:career) { FactoryBot.create(:career, university: university) }
+  let!(:career) { FactoryBot.create(:career, university: university) }
   let!(:subject) { FactoryBot.create(:subject, career: career) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:user_tutor) { FactoryBot.create(:user) }
@@ -248,6 +248,32 @@ let!(:career) { FactoryBot.create(:career, university: university) }
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.add_interested"))
+    end
+  end
+
+  describe '#meet_confirmada_email' do
+    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "confirmed") }
+    let!(:participant1) { FactoryBot.create(:user) }
+    let!(:participant2) { FactoryBot.create(:user) }
+    let!(:interesteds1) { FactoryBot.create(:interested, availability_tutor: availability_tutor, user: participant1) }
+    let!(:interesteds2) { FactoryBot.create(:interested, availability_tutor: availability_tutor, user: participant2) }
+
+    it 'envía un correo a cada participante con la información correcta' do
+      # Llama al método del mailer
+      email = described_class.meet_confirmada_email(meet.id, user_tutor.id, topic.id)
+
+      # Verifica que se enviaron los correos
+      expect { email.deliver_now }.to change { ActionMailer::Base.deliveries.count }.by(2)
+
+      # Verifica el contenido del correo para el primer participante
+      email_for_participant1 = ActionMailer::Base.deliveries.find { |e| e.to.include?(participant1.email) }
+      expect(email_for_participant1.subject).to eq('Reunión reunion confirmada')
+      expect(email_for_participant1.body.encoded).to include(participant1.name)
+
+      # Verifica el contenido del correo para el segundo participante
+      email_for_participant2 = ActionMailer::Base.deliveries.find { |e| e.to.include?(participant2.email) }
+      expect(email_for_participant2.subject).to eq('Reunión reunion confirmada')
+      expect(email_for_participant2.body.encoded).to include(participant2.name)
     end
   end
 end

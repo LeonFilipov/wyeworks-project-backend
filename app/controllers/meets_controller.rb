@@ -67,9 +67,9 @@ class MeetsController < ApplicationController
       end
 
       # Actualizar la información de la reunión
-      if params[:meet][:date].present?
+      if params[:meet][:date_time].present?
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
-        @meet.date_time = params[:meet][:date]
+        @meet.date_time = params[:meet][:date_time]
       end
 
       @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
@@ -78,6 +78,7 @@ class MeetsController < ApplicationController
       else
         render json: { error: @meet.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
+      UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
     end
 
     # POST /meets/:id/interesteds
