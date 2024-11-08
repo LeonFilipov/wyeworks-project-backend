@@ -1297,7 +1297,9 @@ paths:
     patch:
       summary: Confirm a pending meet
       description: |
-        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. If a new date is provided, the meeting status will be updated to confirmed. If the meeting is already confirmed or completed, an error is returned.
+        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. 
+        If a new date is provided, the meeting status will be updated to confirmed. 
+        If the meeting is already confirmed or completed, an error is returned.
       parameters:
         - in: path
           name: id
@@ -1312,10 +1314,13 @@ paths:
             schema:
               type: object
               properties:
-                date:
-                  type: string
-                  format: date-time
-                  description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
+                meet:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                      description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
       responses:
         '200':
           description: Meet confirmed successfully
