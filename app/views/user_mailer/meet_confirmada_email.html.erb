@@ -64,18 +64,21 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Notificación de Reunión - StudyCircle</h1>
+      <h1>Confirmación de Reunión - StudyCircle</h1>
     </div>
     <div class="content">
-      <p>Hola <strong><%= @participant.participant_name %></strong>,</p>
-      <p>Te informamos que la reunión sobre el tema <strong><%= @participant.topic_name %></strong> no se llevará a cabo.</p>
-      <p>El tutor <strong><%= @current_user.first.name %></strong> ha cancelado la reunión.</p>
-      <p>Descripción de la reunión: <strong><%= @participant.description %></strong></p>
+      <p>Hola <strong><%= @participant.user.name %></strong>,</p>
+      <p>Te informamos que la reunión sobre el tema <strong><%= @topic.name %></strong> se confirmó.</p>
+      <p>El tutor <strong><%= @tutor.name %></strong> ha coordinado la reunión.</p>
+      <p>Descripción de la reunión: <strong><%= @topic.description %></strong></p>
       <p>Fecha de la reunión: 
         <strong>
-          <%= @participant.date_time.strftime("%d/%m/%Y") %>
+          <%= @meet.date_time %>
         </strong>
       </p>
+      <div class="button-container">
+        <a href=<%= @meet.link %>>Link de la reunion</a>
+      </div>
       <!-- Contenedor centrado para el botón -->
       <div class="button-container">
         <a href="https://wyeworks-project.web.app/">Explorar StudyCircle</a>
@@ -87,3 +90,4 @@
   </div>
 </body>
 </html>
+

@@ -17,6 +17,19 @@ class UserMailer < ApplicationMailer
         )
     end
 
+    def meet_confirmada_email(id, user_id, topic_id)
+        @meet = Meet.find(id)
+        @tutor = User.find(user_id)
+        @topic = Topic.find(topic_id)
+        @meet.participants.each do |participant|
+            @participant = participant
+            mail(
+                to: email_address_with_name(participant.user.email, participant.user.name),
+                subject: "Reunión confirmada"
+            )
+        end
+    end
+
     def meet_cancelada_email(user, participant)
         @participant = participant
         @current_user = user

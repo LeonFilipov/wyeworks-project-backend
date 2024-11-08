@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Meets", type: :request do
   let!(:university) { FactoryBot.create(:university) }
-let!(:career) { FactoryBot.create(:career, university: university) }
+  let!(:career) { FactoryBot.create(:career, university: university) }
   let!(:subject) { FactoryBot.create(:subject, career: career) }
   let!(:topic) { FactoryBot.create(:topic, subject: subject) }
   let!(:user_tutor) { FactoryBot.create(:user) }
@@ -165,7 +165,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
     context "when user is not authorized" do
       it "returns unauthorized status" do
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2021-12-12 12:00:00" } },
+              params: { meet: { date_time: "2021-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{unauthorized_token}" }
 
         expect(response).to have_http_status(:unauthorized)
@@ -176,7 +176,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
     context "when confirming a meet for the first time" do
       it "confirms the meet successfully" do
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2021-12-12 12:00:00" } },
+              params: { meet: { date_time: "2021-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
 
         expect(response).to have_http_status(:ok)
@@ -188,7 +188,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
       it "returns a bad request status" do
         # First confirmation
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2021-12-12 12:00:00" } },
+              params: { meet: { date_time: "2021-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
 
         # Verifica la respuesta y el mensaje después de la primera confirmación
@@ -197,7 +197,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
 
         # Intento de confirmar de nuevo
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2021-12-12 12:00:01" } },
+              params: { meet: { date_time: "2021-12-12 12:00:01" } },
               headers: { "Authorization" => "Bearer #{token}" }
 
 
@@ -212,7 +212,7 @@ let!(:career) { FactoryBot.create(:career, university: university) }
     context "when the meet does not exist" do
       it "returns a not found status" do
         patch "/meets/0",
-              params: { meet: { date: "2021-12-12 12:00:00" } },
+              params: { meet: { date_time: "2021-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
 
         expect(response).to have_http_status(:not_found)
@@ -248,6 +248,66 @@ let!(:career) { FactoryBot.create(:career, university: university) }
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.add_interested"))
+    end
+  end
+
+
+  describe '#meet_confirmada_email' do
+    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending") }
+    let!(:participant1) { FactoryBot.create(:user) }
+    let!(:participant2) { FactoryBot.create(:user) }
+    let!(:interesteds1) { FactoryBot.create(:interested, availability_tutor: availability_tutor, user: participant1) }
+    let!(:interesteds2) { FactoryBot.create(:interested, availability_tutor: availability_tutor, user: participant2) }
+
+    it 'envía un correo a cada participante con la información correcta' do
+      patch "/meets/#{meet.id}",
+        params: { meet: { date_time: "2021-12-12 12:00:00" } },
+        headers: { "Authorization" => "Bearer #{token}" }
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+      expect(meet.reload.status).to eq("confirmed")
+    end
+  end
+
+  describe "PATCH #cancel_meet" do
+    let!(:other_user) { FactoryBot.create(:user) }
+    let!(:token2) { JsonWebTokenService.encode(user_id: other_user.id) }
+    let(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "confirmed") }
+
+
+    context "when user is the meet tutor" do
+      context "and meet status is 'confirmed'" do
+        it "cancels the meets and returns success message" do
+          patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token}" }
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.cancelled"))
+          expect(meet.reload.status).to eq("cancelled")
+        end
+      end
+
+      context "and meet status is not 'confirmed'" do
+        before { meet.update(status: "pending") }
+
+        it "cant cancel and response is error" do
+          patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token}" }
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.cant_cancel", status: "pending"))
+          expect(meet.reload.status).to eq("pending")
+        end
+      end
+    end
+
+    context "when user is not meet tutor" do
+      it "response is unauthorized" do
+        patch "/cancel_meet/#{meet.id}",
+          headers: { "Authorization" => "Bearer #{token2}" }
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
+        expect(meet.reload.status).to eq("confirmed")
+      end
     end
   end
 end
