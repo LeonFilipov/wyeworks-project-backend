@@ -25,7 +25,7 @@ class UserMailer < ApplicationMailer
             @participant = participant
             mail(
                 to: email_address_with_name(participant.user.email, participant.user.name),
-                subject: "Reunión reunion confirmada"
+                subject: "Reunión confirmada"
             )
         end
     end

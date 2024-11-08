@@ -62,7 +62,7 @@ class MeetsController < ApplicationController
       end
 
       # Verificar el estado de la reunión
-      if @meet.status != "pending" && params[:meet][:date].present?
+      if @meet.status != "pending" && params[:meet][:date_time].present?
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
@@ -74,11 +74,11 @@ class MeetsController < ApplicationController
 
       @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
       if @meet.save
+        UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
         render json: { message: I18n.t("success.meets.updated") }, status: :ok
       else
         render json: { error: @meet.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
-      UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
     end
 
     # POST /meets/:id/interesteds
