@@ -15,13 +15,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "availability_tutors", id: :serial, force: :cascade do |t|
+  create_table "availability_tutors", force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.integer "topic_id", null: false
-    t.datetime "effective_date", precision: nil
-    t.string "form"
-    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.bigint "topic_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_availability_tutors_on_topic_id"
+    t.index ["user_id"], name: "index_availability_tutors_on_user_id"
   end
 
   create_table "careers", force: :cascade do |t|
@@ -78,14 +78,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
     t.index ["career_id"], name: "index_subjects_on_career_id"
   end
 
-  create_table "tags", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "topic_id", null: false
-    t.index ["topic_id"], name: "index_tags_on_topic_id"
-  end
-
   create_table "topics", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -96,17 +88,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
     t.string "link"
     t.boolean "show_email", default: false
     t.index ["subject_id"], name: "index_topics_on_subject_id"
-  end
-
-  create_table "tutors", force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.integer "ranking"
-    t.integer "amount_given_lessons"
-    t.integer "amount_given_topics"
-    t.integer "amount_attended_students"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_tutors_on_user_id"
   end
 
   create_table "universities", force: :cascade do |t|
@@ -122,21 +103,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
     t.string "uid"
     t.string "description"
     t.string "image_url"
-    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "now()" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "attended_lessons", default: 0
+    t.integer "attended_tutors", default: 0
+    t.integer "attended_topics", default: 0
     t.integer "ranking"
     t.integer "amount_given_lessons"
     t.integer "amount_given_topics"
     t.integer "amount_attended_students"
-    t.integer "attended_lessons", default: 0
-    t.integer "attended_tutors", default: 0
-    t.integer "attended_topics", default: 0
     t.bigint "career_id"
     t.index ["career_id"], name: "index_users_on_career_id"
   end
 
-  add_foreign_key "availability_tutors", "topics", name: "availability_tutors_topic_id_fkey"
-  add_foreign_key "availability_tutors", "users", name: "availability_tutors_user_id_fkey"
+  add_foreign_key "availability_tutors", "topics"
+  add_foreign_key "availability_tutors", "users"
   add_foreign_key "careers", "universities"
   add_foreign_key "interesteds", "availability_tutors"
   add_foreign_key "interesteds", "users"
@@ -146,7 +127,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_03_190746) do
   add_foreign_key "student_topics", "topics"
   add_foreign_key "student_topics", "users"
   add_foreign_key "subjects", "careers"
-  add_foreign_key "tags", "topics"
   add_foreign_key "topics", "subjects"
   add_foreign_key "users", "careers"
 end
