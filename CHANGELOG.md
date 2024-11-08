@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
++ [[Backend-427]](https://www.notion.so/Talle-M-Envio-de-mail-una-vez-que-se-confirma-la-meet-7310a9bdde094a36ae8cea37a6f5ce5b?pvs=4)
++ Added Send of Mail to every interested when meet is confirmed
+
 + [[Backend-426]](https://www.notion.so/Cancelar-Meet-d079c8f107be496989a7fd04a9b74398?pvs=4)
 + Added cancel meet endpoint PATCH /cancel_meet/:id
-
 
 ### Fixed
 
