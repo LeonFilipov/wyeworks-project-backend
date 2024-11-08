@@ -61,8 +61,12 @@ class MeetsController < ApplicationController
         render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized and return
       end
 
+      if @meet.status == "cancelled" || @meet.status == "completed"
+        render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
+      end
+
       # Verificar el estado de la reunión
-      if @meet.status != "pending" && params[:meet][:date_time].present?
+      if @meet.status == "confirmed" && params[:meet][:date_time].present?
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 

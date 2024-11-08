@@ -200,23 +200,30 @@ RSpec.describe "Meets", type: :request do
               params: { meet: { date_time: "2021-12-12 12:00:01" } },
               headers: { "Authorization" => "Bearer #{token}" }
 
-
-
         # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
         expect(response).to have_http_status(:bad_request)
         expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "completed"))
       end
     end
 
-
     context "when the meet does not exist" do
       it "returns a not found status" do
         patch "/meets/0",
               params: { meet: { date_time: "2021-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
-
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
+      end
+    end
+
+    context "Edit a confirmed meet" do
+      it "Edit link" do
+        patch "/meets/#{meet.id}",
+          params: { meet: { link: "https://meet.com" } },
+          headers: { "Authorization" => "Bearer #{token}" }
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+        expect(meet.reload.link).to eq("https://meet.com")  
       end
     end
   end
