@@ -39,7 +39,7 @@ class MeetsService
                   .select("users.name AS participant_name,
                           users.email AS participant_email,
                           topics.name AS topic_name,
-                          meets.description AS description,
+                          topics.description AS description,
                           meets.status AS status,
                           meets.date_time AS date_time")
                   .where(meets: { id: @meet.id })

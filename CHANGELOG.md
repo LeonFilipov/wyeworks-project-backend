@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0]
 
+### Added
+
++ [[Backend-426]](https://www.notion.so/Cancelar-Meet-d079c8f107be496989a7fd04a9b74398?pvs=4)
++ Added cancel meet endpoint PATCH /cancel_meet/:id
+
+
 ### Fixed
 
 + [[Backend-421]](https://www.notion.so/Talle-XS-Fix-DELETE-topics-id-7378756240dc41c9a39ca6c9f9a78786)

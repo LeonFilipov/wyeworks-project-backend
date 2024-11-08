@@ -891,7 +891,6 @@ paths:
                     example: "Meet not found"
 
 
-
   /auth/google_oauth2/callback:
     get:
       summary: Callback for Google OAuth2
@@ -939,6 +938,22 @@ paths:
         '404':
           description: Topic not found
 
+  /cancel_meet/:id:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the meet
+    patch:
+      tags:
+        - Meets
+      responses:
+        '200':
+          description: Meet cancelled successfully
+        '404':
+          description: Meet not found
 
   /topics:
     get:
@@ -1357,7 +1372,9 @@ paths:
     patch:
       summary: Confirm a pending meet
       description: |
-        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. If a new date is provided, the meeting status will be updated to confirmed. If the meeting is already confirmed or completed, an error is returned.
+        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. 
+        If a new date is provided, the meeting status will be updated to confirmed. 
+        If the meeting is already confirmed or completed, an error is returned.
       parameters:
         - in: path
           name: id
@@ -1372,10 +1389,13 @@ paths:
             schema:
               type: object
               properties:
-                date:
-                  type: string
-                  format: date-time
-                  description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
+                meet:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                      description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
       responses:
         '200':
           description: Meet confirmed successfully

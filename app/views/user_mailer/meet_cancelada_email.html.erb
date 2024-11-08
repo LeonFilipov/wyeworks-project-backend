@@ -73,7 +73,7 @@
       <p>Descripción de la reunión: <strong><%= @participant.description %></strong></p>
       <p>Fecha de la reunión: 
         <strong>
-          <%= @participant.status == "confirmed" ? @participant.date_time : "Indefinida" %>
+          <%= @participant.date_time.strftime("%d/%m/%Y") %>
         </strong>
       </p>
       <!-- Contenedor centrado para el botón -->
