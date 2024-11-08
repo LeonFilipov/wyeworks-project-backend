@@ -223,7 +223,7 @@ RSpec.describe "Meets", type: :request do
           headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
-        expect(meet.reload.link).to eq("https://meet.com")  
+        expect(meet.reload.link).to eq("https://meet.com")
       end
     end
   end
