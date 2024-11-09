@@ -1396,6 +1396,10 @@ paths:
                       type: string
                       format: date-time
                       description: Optional new date and time for the meeting. If provided, the meeting status will be changed to confirmed.
+                    link:
+                      type: string
+                      format: uri
+                      description: Optional link to the meeting
       responses:
         '200':
           description: Meet confirmed successfully
