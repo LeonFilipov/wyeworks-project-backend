@@ -70,7 +70,12 @@ class MeetsController < ApplicationController
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
-      @meet.assign_attributes(meet_params) # Permitir modificar otros campos permitidos
+      params_formatted = {
+        date_time: params[:meet][:date].present? && @meet.date_time.nil? ? params[:meet][:date] : @meet.date_time,
+        link: params[:meet][:link].present? ? params[:meet][:link] : @meet.link
+      }
+
+      @meet.assign_attributes(params_formatted) # Permitir modificar otros campos permitidos
       # Actualizar la información de la reunión
       if params[:meet][:date].present?
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha

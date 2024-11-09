@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
++ [[Backend-433]](https://www.notion.so/fix-editar-meet-0c04b02b177241bba229644e104faf43?pvs=4)
++ Fix edit meet
+
 + [[Backend-432]](https://www.notion.so/Talle-XS-Fix-no-se-crea-una-meet-pendiente-automaticamente-4241457cb4d7442f8f31d1b1cbe8cf46)
 + Fix for not creating a pending meet automatically
 
