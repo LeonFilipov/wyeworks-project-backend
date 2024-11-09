@@ -74,7 +74,7 @@ class UsersController < ApplicationController
       {
         meets_confirmed: meets_schema(MeetsService.tutor_meets_by_status(user, "confirmed")),
         meets_pending: meets_schema(MeetsService.tutor_meets_by_status(user, "pending")),
-        meets_finished: meets_schema(MeetsService.tutor_meets_by_status(user, "finished")),
+        meets_finished: meets_schema(MeetsService.tutor_meets_by_status(user, "completed")),
         topics: user.availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
       {
         meets_confirmed: meets_schema(MeetsService.student_meets_by_status(user, "confirmed")),
         meets_pending: meets_schema(MeetsService.student_meets_by_status(user, "pending")),
-        meets_finished: meets_schema(MeetsService.student_meets_by_status(user, "finished")),
+        meets_finished: meets_schema(MeetsService.student_meets_by_status(user, "completed")),
         topics: user.interested_availability_tutors.map { |availability| { id: availability.topic.id, name: availability.topic.name } }
       }
     end
