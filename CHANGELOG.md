@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1]
+
++ [[Backend-434]](https://www.notion.so/Talle-XS-Fix-profile-teach-y-profile-learn-endpoints-16df254319de42cf820ec8ba29f853f9?pvs=4)
++ Now returning finished meets in both /profile/teach and /profile/learn correctly.
+
 ## [1.1.0]
 
 ### Added
