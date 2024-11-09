@@ -189,21 +189,22 @@ RSpec.describe "Meets", type: :request do
     end
 
     context "when confirming a meet that is already confirmed" do
-      it "returns a bad request status" do
+      it "returns a success status" do
         meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         # First confirmation
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2024-12-12 12:00:00" } },
+              params: { meet: { date: "2024-12-12 12:00:00", link: "hola.com" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2024-12-12 12:00:01" } },
+              params: { meet: { date: "2024-12-12 12:00:01", link: "hola2.com" } },
               headers: { "Authorization" => "Bearer #{token}" }
         # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
-        expect(response).to have_http_status(:bad_request)
-        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: "confirmed"))
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated", status: "confirmed"))
         meet = Meet.find(meet.id)
         expect(meet.status).to eq("confirmed")
+        expect(meet.link).to eq("hola2.com")
         expect(meet.date_time).to eq("2024-12-12 12:00:00")
       end
     end
