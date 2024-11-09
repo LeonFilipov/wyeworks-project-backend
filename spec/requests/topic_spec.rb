@@ -112,6 +112,7 @@ RSpec.describe "Topics", type: :request do
         expect(parsed["name"]).to eq(topic.name)
         expect(parsed["proposed"]).to eq(true)
         expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
+        expect(topic.availability_tutor.meets.size).to eq(1)
       end
 
       it "returns http success and I did not proposed the topic" do
@@ -154,7 +155,9 @@ RSpec.describe "Topics", type: :request do
         expect(newTopic.link).to eq("New link")
         expect(newTopic.show_email).to eq(true)
         expect(newTopic.subject.id).to eq(subject.id)
-        meet = Meet.find_by(availability_tutor_id: newTopic.availability_tutor.id)
+        availability_tutor_new = newTopic.availability_tutor
+        expect(availability_tutor_new.meets.size).to eq(1)
+        meet = Meet.find_by(availability_tutor_id: availability_tutor_new.id)
         expect(meet.status).to eq("pending")
         expect(meet.date_time).to be_nil
         expect(meet.link).to eq(newTopic.link)

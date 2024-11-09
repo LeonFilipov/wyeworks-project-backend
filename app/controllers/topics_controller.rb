@@ -22,6 +22,7 @@ class TopicsController < ApplicationController
     if topic.nil?
       render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
     else
+      MeetsService.create_pending_meet({ availability_tutor_id: topic.availability_tutor.id, link: topic.link, status: "pending" })
       render json: topic_details(topic), status: :ok
     end
   end
