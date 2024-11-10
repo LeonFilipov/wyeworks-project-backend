@@ -59,6 +59,49 @@ paths:
           $ref: '#/components/responses/AuthHeaderMissingError'
       tags:
       - Users
+  /users/{id}/proposed_topics:
+    get:
+      summary: Get proposed topics for the specified user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+      tags:
+        - Users
+      description: Retrieve a list of topics proposed by the logged user with his availability.
+      responses:
+        '200':
+          description: A list of proposed topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID of the proposed topic
+                    name:
+                      type: string
+                      description: Name of the proposed topic
+        '422':
+          description: Unprocessable entity. This error can return an array of errors. For example, if three parameters are required and none of them are provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Required param can't be blank"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
   /proposed_topics:
     get:
       summary: Get proposed topics for the current user
@@ -938,7 +981,7 @@ paths:
         '404':
           description: Topic not found
 
-  /cancel_meet/:id:
+  /cancel_meet/{id}:
     parameters:
       - in: path
         name: id

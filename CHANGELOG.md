@@ -4,14 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3]
+
+### Fixed
++ [[Backend-440]](https://www.notion.so/Talle-S-Fix-endpoint-users-id-y-nuevo-endpoint-users-id-proposed_meets-b4d8d945eefe459e9471c6b90f0fcd81?pvs=4)
++ Endpoint /users/:id now works and new endpoint /users/:id/proposed_meets
 
 ## [1.1.2]
-
 
 ### Fixed
 + [[Backend-433]](https://www.notion.so/fix-editar-meet-0c04b02b177241bba229644e104faf43?pvs=4)
 + Edit meet link even though it is confirmed
-
 
 ## [1.1.1]
 
