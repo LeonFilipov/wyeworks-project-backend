@@ -4,16 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
-## [1.1.4]
-
-### Fixed
-+ [[Backend-446]](https://www.notion.so/Bug-Report-Talle-S-Id-incorrecto-al-buscar-perfil-13a24a6692a4804da2c2e2a1681a01e2?pvs=4)
-+ User controller: learn & teach searches by the user got by params
-
-
 ## [1.1.3]
- git commit -m "en teach y learn se busca por el user y no el current user"
+
 ### Fixed
 + [[Backend-440]](https://www.notion.so/Talle-S-Fix-endpoint-users-id-y-nuevo-endpoint-users-id-proposed_meets-b4d8d945eefe459e9471c6b90f0fcd81?pvs=4)
 + Endpoint /users/:id now works and new endpoint /users/:id/proposed_meets
