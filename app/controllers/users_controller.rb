@@ -37,8 +37,8 @@ class UsersController < ApplicationController
     end
 
     def show
-      user = User.where(id: params[:id])
-      if user.present?
+      user = User.find_by(id: params[:id])
+      if user
           render json: user_profile(user), status: 200
       else
           render json: { error: I18n.t("error.users.not_found") }, status: 404

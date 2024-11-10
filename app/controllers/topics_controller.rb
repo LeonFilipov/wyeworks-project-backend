@@ -59,6 +59,15 @@ class TopicsController < ApplicationController
     render json: topic_response(topics), status: :ok
   end
 
+  # GET /users/:id/proposed_topics_given_user
+  def proposed_topics_given_user
+    user = User.find_by(id: params[:id])
+    return render json: { error: I18n.t("error.users.not_found") }, status: :not_found unless user
+
+    topics = Topic.for_user(user.id)
+    render json: topic_response(topics), status: :ok
+  end
+
    # PATCH /topics/:id
    def update
     topic = Topic.find_by(id: params[:id])
