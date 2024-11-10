@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     def teach
       user = User.where(id: params[:id])
       if user.present?
+
           render json: teach_response(user.first), status: :ok
       else
           render json: { error: I18n.t("error.users.not_found") }, status: 404
@@ -25,6 +26,7 @@ class UsersController < ApplicationController
     def learn
       user = User.where(id: params[:id])
       if user.present?
+
           render json: learn_response(user.first), status: :ok
       else
           render json: { error: I18n.t("error.users.not_found") }, status: 404
