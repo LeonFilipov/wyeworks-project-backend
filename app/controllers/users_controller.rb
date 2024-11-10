@@ -31,8 +31,6 @@ class UsersController < ApplicationController
       end
     end
 
-    # coment para push
-
     # GET /profile
     def profile
       render json: [ user_profile(@current_user.first) ], status: 200
