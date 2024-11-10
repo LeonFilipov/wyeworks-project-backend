@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     member do
       get "teach", to: "users#teach"
       get "learn", to: "users#learn"
+      get "proposed_topics", to: "topics#proposed_topics_given_user"
     end
   end
 
