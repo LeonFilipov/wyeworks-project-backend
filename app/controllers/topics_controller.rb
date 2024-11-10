@@ -68,8 +68,8 @@ class TopicsController < ApplicationController
     render json: topic_response(topics), status: :ok
   end
 
-   # PATCH /topics/:id
-   def update
+  # PATCH /topics/:id
+  def update
     topic = Topic.find_by(id: params[:id])
     owner = TopicsService.get_topic_owner(params[:id])
     if topic.nil?
