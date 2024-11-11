@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5]
+
+### Fixed
++ [[Backend-451]](https://www.notion.so/Talle-S-Bug-Update-Meet-la-settea-en-confirmada-con-una-fecha-anterior-a-la-actual-a2d54c7c096a4dec8561acad6cafadf9?pvs=4)
++ Fixed update meet endpoint to allow update only links and deny every date previous to current time when the meet is confirmed
 
 ## [1.1.4]
 
