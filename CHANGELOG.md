@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.1.4]
+
+### Fixed
++ [[Backend-440]](https://www.notion.so/Talle-XS-Fix-Delete-topics-topic_id-1e1b9ec4d68d4030b07ed68b1242f64e)
++ Fixed endpoint /topics/topic_id which was returning error 500 and now it functions as expected. 
+
 ## [1.1.3]
 
 ### Fixed
