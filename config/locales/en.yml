@@ -47,6 +47,7 @@ en:
       already_status: "Meet already %{status}"
       already_interested: "User already interested in this meet"
       invalid_status: "Meet already cancelled"
+      invalid_date: "Date must be in the future"
       tutor_interested: "Tutor can't be interested in his own meet"
       pending_meet: "Pending meet already exists"
       cant_cancel: "Can't cancel meet, meet's status is %{status}"
