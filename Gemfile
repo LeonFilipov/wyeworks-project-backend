@@ -71,7 +71,7 @@ group :development, :test do
   gem "rubocop", require: false
 
   # Test suite gem
-  gem "rspec-rails", "~> 7.0"
+  gem "rspec-rails", "~> 7.1"
 
   # Factories for testing
   gem "factory_bot_rails"
