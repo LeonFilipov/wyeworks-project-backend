@@ -136,6 +136,7 @@ class MeetsController < ApplicationController
       end
     end
 
+    # comentario de push
     # Patch /cancel_meet/:id
     def cancel_meet
       @availability_tutor = AvailabilityTutor.find(@meet.availability_tutor_id)
