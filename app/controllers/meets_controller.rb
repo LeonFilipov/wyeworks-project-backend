@@ -25,20 +25,23 @@ class MeetsController < ApplicationController
 
     # GET /meets/:id
     def show
+      availability = @meet.availability_tutor
+      topic = availability.topic
+      tutor = topic.tutor
       render json: {
         date: @meet.date_time,
         status: @meet.status,
         link: @meet.link,
         participant: @meet.participants.exists?(user_id: @current_user.first.id),
         topic: {
-          id: @meet.availability_tutor.topic.id,
-          name: @meet.availability_tutor.topic.name,
-          proposed: @meet.availability_tutor.user.id == @current_user.first.id
+          id: topic.id,
+          name: topic.name,
+          proposed: availability.user.id == @current_user.first.id
         },
         tutor: {
-          id: @meet.availability_tutor.user.id,
-          name: @meet.availability_tutor.user.name,
-          email: @meet.availability_tutor.user.email.presence
+          id: tutor.id,
+          name: tutor.name,
+          email: if topic.show_email then tutor.email else nil end
         },
         participants: @meet.participants.map do |participant|
           {
