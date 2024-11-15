@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.5]
 
+### Added
++ [[Backend-467]](https://www.notion.so/Talle-M-Bug-falta-notificar-a-los-estudiantes-interesados-cuando-se-elimina-un-Tema-fc48b5b8a4344c098127b61448c07fca?pvs=4)
++ Now when tutor eliminates a topic it notifies to students
++ Fixed time formats
+
 ### Fixed
 + [[Backend-451]](https://www.notion.so/Talle-S-Bug-Update-Meet-la-settea-en-confirmada-con-una-fecha-anterior-a-la-actual-a2d54c7c096a4dec8561acad6cafadf9?pvs=4)
 + Fixed update meet endpoint to allow update only links and deny every date previous to current time when the meet is confirmed
