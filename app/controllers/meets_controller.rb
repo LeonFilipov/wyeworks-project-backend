@@ -46,10 +46,9 @@ class MeetsController < ApplicationController
         participants: @meet.participants.map do |participant|
           {
             id: participant.user.id,
-            name: participant.user.name
-          }.tap do |participant_data|
-            participant_data[:email] = participant.user.email if @meet.availability_tutor.topic.show_email
-          end
+            name: participant.user.name,
+            email: participant.user.email
+          }
         end
       }, status: :ok
     end
