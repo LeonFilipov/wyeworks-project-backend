@@ -73,7 +73,7 @@
       <p>Descripción de la reunión: <strong><%= @topic.description %></strong></p>
       <p>Fecha de la reunión: 
         <strong>
-          <%= @meet.date_time.strftime("%d/%m/%Y") %>
+          <%= @meet.date_time.nil? ? "Indefinida" : @meet.date_time.strftime("%d/%m/%Y %H:%M") %>
         </strong>
       </p>
       <div class="button-container">
