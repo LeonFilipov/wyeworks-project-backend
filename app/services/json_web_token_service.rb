@@ -1,6 +1,6 @@
 #
 class JsonWebTokenService
-    def self.encode(payload, exp = 2.hours.from_now)
+    def self.encode(payload, exp = 1.month.from_now)
         payload[:exp] = exp.to_i
         JWT.encode(payload, ENV["JWT_SECRET"])
     end
