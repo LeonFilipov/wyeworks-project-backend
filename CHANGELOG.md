@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.6]
+
+### Updated
+
++ [[Backend-398]](https://www.notion.so/Talle-M-Arreglar-l-gica-de-campo-show_email-en-tabla-de-topics-58aa583eba48417ead86adf0425a0785)
++ Update show_email field logic in topics table
+
+### Fixed
+
++ [[Backend-468]](https://www.notion.so/Talle-XS-Hacer-queel-JWT-no-tenga-tiempo-de-expiraci-n-970c552389f0453e8dd5863b9d72d38b)
++ Update JWT expiration time to 1 month
+
 ## [1.1.5]
 
 ### Added
