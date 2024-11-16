@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5]
 
 ### Added
++ [[Backend-470]](https://www.notion.so/Talle-S-Poder-actualizarla-la-fecha-de-una-meet-ya-confirmada-5d5f5ce996d2475ca70fb8bc4e9b1396)
++ update meet also when it's confirmed to update to another date the same meet.
+
++ [[Backend-470]](https://www.notion.so/Talle-XS-Sacar-enpoints-obsoletos-de-Swagger-191396c8d4f4491f8503c444f5a61258)
++ remove deprecated endpoints from swagger.
+
+
+### Added
 + [[Backend-467]](https://www.notion.so/Talle-M-Bug-falta-notificar-a-los-estudiantes-interesados-cuando-se-elimina-un-Tema-fc48b5b8a4344c098127b61448c07fca?pvs=4)
 + Now when tutor eliminates a topic it notifies to students
 + Fixed time formats

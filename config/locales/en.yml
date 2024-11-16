@@ -51,12 +51,13 @@ en:
       tutor_interested: "Tutor can't be interested in his own meet"
       pending_meet: "Pending meet already exists"
       cant_cancel: "Can't cancel meet, meet's status is %{status}"
+      date_must_be_later: "Date must be later than current date"
     universities:
       not_found: "University not found"
     subjects:
       not_found: "Subject not found"
     topics:
-      not_found: "Topic not found"
+      not_found: "Topic not found" 
     participants:
       not_found: "Participant not found"
       already_participant: "User already participant in this meet"
