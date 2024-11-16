@@ -48,6 +48,10 @@ class TopicsController < ApplicationController
     elsif owner.first != @current_user.first.id
       render json: { error: I18n.t("error.users.not_allowed"), owner_id: owner.first }, status: :unauthorized
     else
+      participants = TopicsService.get_topic_interesteds(topic.id)
+      participants.each do |participant|
+        UserMailer.topic_eliminado_email(@current_user, participant).deliver_now
+      end
       topic.destroy
       render json: { message: I18n.t("success.topics.deleted") }, status: :ok
     end
@@ -107,6 +111,7 @@ class TopicsController < ApplicationController
     def topic_details(topic)
       availability = topic.availability_tutor
       meets = availability.meets
+      tutor = topic.tutor
       {
         name: topic.name,
         description: topic.description,
@@ -114,6 +119,11 @@ class TopicsController < ApplicationController
         show_email: topic.show_email,
         subject_id: topic.subject_id,
         proposed: availability.user_id == @current_user.first.id,
+        tutor: {
+          id: tutor.id,
+          name: tutor.name,
+          email: if topic.show_email then tutor.email else nil end
+        },
         meets: meets.map do |meet|
           {
             id: meet.id,

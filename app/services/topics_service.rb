@@ -17,4 +17,25 @@ class TopicsService
       { error: I18n.t("error.topics.not_found") }
     end
   end
+
+
+  def self.get_topic_interesteds(id)
+    begin
+    query=Meet.joins("INNER JOIN availability_tutors ON availability_tutors.id = meets.availability_tutor_id")
+              .joins("INNER JOIN topics ON availability_tutors.topic_id = topics.id")
+              .joins("INNER JOIN participants ON meets.id = participants.meet_id")
+              .joins("INNER JOIN users ON participants.user_id = users.id")
+              .select("DISTINCT users.name AS participant_name,
+                          users.email AS participant_email,
+                          topics.name AS topic_name,
+                          topics.description AS description,
+                          meets.status AS status,
+                          meets.date_time AS date_time")
+              .where(topics: { id: id })
+
+      query
+    rescue ActiveRecord::RecordNotFound
+      { error: I18n.t("error.topics.not_found") }
+    end
+  end
 end

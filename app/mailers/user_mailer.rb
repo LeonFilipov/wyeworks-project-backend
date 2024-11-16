@@ -38,4 +38,26 @@ class UserMailer < ApplicationMailer
             subject: "Reunión cancelada"
         )
     end
+
+    def topic_eliminado_email(user, participant)
+        @participant = participant
+        @current_user = user
+        mail(
+            to: email_address_with_name(@participant.participant_email, @participant.participant_name),
+            subject: "Tema eliminado"
+        )
+    end
+
+    def meet_updated_email(meet_id, tutor_id, topic_id)
+        @meet = Meet.find(meet_id)
+        @tutor = User.find(tutor_id)
+        @topic = Topic.find(topic_id)
+        @meet.participants.each do |participant|
+            @participant = participant
+            mail(
+                to: email_address_with_name(participant.user.email, participant.user.name),
+                subject: "Reunión actualizada"
+            )
+        end
+      end
 end

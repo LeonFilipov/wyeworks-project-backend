@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notificación de Reunión - StudyCircle</title>
+  <title>Actualización de Reunión - StudyCircle</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -49,9 +49,8 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    /* Centrado del botón */
     .button-container {
-      text-align: center; /* Centrar el contenido */
+      text-align: center;
     }
     .footer {
       text-align: center;
@@ -64,19 +63,21 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Notificación de Reunión - StudyCircle</h1>
+      <h1>Actualización de Reunión - StudyCircle</h1>
     </div>
     <div class="content">
-      <p>Hola <strong><%= @participant.participant_name %></strong>,</p>
-      <p>Te informamos que la reunión sobre el tema <strong><%= @participant.topic_name %></strong> no se llevará a cabo.</p>
-      <p>El tutor <strong><%= @current_user.first.name %></strong> ha cancelado la reunión.</p>
-      <p>Descripción de la reunión: <strong><%= @participant.description %></strong></p>
-      <p>Fecha de la reunión: 
+      <p>Hola <strong><%= @participant.user.name %></strong>,</p>
+      <p>Te informamos que la reunión sobre el tema <strong><%= @topic.name %></strong> ha sido actualizada.</p>
+      <p>El tutor <strong><%= @tutor.name %></strong> ha modificado los detalles de la reunión.</p>
+      <p>Descripción de la reunión: <strong><%= @topic.description %></strong></p>
+      <p>Nueva fecha de la reunión: 
         <strong>
-          <%= @participant.date_time.nil? ? "Indefinida" : @participant.date_time.strftime("%d/%m/%Y %H:%M") %>
+          <%= @meet.date_time.nil? ? "Indefinida" : @meet.date_time.strftime("%d/%m/%Y %H:%M") %>
         </strong>
       </p>
-      <!-- Contenedor centrado para el botón -->
+      <div class="button-container">
+        <a href="<%= @meet.link %>">Acceder a la reunión</a>
+      </div>
       <div class="button-container">
         <a href="https://wyeworks-project.web.app/">Explorar StudyCircle</a>
       </div>
