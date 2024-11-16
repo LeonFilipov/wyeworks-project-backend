@@ -77,7 +77,8 @@ class MeetsController < ApplicationController
 
       params_formatted = {
         date_time: params[:meet][:date].present? ? params[:meet][:date] : @meet.date_time,
-        link: params[:meet][:link].present? ? params[:meet][:link] : @meet.link
+        link: params[:meet][:link].present? ? params[:meet][:link] : @meet.link,
+        status: "confirmed"
       }
 
       @meet.assign_attributes(params_formatted) # Permitir modificar otros campos permitidos

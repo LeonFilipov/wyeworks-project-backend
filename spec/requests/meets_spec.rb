@@ -157,16 +157,22 @@ RSpec.describe "Meets", type: :request do
     end
   end
 
-  describe "PATCH/PUT /meets/:id (confirm a meet)" do
+  describe "PATCH /meets/:id (update a meet)" do
     let!(:non_authorized_user) { FactoryBot.create(:user) }
     let!(:unauthorized_token) { JsonWebTokenService.encode(user_id: non_authorized_user.id) }
+    let!(:meet) { FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending") }
+    let!(:meet_confirmed) { FactoryBot.create(:meet, :confirmed, availability_tutor: availability_tutor) }
+
+    # Cambiar el status de 'meet_confirmed' a 'confirmed' antes de las pruebas
+    before do
+      meet_confirmed.update(status: "confirmed")
+    end
 
     context "when user is not authorized" do
       it "returns unauthorized status" do
-        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
-              params: { meet: { date: "2024-12-12 12:00:00" } },
-              headers: { "Authorization" => "Bearer #{unauthorized_token}" }
+              headers: { "Authorization" => "Bearer #{unauthorized_token}", "Content-Type" => "application/json" },
+              params: { meet: { date: "2024-12-12 12:00:00" } }.to_json
 
         expect(response).to have_http_status(:unauthorized)
         expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.users.not_allowed"))
@@ -175,73 +181,106 @@ RSpec.describe "Meets", type: :request do
 
     context "when confirming a meet for the first time" do
       it "confirms the meet successfully" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
+        tiempo = Time.current + 5.hours
         patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0) } },
-              headers: { "Authorization" => "Bearer #{token}" }
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: {
+                meet: {
+                  date: tiempo.change(usec: 0).strftime("%Y-%m-%d %H:%M:%S"),
+                  link: "https://meetlink.com"
+                }
+              }.to_json
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
-        meet = Meet.find(meet.id)
-        expect(meet.status).to eq("confirmed")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
-        expect(availability_tutor.meets.count).to eq(2)
+        expect(meet.reload.status).to eq("confirmed")
+        expect(meet.link).to eq("https://meetlink.com")
       end
     end
 
-    context "when confirming a meet that is already confirmed" do
-      it "returns a success status" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
-        # First confirmation
-        patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0), link: "hola.com" } },
-              headers: { "Authorization" => "Bearer #{token}" }
+    context "when updating a confirmed meet to a future date" do
+      it "updates the meet successfully" do
+        tiempo_inicial = Time.current + 5.hours
+        tiempo_nuevo = Time.current + 23.days + 10.hours
+        patch "/meets/#{meet_confirmed.id}",
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: {
+                meet: {
+                  date: tiempo_nuevo.change(usec: 0).strftime("%Y-%m-%d %H:%M:%S"),
+                  link: "https://meetlink.com"
+                }
+              }.to_json
         expect(response).to have_http_status(:ok)
-        patch "/meets/#{meet.id}",
-              params: { meet: { date: (tiempo - 1.hour).change(usec: 0), link: "hola2.com" } },
-              headers: { "Authorization" => "Bearer #{token}" }
-        # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
-        expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated", status: "confirmed"))
-        meet = Meet.find(meet.id)
-        expect(meet.status).to eq("confirmed")
-        expect(meet.link).to eq("hola2.com")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+        meet_confirmed.reload
+        expect(meet_confirmed.status).to eq("confirmed")
+        expect(meet_confirmed.date_time).to eq(tiempo_nuevo.change(usec: 0))
+      end
+    end
+
+    context "when updating a confirmed meet to a past date" do
+      it "returns a bad request status" do
+        tiempo_meet = meet_confirmed.date_time
+        tiempo_pasado = Time.current - 1.hour
+        patch "/meets/#{meet_confirmed.id}",
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: { meet: { date: tiempo_pasado.change(usec: 0).strftime("%Y-%m-%d %H:%M:%S") } }.to_json
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.invalid_date"))
+        meet_confirmed.reload
+        expect(meet_confirmed.date_time).to eq(tiempo_meet) # La fecha no debe actualizarse
       end
     end
 
     context "when the meet does not exist" do
       it "returns a not found status" do
         patch "/meets/0",
-              params: { meet: { date: "2024-12-12 12:00:00" } },
-              headers: { "Authorization" => "Bearer #{token}" }
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: { meet: { date: "2024-12-12 12:00:00" } }.to_json
+
         expect(response).to have_http_status(:not_found)
         expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.not_found"))
       end
     end
 
-    context "Edit a confirmed meet" do
-      it "Edit link" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
-        patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0) } },
-              headers: { "Authorization" => "Bearer #{token}" }
-        # confirmed
-        expect(response).to have_http_status(:ok)
-        patch "/meets/#{meet.id}",
-          params: { meet: { link: "https://meet.com" } },
-          headers: { "Authorization" => "Bearer #{token}" }
+    context "when updating only the link of a confirmed meet" do
+      it "updates the link successfully" do
+        tiempo_meet = meet_confirmed.date_time
+        patch "/meets/#{meet_confirmed.id}",
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: { meet: { link: "https://meet.com" } }.to_json
+
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
-        meet = Meet.find(meet.id)
-        expect(meet.link).to eq("https://meet.com")
-        expect(meet.status).to eq("confirmed")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
+        meet_confirmed.reload
+        expect(meet_confirmed.link).to eq("https://meet.com")
+        expect(meet_confirmed.status).to eq("confirmed")
+        expect(meet_confirmed.date_time).to eq(tiempo_meet) # La fecha no debe cambiar
+      end
+    end
+
+    context "when updating both date and link of a confirmed meet" do
+      it "updates both fields successfully" do
+        tiempo_nuevo = Time.current + 23.days + 10.hours
+        patch "/meets/#{meet_confirmed.id}",
+              headers: { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" },
+              params: {
+                meet: {
+                  date: tiempo_nuevo.change(usec: 0).strftime("%Y-%m-%d %H:%M:%S"),
+                  link: "https://newlink.com"
+                }
+              }.to_json
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
+        meet_confirmed.reload
+        expect(meet_confirmed.date_time).to eq(tiempo_nuevo.change(usec: 0))
+        expect(meet_confirmed.link).to eq("https://newlink.com")
       end
     end
   end
+
+
 
 
   describe "POST /meets/:id/interesteds (add interested to a meet)" do
