@@ -64,16 +64,16 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Notificación de Reunión - StudyCircle</h1>
+      <h1>Notificación de Tema - StudyCircle</h1>
     </div>
     <div class="content">
       <p>Hola <strong><%= @participant.participant_name %></strong>,</p>
-      <p>Te informamos que la reunión sobre el tema <strong><%= @participant.topic_name %></strong> no se llevará a cabo.</p>
-      <p>El tutor <strong><%= @current_user.first.name %></strong> ha cancelado la reunión.</p>
+      <p>Te informamos que el tema <strong><%= @participant.topic_name %></strong> fue eliminado.</p>
+      <p>El tutor <strong><%= @current_user.first.name %></strong> ha eliminado el tema.</p>
       <p>Descripción de la reunión: <strong><%= @participant.description %></strong></p>
       <p>Fecha de la reunión: 
         <strong>
-          <%= @participant.date_time.nil? ? "Indefinida" : @participant.date_time.strftime("%d/%m/%Y %H:%M") %>
+        <%=@participant.date_time.nil? ? "Indefinida" : @participant.date_time.strftime("%d/%m/%Y %H:%M") %>
         </strong>
       </p>
       <!-- Contenedor centrado para el botón -->
