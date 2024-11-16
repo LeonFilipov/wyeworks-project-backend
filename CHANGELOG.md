@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.6]
+
+### Fixed
++ [[Backend-482]](https://www.notion.so/Talle-S-Errores-en-espa-ol-26a2a0bf572d41279c57486c7812cf97?pvs=4)
++ Errors translated to spanish
+
++ [[Backend-414]](https://www.notion.so/Talle-M-Precargar-base-de-datos-con-carreras-de-la-FING-864533ae3f0443ad936b4c0b7e85489d?pvs=4)
++ Database loaded with new careers
+
 ## [1.1.5]
 
 ### Fixed
