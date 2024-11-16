@@ -6,15 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.6]
 
-### Updated
-
-+ [[Backend-398]](https://www.notion.so/Talle-M-Arreglar-l-gica-de-campo-show_email-en-tabla-de-topics-58aa583eba48417ead86adf0425a0785)
-+ Update show_email field logic in topics table
-
 ### Fixed
++ [[Backend-482]](https://www.notion.so/Talle-S-Errores-en-espa-ol-26a2a0bf572d41279c57486c7812cf97?pvs=4)
++ Errors translated to spanish
+
++ [[Backend-414]](https://www.notion.so/Talle-M-Precargar-base-de-datos-con-carreras-de-la-FING-864533ae3f0443ad936b4c0b7e85489d?pvs=4)
++ Database loaded with new careers
 
 + [[Backend-468]](https://www.notion.so/Talle-XS-Hacer-queel-JWT-no-tenga-tiempo-de-expiraci-n-970c552389f0453e8dd5863b9d72d38b)
 + Update JWT expiration time to 1 month
+
+### Updated
++ [[Backend-398]](https://www.notion.so/Talle-M-Arreglar-l-gica-de-campo-show_email-en-tabla-de-topics-58aa583eba48417ead86adf0425a0785)
++ Update show_email field logic in topics table
 
 ## [1.1.5]
 
