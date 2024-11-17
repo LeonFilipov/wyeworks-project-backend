@@ -8,7 +8,6 @@ class Topic < ApplicationRecord
   has_many :student_topics, dependent: :destroy
   has_many :student_users, through: :student_topics
 
-  validates :name, uniqueness: true
   validates :name, :subject_id, presence: true
   validates :show_email, inclusion: { in: [ true, false ] }
 

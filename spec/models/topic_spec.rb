@@ -24,11 +24,5 @@ RSpec.describe Topic, type: :model do
       expect(topic).not_to be_valid
       expect(topic.errors[:subject_id]).to include("can't be blank")
     end
-
-    it 'is invalid with a non-unique name' do
-      topic1 = FactoryBot.build(:topic, name: topic.name, subject: subject)
-      expect(topic1).not_to be_valid
-      expect(topic1.errors[:name]).to include('has already been taken')
-    end
   end
 end
