@@ -260,7 +260,7 @@ RSpec.describe "Meets", type: :request do
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
       expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.invalid_status"))
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: meet.status))
     end
 
     it "Add interested to a meet" do

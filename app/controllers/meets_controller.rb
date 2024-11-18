@@ -65,6 +65,14 @@ class MeetsController < ApplicationController
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
+      # Validar nueva fecha
+      if params[:meet][:date].present?
+        new_date = params[:meet][:date].to_datetime
+        if new_date < Time.current
+          render json: { error: I18n.t("error.meets.invalid_date") }, status: :bad_request and return
+        end
+      end
+
       params_formatted = {
         date_time: params[:meet][:date].present? && @meet.date_time.nil? ? params[:meet][:date] : @meet.date_time,
         link: params[:meet][:link].present? ? params[:meet][:link] : @meet.link

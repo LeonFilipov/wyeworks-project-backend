@@ -30,6 +30,16 @@ class TopicsController < ApplicationController
   # POST /topics
   def create
     begin
+      existing_topic = Topic.joins(:availability_tutor).where(
+        name: topic_params[:name],
+        availability_tutors: { user_id: @current_user.first.id }
+      ).first
+
+      if existing_topic
+        render json: { error: "You already have a topic with this name" }, status: :unprocessable_entity
+        return
+      end
+
       topic = Topic.create!(topic_params)
       availability = AvailabilityTutor.create!(user_id: @current_user.first.id, topic_id: topic.id)
       MeetsService.create_pending_meet({ availability_tutor_id: availability.id, link: topic.link, status: "pending" })
