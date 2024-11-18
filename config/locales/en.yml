@@ -53,12 +53,14 @@ en:
       pending_meet: "Pending meet ya existente"
       cant_cancel: "No se puede cancelar la meet, el estatus de la meet es %{status}"
       date_must_be_later: "La fecha debe ser posterior a la fecha actual"
+      
     universities:
       not_found: "Universidad no encontrada"
     subjects:
       not_found: "Materia no encontrada"
     topics:
       not_found: "Tema no encontrado"
+
     participants:
       not_found: "Participante no encontrado"
       already_participant: "El usuario ya está participando en esta meet"
