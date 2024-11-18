@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.6]
 
-### Added
+### Added 
++ [[Backend-482]](https://www.notion.so/XS-agregarle-campo-university-a-Profile-415d7ea4446e439ca2c0537665d5c818)
++ Added university_id and university_name to the endpoint /profile
++ 
++ ### Added
 +[[Backend-465]](https://www.notion.so/Talle-M-Puede-haber-m-s-de-un-tema-con-el-mismo-nombre-ee42ab26956242f598e0abb00168cb14?pvs=4) Create topics with the same name
 
 ### Fixed

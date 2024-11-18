@@ -1555,6 +1555,13 @@ components:
               type: integer
             name:
               type: string
+        university:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
 
   responses:
     UnauthorizedError:

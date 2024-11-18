@@ -72,8 +72,6 @@ class MeetsController < ApplicationController
         new_date = params[:meet][:date].to_datetime
         if new_date < Time.current
           render json: { error: I18n.t("error.meets.invalid_date") }, status: :bad_request and return
-        elsif @meet.status == "confirmed" && new_date <= @meet.date_time
-          render json: { error: I18n.t("error.meets.date_must_be_later") }, status: :bad_request and return
         end
       end
 
