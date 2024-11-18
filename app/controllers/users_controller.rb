@@ -94,6 +94,8 @@ class UsersController < ApplicationController
 
     def user_profile(user)
       career = user.career
+      university = career&.university # Accedemos a la universidad a través de la carrera
+    
       {
         id: user.id,
         name: user.name,
@@ -101,11 +103,16 @@ class UsersController < ApplicationController
         description: user.description,
         image_url: user.image_url,
         career: career.nil? ? nil : {
-            id: career.id,
-            name: career.name
+          id: career.id,
+          name: career.name
+        },
+        university: university.nil? ? nil : {
+          id: university.id,
+          name: university.name
         }
       }
     end
+    
 
     def meets_schema(meets)
       meets.map do |meet|

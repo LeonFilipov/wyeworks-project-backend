@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     belongs_to :career, optional: true
+    has_one :university, through: :career
     has_many :student_topics
     has_many :topics, through: :student_topics
 
