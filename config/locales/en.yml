@@ -40,7 +40,6 @@ en:
     availabilities:
       not_found: "Availability no encontrada"
     meets:
-
       not_created: "Meet no creada"
       not_interested: "El usuario no esta interesado en esta meet"
       not_found: "Meet no encontrada"
@@ -60,7 +59,6 @@ en:
       not_found: "Materia no encontrada"
     topics:
       not_found: "Tema no encontrado"
-
     participants:
       not_found: "Participante no encontrado"
       already_participant: "El usuario ya está participando en esta meet"
