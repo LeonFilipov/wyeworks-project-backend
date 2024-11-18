@@ -64,7 +64,7 @@ class MeetsController < ApplicationController
       if @meet.status == "cancelled" || @meet.status == "completed"
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
-      
+
       # Validar nueva fecha
       if params[:meet][:date].present?
         new_date = params[:meet][:date].to_datetime
