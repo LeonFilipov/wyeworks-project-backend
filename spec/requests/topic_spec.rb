@@ -111,7 +111,7 @@ RSpec.describe "Topics", type: :request do
         parsed = JSON.parse(response.body)
         expect(parsed["name"]).to eq(topic.name)
         expect(parsed["proposed"]).to eq(true)
-        expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
+        expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "tutor", "meets" ])
         expect(topic.availability_tutor.meets.size).to eq(1)
       end
 
@@ -298,7 +298,7 @@ RSpec.describe "Topics", type: :request do
           name: "New topic",
           description: "New description",
           link: "New link",
-          show_email: true,
+          show_email: false,
           subject_id: subject.id
         }
       },
@@ -312,8 +312,12 @@ RSpec.describe "Topics", type: :request do
       parsed = JSON.parse(response.body)
       expect(parsed["name"]).to eq("New topic")
       expect(parsed["proposed"]).to eq(true)
-      expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "meets" ])
+      expect(parsed.keys).to eq([ "name", "description", "link", "show_email", "subject_id", "proposed", "tutor", "meets" ])
       meet = Meet.find_by(id: parsed["meets"].first["id"])
+      tutor = parsed["tutor"]
+      expect(tutor["id"]).to eq(user.id)
+      expect(tutor["name"]).to eq(user.name)
+      expect(tutor["email"]).to eq(nil)
       expect(parsed["meets"].first["id"]).to eq(meet.id)
       expect(parsed["meets"].first["status"]).to eq(meet.status)
       expect(parsed["meets"].first["date_time"]).to eq(meet.date_time)
