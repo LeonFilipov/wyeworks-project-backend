@@ -116,6 +116,7 @@ class TopicsController < ApplicationController
     def topic_details(topic)
       availability = topic.availability_tutor
       meets = availability.meets
+      tutor = topic.tutor
       {
         name: topic.name,
         description: topic.description,
@@ -123,6 +124,11 @@ class TopicsController < ApplicationController
         show_email: topic.show_email,
         subject_id: topic.subject_id,
         proposed: availability.user_id == @current_user.first.id,
+        tutor: {
+          id: tutor.id,
+          name: tutor.name,
+          email: if topic.show_email then tutor.email else nil end
+        },
         meets: meets.map do |meet|
           {
             id: meet.id,

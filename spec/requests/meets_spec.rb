@@ -333,6 +333,37 @@ RSpec.describe "Meets", type: :request do
   end
 
   describe "Integration with Topics" do
+    it "create a topic and get meet" do
+      # create topic
+      post "/topics",
+        params: {
+          topic: {
+            name: "Topic 1",
+            description: "New description",
+            link: "https://link.com",
+            show_email: false,
+            subject_id: subject.id
+          }
+        },
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:created)
+      expect(JSON.parse(response.body)["topic"]["id"]).to be_present
+      # Get all meets for the topic
+      get "/meets",
+        params: { topic_id: JSON.parse(response.body)["topic"]["id"] },
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(1)
+      meet = JSON.parse(response.body)[0]
+      expect(meet["status"]).to eq("pending")
+      # Get information about the meet
+      get "/meets/#{meet["id"]}",
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["status"]).to eq(meet["status"])
+      expect(JSON.parse(response.body)["link"]).to eq(JSON.parse(response.body)["link"])
+      expect(JSON.parse(response.body)["tutor"]["email"]).to eq(nil)
+    end
     it "create a topic and confirm a meet" do
       # create topic
       post "/topics",
@@ -341,7 +372,7 @@ RSpec.describe "Meets", type: :request do
             name: "Topic 1",
             description: "New description",
             link: "https://link.com",
-            show_email: true,
+            show_email: false,
             subject_id: subject.id
           }
         },
