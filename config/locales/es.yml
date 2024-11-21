@@ -1,0 +1,88 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+es:
+  error:
+    users:
+      not_found: "User not found."
+      not_allowed: "User not allowed"
+      not_created: "User not created"
+      parameter_missing: "Required parameter %{param} is missing"
+    sessions:
+      invalid_token: "Invalid token"
+      missing_header: "Authorization header is missing"
+    availabilities:
+      not_found: "Availability not found"
+    meets:
+      not_created: "Meet not created"
+      not_interested: "User is not interested in this meet"
+      not_found: "Meet not found"
+      failed: "Failed to %{action} meet"
+      already_status: "Meet already %{status}"
+      already_interested: "User already interested in this meet"
+      invalid_status: "Meet already cancelled"
+      invalid_date: "Date must be in the future"
+      tutor_interested: "Tutor can't be interested in his own meet"
+      pending_meet: "Pending meet already exists"
+      cant_cancel: "Can't cancel meet, meet's status is %{status}"
+    universities:
+      not_found: "University not found"
+    subjects:
+      not_found: "Subject not found"
+    topics:
+      not_found: "Topic not found"
+    participants:
+      not_found: "Participant not found"
+      already_participant: "User already participant in this meet"
+    careers:
+      not_found: "Career not found"
+
+  success:
+    users:
+      created: "User created successfully"
+      updated: "User updated successfully"
+    availabilities:
+      created: "Availability created successfully"
+    meets:
+      created: "Meet created successfully"
+      updated: "Meet updated successfully"
+      confirmed: "Meet confirmed successfully"
+      cancelled: "Meet cancelled successfully"
+      interested: "Interested successfully"
+      interest_removed: "Interest removed successfully"
+      add_interested: "Interested successfully"
+    topics:
+      created: "Tema creado exitosamente"
+      deleted: "Topic deleted successfully"
+      updated: "Topic updated successfully"
+    participants:
+      created: "Participant added"
+
+
+

@@ -25,28 +25,30 @@ class MeetsController < ApplicationController
 
     # GET /meets/:id
     def show
+      availability = @meet.availability_tutor
+      topic = availability.topic
+      tutor = topic.tutor
       render json: {
         date: @meet.date_time,
         status: @meet.status,
         link: @meet.link,
         participant: @meet.participants.exists?(user_id: @current_user.first.id),
         topic: {
-          id: @meet.availability_tutor.topic.id,
-          name: @meet.availability_tutor.topic.name,
-          proposed: @meet.availability_tutor.user.id == @current_user.first.id
+          id: topic.id,
+          name: topic.name,
+          proposed: availability.user.id == @current_user.first.id
         },
         tutor: {
-          id: @meet.availability_tutor.user.id,
-          name: @meet.availability_tutor.user.name,
-          email: @meet.availability_tutor.user.email.presence
+          id: tutor.id,
+          name: tutor.name,
+          email: if topic.show_email then tutor.email else nil end
         },
         participants: @meet.participants.map do |participant|
           {
             id: participant.user.id,
-            name: participant.user.name
-          }.tap do |participant_data|
-            participant_data[:email] = participant.user.email if @meet.availability_tutor.topic.show_email
-          end
+            name: participant.user.name,
+            email: participant.user.email
+          }
         end
       }, status: :ok
     end
@@ -65,27 +67,30 @@ class MeetsController < ApplicationController
         render json: { error: I18n.t("error.meets.already_status", status: @meet.status) }, status: :bad_request and return
       end
 
+      # Validar nueva fecha
+      if params[:meet][:date].present?
+        new_date = params[:meet][:date].to_datetime
+        if new_date < Time.current
+          render json: { error: I18n.t("error.meets.invalid_date") }, status: :bad_request and return
+        end
+      end
+
       params_formatted = {
         date_time: params[:meet][:date].present? && @meet.date_time.nil? ? params[:meet][:date] : @meet.date_time,
         link: params[:meet][:link].present? ? params[:meet][:link] : @meet.link
       }
 
-      if params[:meet][:date].present? && (date = params[:meet][:date].to_datetime) < Time.current
-        render json: { error: I18n.t("error.meets.invalid_date") }, status: :bad_request and return
-      end
-
       @meet.assign_attributes(params_formatted) # Permitir modificar otros campos permitidos
       # Actualizar la información de la reunión
       if params[:meet][:date].present? && @meet.status == "pending"
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
+        @meet.date_time = params[:meet][:date]
       end
 
       # comentario de push
       if @meet.save!
-        if @meet.status == "confirmed"
-          MeetsService.create_pending_meet({ availability_tutor_id: @availability_tutor.id, link: @availability_tutor.topic.link, status: "pending" })
-          UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
-        end
+        MeetsService.create_pending_meet({ availability_tutor_id: @availability_tutor.id, link: @availability_tutor.topic.link, status: "pending" })
+        UserMailer.meet_confirmada_email(@meet.id, @availability_tutor.user_id, @availability_tutor.topic_id).deliver_now # Enviar correo de confirmación
         render json: { message: I18n.t("success.meets.updated") }, status: :ok
       else
         render json: { error: @meet.errors.full_messages.to_sentence }, status: :unprocessable_entity

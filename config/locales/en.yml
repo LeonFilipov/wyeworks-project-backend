@@ -30,59 +30,61 @@
 en:
   error:
     users:
-      not_found: "User not found."
-      not_allowed: "User not allowed"
-      not_created: "User not created"
-      parameter_missing: "Required parameter %{param} is missing"
+      not_found: "Usuario no encontrado."
+      not_allowed: "Usuario no permitido"
+      not_created: "Usuario no creado"
+      parameter_missing: "Parametro Requerido %{param} falta"
     sessions:
-      invalid_token: "Invalid token"
-      missing_header: "Authorization header is missing"
+      invalid_token: "Token invalido"
+      missing_header: "Headers de Autenticacion faltantes"
     availabilities:
-      not_found: "Availability not found"
+      not_found: "Availability no encontrada"
     meets:
-      not_created: "Meet not created"
-      not_interested: "User is not interested in this meet"
-      not_found: "Meet not found"
-      failed: "Failed to %{action} meet"
-      already_status: "Meet already %{status}"
-      already_interested: "User already interested in this meet"
-      invalid_status: "Meet already cancelled"
-      invalid_date: "Date must be in the future"
-      tutor_interested: "Tutor can't be interested in his own meet"
-      pending_meet: "Pending meet already exists"
-      cant_cancel: "Can't cancel meet, meet's status is %{status}"
+      not_created: "Meet no creada"
+      not_interested: "El usuario no esta interesado en esta meet"
+      not_found: "Meet no encontrada"
+      failed: "Falla al %{action} a la meet"
+      already_status: "Meet ya %{status}"
+      already_interested: "Usuario ya interesado en esta meet"
+      invalid_status: "Meet ya cancelada"
+      invalid_date: "La fecha debe estar en el futuro"
+      tutor_interested: "El tutor no puede estar interesado en su meet"
+      pending_meet: "Pending meet ya existente"
+      cant_cancel: "No se puede cancelar la meet, el estatus de la meet es %{status}"
+      date_must_be_later: "La fecha debe ser posterior a la fecha actual"
+      
     universities:
-      not_found: "University not found"
+      not_found: "Universidad no encontrada"
     subjects:
-      not_found: "Subject not found"
+      not_found: "Materia no encontrada"
     topics:
-      not_found: "Topic not found"
+      not_found: "Tema no encontrado"
     participants:
-      not_found: "Participant not found"
-      already_participant: "User already participant in this meet"
+      not_found: "Participante no encontrado"
+      already_participant: "El usuario ya está participando en esta meet"
     careers:
-      not_found: "Career not found"
+      not_found: "Carrera no encontrada"
 
   success:
     users:
-      created: "User created successfully"
-      updated: "User updated successfully"
+      created: "Usuario creado satisfactoriamente"
+      updated: "Usuario actualizado satisfactoriamente"
     availabilities:
-      created: "Availability created successfully"
+      created: "Availability creado satisfactoriamente"
     meets:
-      created: "Meet created successfully"
-      updated: "Meet updated successfully"
-      confirmed: "Meet confirmed successfully"
-      cancelled: "Meet cancelled successfully"
-      interested: "Interested successfully"
-      interest_removed: "Interest removed successfully"
-      add_interested: "Interested successfully"
+      created: "Meet creada satisfactoriamente"
+      updated: "Meet actualizada satisfactoriamente"
+      confirmed: "Meet confirmada satisfactoriamente"
+      cancelled: "Meet cancelada satisfactoriamente"
+      interested: "Interesado satisfactoriamente"
+      interest_removed: "Interes removido satisfactoriamente"
+      add_interested: "Interesado satisfactoriamente"
     topics:
-      created: "Topic created successfully"
-      deleted: "Topic deleted successfully"
-      updated: "Topic updated successfully"
+      created: "Tema creado satisfactoriamente"
+      deleted: "Tema borrado satisfactoriamente"
+      updated: "Tema actualizado satisfactoriamente"
     participants:
-      created: "Participant added"
+      created: "Participante añadido"
 
 
 

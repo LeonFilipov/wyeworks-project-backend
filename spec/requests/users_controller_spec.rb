@@ -13,7 +13,7 @@ RSpec.describe "UsersControllers", type: :request do
     it "returns the current user with correct attributes" do
       get "/profile", headers: { 'Authorization': "Bearer #{token}" }
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).first.keys).to eq([ "id", "name", "email", "description", "image_url", "career" ])
+      expect(JSON.parse(response.body).first.keys).to eq([ "id", "name", "email", "description", "image_url", "career", "university" ])
       expect(JSON.parse(response.body).first["name"]).to eq(user.name)
     end
 

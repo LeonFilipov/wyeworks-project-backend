@@ -175,31 +175,29 @@ RSpec.describe "Meets", type: :request do
 
     context "when confirming a meet for the first time" do
       it "confirms the meet successfully" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0) } },
+              params: { meet: { date: "2024-12-12 12:00:00" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["message"]).to eq(I18n.t("success.meets.updated"))
         meet = Meet.find(meet.id)
         expect(meet.status).to eq("confirmed")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
+        expect(meet.date_time).to eq("2024-12-12 12:00:00")
         expect(availability_tutor.meets.count).to eq(2)
       end
     end
 
     context "when confirming a meet that is already confirmed" do
       it "returns a success status" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         # First confirmation
         patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0), link: "hola.com" } },
+              params: { meet: { date: "2024-12-12 12:00:00", link: "hola.com" } },
               headers: { "Authorization" => "Bearer #{token}" }
         expect(response).to have_http_status(:ok)
         patch "/meets/#{meet.id}",
-              params: { meet: { date: (tiempo - 1.hour).change(usec: 0), link: "hola2.com" } },
+              params: { meet: { date: "2024-12-12 12:00:01", link: "hola2.com" } },
               headers: { "Authorization" => "Bearer #{token}" }
         # Verifica que la segunda confirmación da un error 400 y el mensaje esperado
         expect(response).to have_http_status(:ok)
@@ -207,7 +205,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.status).to eq("confirmed")
         expect(meet.link).to eq("hola2.com")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
+        expect(meet.date_time).to eq("2024-12-12 12:00:00")
       end
     end
 
@@ -223,10 +221,9 @@ RSpec.describe "Meets", type: :request do
 
     context "Edit a confirmed meet" do
       it "Edit link" do
-        tiempo = Time.current + 5.hour
-        meet = FactoryBot.create(:meet, date_time: nil, availability_tutor: availability_tutor, status: "pending")
+        meet = FactoryBot.create(:meet, availability_tutor: availability_tutor, status: "pending")
         patch "/meets/#{meet.id}",
-              params: { meet: { date: tiempo.change(usec: 0) } },
+              params: { meet: { date: "2024-12-12 12:00:01" } },
               headers: { "Authorization" => "Bearer #{token}" }
         # confirmed
         expect(response).to have_http_status(:ok)
@@ -238,7 +235,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.link).to eq("https://meet.com")
         expect(meet.status).to eq("confirmed")
-        expect(meet.date_time).to eq(tiempo.change(usec: 0))
+        expect(meet.date_time).to eq("2024-12-12 12:00:01")
       end
     end
   end
@@ -263,7 +260,7 @@ RSpec.describe "Meets", type: :request do
       post "/meets/#{meet.id}/interesteds",
         headers: { "Authorization" => "Bearer #{JsonWebTokenService.encode(user_id: user.id)}" }
       expect(response).to have_http_status(:bad_request)
-      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.invalid_status"))
+      expect(JSON.parse(response.body)["error"]).to eq(I18n.t("error.meets.already_status", status: meet.status))
     end
 
     it "Add interested to a meet" do
@@ -336,6 +333,37 @@ RSpec.describe "Meets", type: :request do
   end
 
   describe "Integration with Topics" do
+    it "create a topic and get meet" do
+      # create topic
+      post "/topics",
+        params: {
+          topic: {
+            name: "Topic 1",
+            description: "New description",
+            link: "https://link.com",
+            show_email: false,
+            subject_id: subject.id
+          }
+        },
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:created)
+      expect(JSON.parse(response.body)["topic"]["id"]).to be_present
+      # Get all meets for the topic
+      get "/meets",
+        params: { topic_id: JSON.parse(response.body)["topic"]["id"] },
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(1)
+      meet = JSON.parse(response.body)[0]
+      expect(meet["status"]).to eq("pending")
+      # Get information about the meet
+      get "/meets/#{meet["id"]}",
+        headers: { "Authorization" => "Bearer #{token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)["status"]).to eq(meet["status"])
+      expect(JSON.parse(response.body)["link"]).to eq(JSON.parse(response.body)["link"])
+      expect(JSON.parse(response.body)["tutor"]["email"]).to eq(nil)
+    end
     it "create a topic and confirm a meet" do
       # create topic
       post "/topics",
@@ -344,7 +372,7 @@ RSpec.describe "Meets", type: :request do
             name: "Topic 1",
             description: "New description",
             link: "https://link.com",
-            show_email: true,
+            show_email: false,
             subject_id: subject.id
           }
         },

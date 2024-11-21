@@ -4,9 +4,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.6]
+
+### Added 
++ [[Backend-510]](https://www.notion.so/XS-agregarle-campo-university-a-Profile-415d7ea4446e439ca2c0537665d5c818)
++ fixed show_email
+
+### Added 
++ [[Backend-482]](https://www.notion.so/XS-agregarle-campo-university-a-Profile-415d7ea4446e439ca2c0537665d5c818)
++ Added university_id and university_name to the endpoint /profile
++ 
++ ### Added
++[[Backend-465]](https://www.notion.so/Talle-M-Puede-haber-m-s-de-un-tema-con-el-mismo-nombre-ee42ab26956242f598e0abb00168cb14?pvs=4) Create topics with the same name
+
+### Fixed
++ [[Backend-482]](https://www.notion.so/Talle-S-Errores-en-espa-ol-26a2a0bf572d41279c57486c7812cf97?pvs=4)
++ Errors translated to spanish
+
++ [[Backend-414]](https://www.notion.so/Talle-M-Precargar-base-de-datos-con-carreras-de-la-FING-864533ae3f0443ad936b4c0b7e85489d?pvs=4)
++ Database loaded with new careers
+
++ [[Backend-468]](https://www.notion.so/Talle-XS-Hacer-queel-JWT-no-tenga-tiempo-de-expiraci-n-970c552389f0453e8dd5863b9d72d38b)
++ Update JWT expiration time to 1 month
+
+### Updated
++ [[Backend-398]](https://www.notion.so/Talle-M-Arreglar-l-gica-de-campo-show_email-en-tabla-de-topics-58aa583eba48417ead86adf0425a0785)
++ Update show_email field logic in topics table
+
 ## [1.1.5]
 
 ### Added
++ [[Backend-470]](https://www.notion.so/Talle-S-Poder-actualizarla-la-fecha-de-una-meet-ya-confirmada-5d5f5ce996d2475ca70fb8bc4e9b1396)
++ update meet also when it's confirmed to update to another date the same meet.
+
++ [[Backend-470]](https://www.notion.so/Talle-XS-Sacar-enpoints-obsoletos-de-Swagger-191396c8d4f4491f8503c444f5a61258)
++ remove deprecated endpoints from swagger.
++ 
 + [[Backend-467]](https://www.notion.so/Talle-M-Bug-falta-notificar-a-los-estudiantes-interesados-cuando-se-elimina-un-Tema-fc48b5b8a4344c098127b61448c07fca?pvs=4)
 + Now when tutor eliminates a topic it notifies to students
 + Fixed time formats
