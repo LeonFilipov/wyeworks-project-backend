@@ -38,4 +38,13 @@ class UserMailer < ApplicationMailer
             subject: "Reunión cancelada"
         )
     end
+
+    def topic_eliminado_email(user, participant)
+        @participant = participant
+        @current_user = user
+        mail(
+            to: email_address_with_name(@participant.participant_email, @participant.participant_name),
+            subject: "Tema eliminado"
+        )
+    end
 end
