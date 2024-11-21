@@ -57,6 +57,10 @@ class TopicsController < ApplicationController
     elsif topic.tutor.id != @current_user.first.id
       render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
     else
+      participants = TopicsService.get_topic_interesteds(topic.id)
+      participants.each do |participant|
+        UserMailer.topic_eliminado_email(@current_user, participant).deliver_now
+      end
       topic.destroy
       render json: { message: I18n.t("success.topics.deleted") }, status: :ok
     end

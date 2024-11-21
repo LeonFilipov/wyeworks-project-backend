@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 + [[Backend-482]](https://www.notion.so/XS-agregarle-campo-university-a-Profile-415d7ea4446e439ca2c0537665d5c818)
 + Added university_id and university_name to the endpoint /profile
-+ 
-+ ### Added
+
+
+### Added
 +[[Backend-465]](https://www.notion.so/Talle-M-Puede-haber-m-s-de-un-tema-con-el-mismo-nombre-ee42ab26956242f598e0abb00168cb14?pvs=4) Create topics with the same name
 
 ### Fixed
@@ -39,9 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 + [[Backend-470]](https://www.notion.so/Talle-XS-Sacar-enpoints-obsoletos-de-Swagger-191396c8d4f4491f8503c444f5a61258)
 + remove deprecated endpoints from swagger.
-
-
-### Added
++ 
 + [[Backend-467]](https://www.notion.so/Talle-M-Bug-falta-notificar-a-los-estudiantes-interesados-cuando-se-elimina-un-Tema-fc48b5b8a4344c098127b61448c07fca?pvs=4)
 + Now when tutor eliminates a topic it notifies to students
 + Fixed time formats
