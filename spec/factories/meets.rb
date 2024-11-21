@@ -5,8 +5,5 @@ FactoryBot.define do
     status { "pending" } # meet can be pending or confirmed
     association :availability_tutor
     count_interesteds { 0 }
-    trait :confirmed do
-      status { "confirmed" }
-    end
   end
 end

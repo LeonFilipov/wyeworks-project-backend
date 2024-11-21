@@ -217,7 +217,60 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '400':
           $ref: '#/components/responses/AuthHeaderMissingError'
+          
+  /tutor_availability/{id}/interesteds:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the tutor availability
+    post:
+      deprecated: true
+      tags:
+        - Tutor availability
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
 
+  
+  /interested_meetings:
+    get:
+      deprecated: true
+      summary: Gets meeting that im interested.
+      description: |
+        This endpoint allows a user as a studento to show interest in a tutor's availability. If there is a pending meet, the user's interest is added, and the count of interested users is incremented. If no pending meet exists, a new meet is created.
+      responses:
+        '200':
+          description: Interest added and meet updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    topic_name:
+                      type: string
+                      example: "topic 1111111111111"
+                    tutor_name:
+                      type: string
+                      example: "Tutor name"
+                    meet_status:
+                      type: string
+                      example: "confirmed"
+                    date_time:
+                      oneOf:
+                        - type: string
+                          format: date-time
+                          example: "2024-11-11T22:13:39.937+00:00"
+                        - type: string
+                          example: "Indefinida"
+      tags:
+        - Meets
 
   /profile:
     get:
@@ -292,7 +345,26 @@ paths:
                     example: "Career not found"
       tags:
       - Users
-      
+
+  /profile/meets:
+    get:
+      deprecated: true
+      summary: Get the tutors's meetings
+      responses:
+        '200':
+          description: A list of meetings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+      tags:
+      - Users
   /profile/teach:
     get:
       summary: "Get the topics and meets the user is tutoring"
@@ -685,6 +757,182 @@ paths:
         404:
           description: "User not found"
 
+  /profile/meets/{id}:
+    get:
+      deprecated: true
+      summary: Get the tutor's meeting by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A meeting object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorMeet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/AuthHeaderMissingError'
+        '404':
+          description: Meeting not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Meet not found
+      tags:
+      - Users
+    patch:
+      deprecated: true
+      summary: Cancel a meeting
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meeting to cancel
+      responses:
+        '200':
+          description: Meeting cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Meet cancelled successfully"
+        '422':
+          description: Meet is already cancelled or completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet is already cancelled, cannot cancel"
+        '404':
+          description: Meet not found or user is not the tutor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found or you are not the tutor"
+
+  
+  /meets/{id}/interest:
+    post:
+      deprecated: true
+      summary: Express interest in a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to express interest in
+      responses:
+        '200':
+          description: Interest expressed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest expressed successfully"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User's interest added to availability tutor."
+        '400':
+          description: User already interested or bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User already interested in this meet"
+                  debug:
+                    type: array
+                    items:
+                      type: string
+                      example: "User has existing interest in availability tutor."
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+    delete:
+      deprecated: true
+      summary: Remove interest in a meet
+      tags:
+        - Meets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the meet to remove interest from
+      responses:
+        '200':
+          description: Interest removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Interest removed successfully"
+        '400':
+          description: User is not interested in this meet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User is not interested in this meet"
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+
 
   /auth/google_oauth2/callback:
     get:
@@ -714,6 +962,24 @@ paths:
       tags:
       - Authentication
 
+
+  /topics/{topic_id}/tutor_availability:
+    parameters:
+      - in: path
+        name: topic_id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the topic
+    post:
+      deprecated: true
+      tags:
+        - Tutor availability
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Topic not found
 
   /cancel_meet/{id}:
     parameters:
@@ -1147,11 +1413,11 @@ paths:
         - Meets
 
     patch:
-      summary: Update the status of a meeting or update the date and time
+      summary: Confirm a pending meet
       description: |
-        This endpoint allows a user to update the status of a meeting or change the date and time.
-        If the date and time are provided and the status of the meeting is "pending", the meeting status will be changed to confirmed.
-        If the aate and time are provided and the status of the meeting is "confirmed", the date and time will change but the status will be the same.
+        This endpoint confirms a pending meeting if the current user is the tutor of the meeting. 
+        If a new date is provided, the meeting status will be updated to confirmed. 
+        If the meeting is already confirmed or completed, an error is returned.
       parameters:
         - in: path
           name: id
@@ -1285,7 +1551,162 @@ paths:
                     example: "Meet not found"
       tags:
         - Interesteds
+  /tutor_availability/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        description: The ID of the tutor availability
+    post:
+      deprecated: true
+      tags:
+        - Tutor availability
+      responses:
+        '200':
+          description: Tutor availability created successfully
+        '404':
+          description: Tutor availability not found
+
       
+  /available_meets:
+    get:
+      deprecated: true
+      summary: Get all available meets
+      tags:
+        - Meetings
+      responses:
+        '200':
+          description: List of available meets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meet'
+        '404':
+          description: No available meets found
+      
+  /available_meets/{id}:
+    get:
+      deprecated: true
+      summary: Get details of a specific meeting
+      description: Retrieve details for a specific meeting, including interested users.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the meeting
+      responses:
+        '200':
+          description: Meeting details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The unique ID of the meeting
+                  meeting_date:
+                    type: string
+                    format: date-time
+                    description: The date and time of the meeting
+                  meet_status:
+                    type: string
+                    description: The status of the meeting
+                  topic:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: The unique ID of the topic
+                        name:
+                          type: string
+                          description: The name of the topic
+                        image_url:
+                          type: string
+                          description: The image of the topic
+                        description:
+                          type: string
+                          description: The description of the topic
+                  availability_tutor:
+                    type: object
+                    properties:
+                      availability:
+                        type: string
+                        description: The described availability
+                      description:
+                        type: string
+                        description: The availability's description
+                  tutor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The unique ID of the tutor
+                      name:
+                        type: string
+                        description: The name of the tutor
+                      image_url:
+                        type: string
+                        description: Tutor's image url
+                  subject:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: The unique ID of the subject
+                      name:
+                        type: string
+                        description: The name of the subject
+                  interested:
+                    type: boolean
+                    description: Whether the current user is interested in the meeting
+                  count_interesteds:
+                    type: integer
+                    description: The number of users interested in the meeting
+                  interested_users:
+                    type: array
+                    description: List of users interested in the meeting
+                    items:
+                      $ref: '#/components/schemas/InterestedUser'
+        '404':
+          description: Meet not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Meet not found"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Bad request"
+      tags:
+        - Meetings
   /universities/:id/careers:
     get:
       summary: Get all careers from a university
@@ -1549,6 +1970,13 @@ components:
           type: string
           format: uri
         career:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        university:
           type: object
           properties:
             id:

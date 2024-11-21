@@ -40,7 +40,6 @@ en:
     availabilities:
       not_found: "Availability no encontrada"
     meets:
-
       not_created: "Meet no creada"
       not_interested: "El usuario no esta interesado en esta meet"
       not_found: "Meet no encontrada"
@@ -53,6 +52,7 @@ en:
       pending_meet: "Pending meet ya existente"
       cant_cancel: "No se puede cancelar la meet, el estatus de la meet es %{status}"
       date_must_be_later: "La fecha debe ser posterior a la fecha actual"
+      
     universities:
       not_found: "Universidad no encontrada"
     subjects:

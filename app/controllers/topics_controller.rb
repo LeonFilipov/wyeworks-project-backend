@@ -52,11 +52,10 @@ class TopicsController < ApplicationController
   # DELETE /topics/:id
   def delete
     topic = Topic.find_by(id: params[:id])
-    owner = TopicsService.get_topic_owner(params[:id])
     if topic.nil?
       render json: { error: I18n.t("error.topics.not_found") }, status: :not_found
-    elsif owner.first != @current_user.first.id
-      render json: { error: I18n.t("error.users.not_allowed"), owner_id: owner.first }, status: :unauthorized
+    elsif topic.tutor.id != @current_user.first.id
+      render json: { error: I18n.t("error.users.not_allowed") }, status: :unauthorized
     else
       participants = TopicsService.get_topic_interesteds(topic.id)
       participants.each do |participant|

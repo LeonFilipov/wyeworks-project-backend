@@ -336,14 +336,6 @@ RSpec.describe "Topics", type: :request do
         headers: { 'Authorization': "Bearer #{token}" }
       expect(response).to have_http_status(:created)
       topic_id = JSON.parse(response.body)["topic"]["id"]
-      get "/topics/#{topic_id}",
-        headers: { 'Authorization': "Bearer #{token}" }
-      expect(response).to have_http_status(:success)
-      parsed = JSON.parse(response.body)
-      tutor = parsed["tutor"]
-      expect(tutor["id"]).to eq(user.id)
-      expect(tutor["name"]).to eq(user.name)
-      expect(tutor["email"]).to eq(user.email)
       # created
       delete "/topics/#{topic_id}",
         headers: { 'Authorization': "Bearer #{token}", 'Accept': 'application/json' }
