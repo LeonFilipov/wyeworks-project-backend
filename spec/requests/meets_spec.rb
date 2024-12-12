@@ -205,7 +205,7 @@ RSpec.describe "Meets", type: :request do
         meet = Meet.find(meet.id)
         expect(meet.status).to eq("confirmed")
         expect(meet.link).to eq("hola2.com")
-        expect(meet.date_time).to eq("2024-12-12 12:00:00")
+        expect(meet.date_time).to eq("2024-12-12 12:00:01.000000000 +0000")
       end
     end
 

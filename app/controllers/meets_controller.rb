@@ -85,7 +85,9 @@ class MeetsController < ApplicationController
       if params[:meet][:date].present? && @meet.status == "pending"
         @meet.status = "confirmed" # Confirmar la reunión si se modifica la fecha
       end
-      @meet.date_time = params[:meet][:date]
+      if params[:meet][:date].present?
+        @meet.date_time = params[:meet][:date]
+      end
 
       # comentario de push
       if @meet.save!
